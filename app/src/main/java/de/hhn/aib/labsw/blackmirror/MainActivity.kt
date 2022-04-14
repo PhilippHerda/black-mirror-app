@@ -11,10 +11,5 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        val helloBtn = findViewById<Button>(R.id.btn_hello)
-        helloBtn.setOnClickListener {
-            val helloWorldLbl = findViewById<TextView>(R.id.lbl_helloWorld)
-            helloWorldLbl.visibility = View.VISIBLE;
-        }
     }
 }
