@@ -26,6 +26,8 @@ class WeatherLocationActivity : AppCompatActivity() {
         editTextLat.setText((49.066).toString())
         editTextLon.setText((9.220).toString())
 
+        // TODO: implement an edit text listener that fires on focus loss and where the change can be rejected by the callback
+
         onTextChanged(editTextLat) { validateLat(it) }
         onTextChanged(editTextLon) { validateLon(it) }
     }
@@ -35,6 +37,7 @@ class WeatherLocationActivity : AppCompatActivity() {
      */
     private fun validateLat(input: String) {
         try {
+            if (input.isEmpty()) return
             val lat = input.toDouble()
             if (lat < -90.0 || lat > 90.0)
                 showInvalidInput(R.string.invalidLatTitle, R.string.invalidLatMsg)
@@ -48,6 +51,7 @@ class WeatherLocationActivity : AppCompatActivity() {
      */
     private fun validateLon(input: String) {
         try {
+            if (input.isEmpty()) return
             val lon = input.toDouble()
             if (lon < -180.0 || lon > 180.0)
                 showInvalidInput(R.string.invalidLonTitle, R.string.invalidLonMsg)
