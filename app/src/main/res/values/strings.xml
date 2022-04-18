@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">black-mirror-app</string>
+    <string name="textIcon_str">TESTICON</string>
 </resources>
