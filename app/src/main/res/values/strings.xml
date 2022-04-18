@@ -1,6 +1,6 @@
 <resources>
     <string name="app_name">black-mirror-app</string>
-    <string name="weatherLocationDescr">Enter the location used for your weather data.\n\nA location consists of a longitude (north-south) and a latitude (west-east).</string>
+    <string name="weatherLocationDescr">Enter the location used for your weather data.\n\nA location consists of a latitude (north-south) and a longitude (west-east).</string>
     <string name="longitude">Longitude</string>
     <string name="latitude">Latitude</string>
     <string name="invalidLatTitle">Invalid latitude</string>
