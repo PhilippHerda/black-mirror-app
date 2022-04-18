@@ -1,10 +1,9 @@
 package de.hhn.aib.labsw.blackmirror
 
-import androidx.appcompat.app.AppCompatActivity
+import android.content.Intent
 import android.os.Bundle
-import android.view.View
 import android.widget.Button
-import android.widget.TextView
+import androidx.appcompat.app.AppCompatActivity
 
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -13,8 +12,8 @@ class MainActivity : AppCompatActivity() {
 
         val helloBtn = findViewById<Button>(R.id.btn_hello)
         helloBtn.setOnClickListener {
-            val helloWorldLbl = findViewById<TextView>(R.id.lbl_helloWorld)
-            helloWorldLbl.visibility = View.VISIBLE;
+            val intent = Intent(this, WifiInputActivity::class.java)
+            startActivity(intent)
         }
     }
 }
