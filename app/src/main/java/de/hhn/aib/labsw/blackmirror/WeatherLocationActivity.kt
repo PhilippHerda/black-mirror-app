@@ -26,37 +26,60 @@ class WeatherLocationActivity : AppCompatActivity() {
         editTextLat.setText((49.066).toString())
         editTextLon.setText((9.220).toString())
 
-        // TODO: implement an edit text listener that fires on focus loss and where the change can be rejected by the callback
+        editTextLat.onFocusChangeListener = object : EditTextListener(editTextLat) {
+            override fun onTextEdited(newText: String): Boolean {
+                return validateLat(newText)
+            }
+        }
 
-        onTextChanged(editTextLat) { validateLat(it) }
-        onTextChanged(editTextLon) { validateLon(it) }
+        editTextLon.onFocusChangeListener = object : EditTextListener(editTextLon) {
+            override fun onTextEdited(newText: String): Boolean {
+                return validateLon(newText)
+            }
+        }
     }
 
     /**
      * @param input must be a double between -90 and 90 degrees
      */
-    private fun validateLat(input: String) {
-        try {
-            if (input.isEmpty()) return
-            val lat = input.toDouble()
-            if (lat < -90.0 || lat > 90.0)
+    private fun validateLat(input: String): Boolean {
+        return validateInput(input) {
+            return@validateInput if (it < -90.0 || it > 90.0) {
                 showInvalidInput(R.string.invalidLatTitle, R.string.invalidLatMsg)
-        } catch (e: NumberFormatException) {
-            showInvalidInput(R.string.invalidDoubleTitle, R.string.invalidDoubleMsg)
+                false
+            } else {
+                true
+            }
         }
     }
 
     /**
      * @param input must be a double between -180 and 180 degrees
      */
-    private fun validateLon(input: String) {
-        try {
-            if (input.isEmpty()) return
-            val lon = input.toDouble()
-            if (lon < -180.0 || lon > 180.0)
+    private fun validateLon(input: String): Boolean {
+        return validateInput(input) {
+            return@validateInput if (it < -180.0 || it > 180.0) {
                 showInvalidInput(R.string.invalidLonTitle, R.string.invalidLonMsg)
+                false
+            } else {
+                true
+            }
+        }
+    }
+
+    /**
+     * @param input must be a double that satisfies the 'additionalChecks'
+     * @param additionalChecks callback for when the input was generally valid to make additional checks
+     * @return `true` when the input is valid, `false` when the input should be rejected
+     */
+    private fun validateInput(input: String, additionalChecks: (Double) -> Boolean): Boolean {
+        return if (input.isEmpty()) false
+        else try {
+            val double = input.toDouble()
+            return additionalChecks(double)
         } catch (e: NumberFormatException) {
             showInvalidInput(R.string.invalidDoubleTitle, R.string.invalidDoubleMsg)
+            false
         }
     }
 
@@ -69,11 +92,4 @@ class WeatherLocationActivity : AppCompatActivity() {
         }
     }
 
-    private fun onTextChanged(editText: EditText, callback: (String) -> Unit) {
-        editText.addTextChangedListener(object : TextChangeListener<EditText>(editText) {
-            override fun onTextChanged(textView: EditText, s: Editable) {
-                callback(s.toString())
-            }
-        })
-    }
 }
