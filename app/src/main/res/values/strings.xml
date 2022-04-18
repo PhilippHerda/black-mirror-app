@@ -4,4 +4,5 @@
     <string name="wifiInput_wifiSSID_hint">Wifi SSID / Wifi Name</string>
     <string name="wifiInput_wifiPassword_hint">Wifi Passwort</string>
     <string name="wifiInput_confirm_buttonText">Bestätigen</string>
+    <string name="wifiInput_emptyWifiSSID_toastText">Wifi SSID darf nicht leer sein!</string>
 </resources>

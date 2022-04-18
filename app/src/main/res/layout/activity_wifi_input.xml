@@ -39,9 +39,9 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginLeft="20dp"
-        android:layout_marginTop="290dp"
+        android:layout_marginTop="240dp"
         android:layout_marginRight="20dp"
-        android:layout_marginBottom="40dp"
+        android:layout_marginBottom="20dp"
         android:ems="10"
         android:hint="@string/wifiInput_wifiSSID_hint"
         android:inputType="textPersonName"
@@ -51,8 +51,7 @@
         app:layout_constraintEnd_toStartOf="@+id/rightGuideline"
         app:layout_constraintHorizontal_bias="0.493"
         app:layout_constraintStart_toStartOf="@+id/leftGuideline"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="1.0" />
+        app:layout_constraintTop_toTopOf="@+id/topGuideline" />
 
     <EditText
         android:id="@+id/editTextText_WifiPassword"
