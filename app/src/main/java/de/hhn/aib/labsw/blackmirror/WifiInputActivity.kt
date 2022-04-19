@@ -16,8 +16,6 @@ class WifiInputActivity : AppCompatActivity() {
         wifiInputButton.setOnClickListener {
             val wifiSsidEditText = findViewById<EditText>(R.id.editTextText_WifiSSID)
             val wifiPasswordEditText = findViewById<EditText>(R.id.editTextText_WifiPassword)
-            println(wifiSsidEditText.text)
-            println(wifiPasswordEditText.text)
             if (wifiSsidEditText.text.toString().isBlank()) {
                 Toast.makeText(
                     this,
@@ -25,12 +23,20 @@ class WifiInputActivity : AppCompatActivity() {
                     Toast.LENGTH_LONG
                 ).show()
             } else {
-                sendWifiData(wifiSsidEditText.text.toString(), wifiPasswordEditText.text.toString())
+                sendWifiData(
+                    convertToUtf8String(wifiSsidEditText.text.toString()),
+                    convertToUtf8String(wifiPasswordEditText.text.toString())
+                )
             }
         }
     }
 
+    fun convertToUtf8String(input: String): String {
+        val utf8Bytes: ByteArray = input.toByteArray(charset("UTF-8"))
+        return String(utf8Bytes)
+    }
+
     fun sendWifiData(ssid: String, password: String) {
-        //Schnittstelle
+        //Sending Data
     }
 }
