@@ -1,12 +1,14 @@
 package de.hhn.aib.labsw.blackmirror
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
-import java.nio.charset.Charset
+import androidx.appcompat.app.AppCompatActivity
 
+/**
+ * WifiInputActivity to get the wifi data from the user and hand it over as UTF-8 String to the bluetooth interface.
+ */
 class WifiInputActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -31,12 +33,18 @@ class WifiInputActivity : AppCompatActivity() {
         }
     }
 
-    fun convertToUtf8String(input: String): String {
+    /**
+     * Function to convert a normal string to a UTF-8 compatible String.
+     */
+    private fun convertToUtf8String(input: String): String {
         val utf8Bytes: ByteArray = input.toByteArray(charset("UTF-8"))
         return String(utf8Bytes)
     }
 
-    fun sendWifiData(ssid: String, password: String) {
+    /**
+     * Function to send the Wifi SSID & the Wifi password to the raspberry pi / blackmirror.
+     */
+    private fun sendWifiData(ssid: String, password: String) {
         //Sending Data
     }
 }
