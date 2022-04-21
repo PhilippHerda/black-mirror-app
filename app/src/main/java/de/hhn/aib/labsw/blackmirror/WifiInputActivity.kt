@@ -5,6 +5,7 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import java.nio.charset.StandardCharsets
 
 /**
  * WifiInputActivity to get the wifi data from the user and hand it over as UTF-8 String to the bluetooth interface.
@@ -16,8 +17,8 @@ class WifiInputActivity : AppCompatActivity() {
 
         val wifiInputButton = findViewById<Button>(R.id.button_ConfirmWifiData)
         wifiInputButton.setOnClickListener {
-            val wifiSsidEditText = findViewById<EditText>(R.id.editTextText_WifiSSID)
-            val wifiPasswordEditText = findViewById<EditText>(R.id.editTextText_WifiPassword)
+            val wifiSsidEditText = findViewById<EditText>(R.id.editText_WifiSSID)
+            val wifiPasswordEditText = findViewById<EditText>(R.id.editText_WifiPassword)
             if (wifiSsidEditText.text.toString().isBlank()) {
                 Toast.makeText(
                     this,
@@ -37,8 +38,8 @@ class WifiInputActivity : AppCompatActivity() {
      * Function to convert a normal string to a UTF-8 compatible String.
      */
     private fun convertToUtf8String(input: String): String {
-        val utf8Bytes: ByteArray = input.toByteArray(charset("UTF-8"))
-        return String(utf8Bytes)
+        val utf8Bytes: ByteArray = input.toByteArray(StandardCharsets.UTF_8)
+        return String(utf8Bytes, StandardCharsets.UTF_8)
     }
 
     /**

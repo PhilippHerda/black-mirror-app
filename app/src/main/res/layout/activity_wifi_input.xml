@@ -35,7 +35,7 @@
         app:layout_constraintGuide_percent="0.95" />
 
     <EditText
-        android:id="@+id/editTextText_WifiSSID"
+        android:id="@+id/editText_WifiSSID"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginLeft="20dp"
@@ -47,25 +47,24 @@
         android:inputType="textPersonName"
         android:minHeight="48dp"
         android:textAlignment="center"
-        app:layout_constraintBottom_toTopOf="@+id/editTextText_WifiPassword"
+        app:layout_constraintBottom_toTopOf="@+id/editText_WifiPassword"
         app:layout_constraintEnd_toStartOf="@+id/rightGuideline"
         app:layout_constraintHorizontal_bias="0.493"
         app:layout_constraintStart_toStartOf="@+id/leftGuideline"
         app:layout_constraintTop_toTopOf="@+id/topGuideline" />
 
     <EditText
-        android:id="@+id/editTextText_WifiPassword"
+        android:id="@+id/editText_WifiPassword"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginLeft="20dp"
         android:layout_marginRight="20dp"
-        android:layout_marginBottom="30dp"
         android:ems="10"
         android:hint="@string/wifiInput_wifiPassword_hint"
         android:inputType="textPassword"
         android:minHeight="48dp"
         android:textAlignment="center"
-        app:layout_constraintBottom_toTopOf="@+id/button_ConfirmWifiData"
+        app:layout_constraintBottom_toTopOf="@+id/textView_PasswordAdvice"
         app:layout_constraintEnd_toStartOf="@+id/rightGuideline"
         app:layout_constraintStart_toStartOf="@+id/leftGuideline" />
 
@@ -73,10 +72,23 @@
         android:id="@+id/button_ConfirmWifiData"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="233dp"
+        android:layout_marginBottom="220dp"
         android:text="@string/wifiInput_confirm_buttonText"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="@+id/editTextText_WifiPassword"
-        app:layout_constraintStart_toStartOf="@+id/editTextText_WifiPassword" />
+        app:layout_constraintEnd_toStartOf="@+id/rightGuideline"
+        app:layout_constraintStart_toStartOf="@+id/leftGuideline" />
+
+    <TextView
+        android:id="@+id/textView_PasswordAdvice"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="20dp"
+        android:layout_marginBottom="20dp"
+        android:text="@string/wifiInput_wifiPasswordAdvice_text"
+        android:textAlignment="center"
+        app:layout_constraintBottom_toTopOf="@+id/button_ConfirmWifiData"
+        app:layout_constraintEnd_toStartOf="@+id/rightGuideline"
+        app:layout_constraintStart_toStartOf="@+id/leftGuideline" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
