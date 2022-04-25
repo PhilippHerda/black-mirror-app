@@ -18,14 +18,93 @@
     </androidx.recyclerview.widget.RecyclerView>
 
     <androidx.gridlayout.widget.GridLayout
+        android:id="@+id/widgetGrid"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:background="@android:color/background_light"
         app:columnCount="3"
         app:layout_constraintBottom_toTopOf="@+id/widgetRecyclerView"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.491"
+        app:layout_constraintHorizontal_bias="0.494"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:rowCount="5" />
+        app:layout_constraintVertical_bias="0.41"
+        app:rowCount="5"
+        app:useDefaultMargins="true">
+
+        <ImageView
+            android:id="@+id/box11"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:srcCompat="@drawable/box"
+            tools:ignore="ImageContrastCheck" />
+
+        <ImageView
+            android:id="@+id/box12"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:srcCompat="@drawable/box" />
+
+        <ImageView
+            android:id="@+id/box13"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:srcCompat="@drawable/box" />
+
+        <ImageView
+            android:id="@+id/box21"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:srcCompat="@drawable/box" />
+
+        <ImageView
+            android:id="@+id/box22"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:srcCompat="@drawable/box" />
+
+        <ImageView
+            android:id="@+id/box23"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:srcCompat="@drawable/box" />
+
+        <ImageView
+            android:id="@+id/box31"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:srcCompat="@drawable/box" />
+
+        <ImageView
+            android:id="@+id/box32"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:srcCompat="@drawable/box" />
+
+        <ImageView
+            android:id="@+id/box33"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:srcCompat="@drawable/box" />
+
+        <ImageView
+            android:id="@+id/box41"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:srcCompat="@drawable/box" />
+
+        <ImageView
+            android:id="@+id/box42"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:srcCompat="@drawable/box" />
+
+        <ImageView
+            android:id="@+id/box43"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:srcCompat="@drawable/box" />
+    </androidx.gridlayout.widget.GridLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

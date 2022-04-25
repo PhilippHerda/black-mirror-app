@@ -13,8 +13,8 @@ class MainActivity : AppCompatActivity() {
 
         val helloBtn = findViewById<Button>(R.id.btn_hello)
         helloBtn.setOnClickListener {
-            val helloWorldLbl = findViewById<TextView>(R.id.lbl_helloWorld)
-            helloWorldLbl.visibility = View.VISIBLE;
+            //val helloWorldLbl = findViewById<TextView>(R.id.lbl_helloWorld)
+            //helloWorldLbl.visibility = View.VISIBLE;
         }
     }
 }
