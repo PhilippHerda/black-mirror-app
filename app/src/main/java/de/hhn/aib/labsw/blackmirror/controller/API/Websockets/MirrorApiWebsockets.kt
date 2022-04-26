@@ -1,4 +1,4 @@
-package de.hhn.aib.labsw.blackmirror.controller.API
+package de.hhn.aib.labsw.blackmirror.controller.API.Websockets
 
 import com.fasterxml.jackson.databind.JsonNode
 import com.fasterxml.jackson.databind.ObjectMapper
@@ -7,10 +7,19 @@ import okhttp3.WebSocket
 import okhttp3.WebSocketListener
 import java.io.IOException
 
-class MirrorApiListener : WebSocketListener() {
+class MirrorApiWebsockets : WebSocketListener(),MirrorApi {
     var sessions: ArrayList<WebSocket> = ArrayList()
     private var mapper: ObjectMapper = ObjectMapper()
-    var listeners: HashMap<String, ArrayList<TopicListener>?> =
+
+    override fun init() {
+
+    }
+
+    override fun finish() {
+
+    }
+
+    var listeners: HashMap<String, ArrayList<ApiListener>?> =
         HashMap()
 
     fun getJSONMapper(): ObjectMapper {
@@ -32,8 +41,8 @@ class MirrorApiListener : WebSocketListener() {
             val jsonNode: JsonNode = mapper.readTree(message)
             val topic: String = jsonNode.get("topic").textValue()
             requireNotNull(jsonNode.get("payload")) { "wrong json format" }
-            val listenersList: ArrayList<TopicListener>? = listeners[topic]
-            listenersList?.forEach { element : TopicListener ->
+            val listenersList: ArrayList<ApiListener>? = listeners[topic]
+            listenersList?.forEach { element : ApiListener ->
                 try {
                     element.dataReceived(topic, jsonNode)
                 } catch (e: NullPointerException) {
@@ -56,8 +65,8 @@ class MirrorApiListener : WebSocketListener() {
         sessions.remove(session)
     }
 
-    fun subscribe(topic: String, listener: TopicListener) {
-        var listenerList: ArrayList<TopicListener>? = listeners[topic]
+    override fun subscribe(topic: String, listener: ApiListener) {
+        var listenerList: ArrayList<ApiListener>? = listeners[topic]
         if (listenerList == null) {
             listenerList = ArrayList()
             listenerList!!.add(listener)
@@ -67,7 +76,11 @@ class MirrorApiListener : WebSocketListener() {
         }
     }
 
-    fun publish(topic: String, payload: Any?) {
+    override fun unsubscribe(topic: String, listener: ApiListener) {
+        TODO("Not yet implemented")
+    }
+
+    override fun publish(topic: String, payload: Any) {
         val sendPackage = SendPackage()
         sendPackage.topic = topic
         sendPackage.payload = mapper.valueToTree(payload)
@@ -80,7 +93,7 @@ class MirrorApiListener : WebSocketListener() {
         }
     }
 
-    fun publish(topic: String, payload: JsonNode) {
+    override fun publish(topic: String, payload: JsonNode) {
         val sendPackage = SendPackage()
         sendPackage.topic = topic
         sendPackage.payload = payload
@@ -94,12 +107,12 @@ class MirrorApiListener : WebSocketListener() {
     }
 
     companion object {
-        private var instance: MirrorApiListener? = null
-        fun getInstance(): MirrorApiListener? {
+        private var instance: MirrorApiWebsockets? = null
+        fun getInstance(): MirrorApiWebsockets {
             if (instance == null) {
-                instance = MirrorApiListener()
+                instance = MirrorApiWebsockets()
             }
-            return instance
+            return instance as MirrorApiWebsockets
         }
     }
 

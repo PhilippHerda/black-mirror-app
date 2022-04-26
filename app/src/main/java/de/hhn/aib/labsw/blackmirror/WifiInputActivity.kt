@@ -13,7 +13,7 @@ import java.nio.charset.StandardCharsets
  * @author Niklas Binder
  * @version 2022-04-21
  */
-class WifiInputActivity : AppCompatActivity() {
+class WifiInputActivity : AbstractActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_wifi_input)

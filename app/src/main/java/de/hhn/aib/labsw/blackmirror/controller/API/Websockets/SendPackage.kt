@@ -1,4 +1,4 @@
-package de.hhn.aib.labsw.blackmirror.controller.API
+package de.hhn.aib.labsw.blackmirror.controller.API.Websockets
 
 import com.fasterxml.jackson.databind.JsonNode
 
