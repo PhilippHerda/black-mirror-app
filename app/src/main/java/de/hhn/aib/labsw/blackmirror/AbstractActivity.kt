@@ -43,7 +43,7 @@ abstract class AbstractActivity: AppCompatActivity(),ApiListener {
     override fun dataReceived(topic: String, `object`: JsonNode) {}
 
     override fun onDestroy() {
-        super.onDestroy()
         socket.close(1000,"session terminated")
+        super.onDestroy()
     }
 }
