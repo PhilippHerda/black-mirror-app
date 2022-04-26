@@ -47,11 +47,19 @@ interface BleAPI {
 
     // INTERFACES
 
+    /**
+     * Ble Service interface that allows direct access to characteristics.
+     * @author Markus Marewitz
+     * @version 2022-04-26
+     */
     interface Service {
         /**
          * Sets the value of the specified characteristic and publishes the change.
          * @param value The new value of the characteristic.
          * @param characteristicUUID The UUID of the characteristic.
+         * @throws CharacteristicNotFoundException If the service doesn't have a characteristic with the specified UUID.
+         * @throws SecurityException When the required permissions haven't been granted. Call [ensurePermissions] to ensure the required permissions have been granted.
+         * @throws ServiceUnavailableException When the required services (BT, Location) are offline. Call [ensureServices] to ensure the required services are online.
          */
         fun writeCharacteristic(
             value: String,
@@ -61,10 +69,34 @@ interface BleAPI {
 
     // EXCEPTIONS
 
+    /**
+     * This exception is thrown when an operation cannot be performed because a required service is unavailable.
+     * When catching this exception the unavailable service can be queried with [type].
+     * @author Markus Marewitz
+     * @version 2022-04-26
+     */
     class ServiceUnavailableException : RuntimeException {
-        constructor() : super()
-        constructor(message: String) : super(message)
-        constructor(message: String, cause: Throwable) : super(message, cause)
-        constructor(cause: Throwable) : super(cause)
+        constructor(type: Type) : super() { this.type = type }
+        constructor(type: Type, message: String) : super(message) { this.type = type }
+        constructor(type: Type, message: String, cause: Throwable) : super(message, cause) { this.type = type }
+        constructor(type: Type, cause: Throwable) : super(cause) { this.type = type }
+
+        enum class Type { BLUETOOTH, LOCATION }
+        val type: Type
+    }
+
+    /**
+     * This exception is thrown when a characteristic is not contained inside a service.
+     * Get the missing characteristics UUID with [uuid].
+     * @author Markus Marewitz
+     * @version 2022-04-26
+     */
+    class CharacteristicNotFoundException : RuntimeException {
+        constructor(uuid: UUID) : super() { this.uuid = uuid }
+        constructor(uuid: UUID, message: String) : super(message) { this.uuid = uuid }
+        constructor(uuid: UUID, message: String, cause: Throwable) : super(message, cause) { this.uuid = uuid }
+        constructor(uuid: UUID, cause: Throwable) : super(cause) { this.uuid = uuid }
+
+        val uuid: UUID
     }
 }
