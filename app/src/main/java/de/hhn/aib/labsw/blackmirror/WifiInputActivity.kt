@@ -9,6 +9,9 @@ import java.nio.charset.StandardCharsets
 
 /**
  * WifiInputActivity to get the wifi data from the user and hand it over as UTF-8 String to the bluetooth interface.
+ *
+ * @author Niklas Binder
+ * @version 2022-04-21
  */
 class WifiInputActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
