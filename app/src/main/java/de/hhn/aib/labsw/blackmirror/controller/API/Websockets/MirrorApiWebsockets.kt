@@ -2,25 +2,22 @@ package de.hhn.aib.labsw.blackmirror.controller.API.Websockets
 
 import com.fasterxml.jackson.databind.JsonNode
 import com.fasterxml.jackson.databind.ObjectMapper
-import okhttp3.Response
-import okhttp3.WebSocket
-import okhttp3.WebSocketListener
+import okhttp3.*
 import java.io.IOException
 
 class MirrorApiWebsockets : WebSocketListener(),MirrorApi {
     var sessions: ArrayList<WebSocket> = ArrayList()
     private var mapper: ObjectMapper = ObjectMapper()
+    var listeners: HashMap<String, ArrayList<ApiListener>?> =
+        HashMap()
 
     override fun init() {
-
+        //no code atm
     }
 
     override fun finish() {
-
+        //no code atm
     }
-
-    var listeners: HashMap<String, ArrayList<ApiListener>?> =
-        HashMap()
 
     fun getJSONMapper(): ObjectMapper {
         return mapper
@@ -104,19 +101,5 @@ class MirrorApiWebsockets : WebSocketListener(),MirrorApi {
                 println(e.message)
             }
         }
-    }
-
-    companion object {
-        private var instance: MirrorApiWebsockets? = null
-        fun getInstance(): MirrorApiWebsockets {
-            if (instance == null) {
-                instance = MirrorApiWebsockets()
-            }
-            return instance as MirrorApiWebsockets
-        }
-    }
-
-    init {
-        instance = this
     }
 }

@@ -6,10 +6,18 @@ import com.fasterxml.jackson.databind.JsonNode
 import de.hhn.aib.labsw.blackmirror.controller.API.Websockets.ApiListener
 import de.hhn.aib.labsw.blackmirror.controller.API.Websockets.MirrorApi
 import de.hhn.aib.labsw.blackmirror.controller.API.Websockets.MirrorApiWebsockets
+import okhttp3.OkHttpClient
+import okhttp3.Request
 
 
 abstract class AbstractActivity: AppCompatActivity(),ApiListener {
-    private val api = MirrorApiWebsockets.getInstance()
+    //set URL here
+    //10.0.2.2 is localhost of the computer running the emulator
+    val SOCKETS_URL = "ws:\\\\10.0.2.2"
+
+    //create the apiListener and create a socket
+    val api = MirrorApiWebsockets()
+    private val socket = OkHttpClient.Builder().build().newWebSocket(Request.Builder().url(SOCKETS_URL).build(),api)
 
     protected open fun publish(topic:String, payload: JsonNode){
         api.publish(topic,payload)
@@ -33,4 +41,9 @@ abstract class AbstractActivity: AppCompatActivity(),ApiListener {
     }
 
     override fun dataReceived(topic: String, `object`: JsonNode) {}
+
+    override fun onDestroy() {
+        super.onDestroy()
+        socket.close(1000,"session terminated")
+    }
 }
