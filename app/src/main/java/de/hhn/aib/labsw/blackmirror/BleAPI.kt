@@ -32,7 +32,7 @@ interface BleAPI {
     fun setScanDuration(millis: Long)
 
     /**
-     * Scans for BT Devices and checks if they offer the requested service.
+     * Scans for BT devices and checks if they offer the requested service.
      * @param serviceUUID The UUID of the requested service. Each device is checked for whether it offers this service.
      * @param onServiceFound Callback for when a device is found that offers the requested service. `gatt` is the Generic Attribute Profile. `service` is the requested service.
      * @param onTimeout Callback for when the scan duration exceeds. This is only called if no device has been found during the scan.
@@ -44,6 +44,13 @@ interface BleAPI {
         onServiceFound: (service: Service) -> Unit,
         onTimeout: () -> Unit
     )
+
+    /**
+     * Stops scanning for BT devices.
+     * @throws SecurityException  When the required permissions haven't been granted. Call [ensurePermissions] to ensure the required permissions have been granted.
+     * @throws ServiceUnavailableException When the required services (BT, Location) are offline. Call [ensureServices] to ensure the required services are online.
+     */
+    fun stopScanning()
 
     // INTERFACES
 
