@@ -8,11 +8,19 @@ import okhttp3.WebSocketListener
 import java.io.IOException
 
 class MirrorApiListener : WebSocketListener() {
-    var sessions: ArrayList<WebSocket> = ArrayList()
+
+    private var sessions: ArrayList<WebSocket> = ArrayList()
     private var mapper: ObjectMapper = ObjectMapper()
-    var listeners: HashMap<String, ArrayList<TopicListener>?> =
+
+    // HashMap holding topics and all TopicListeners subscribed to them
+    private var listeners: HashMap<String, ArrayList<TopicListener>?> =
         HashMap()
 
+    /**
+     * Returns the APIs instance of the ObjectMapper
+     * which can be used to turn JsonNodes (from dataReceived() method)
+     * back into Objects and vice versa
+     */
     fun getJSONMapper(): ObjectMapper {
         return mapper
     }
@@ -56,6 +64,10 @@ class MirrorApiListener : WebSocketListener() {
         sessions.remove(session)
     }
 
+    /**
+     * This method is used to subscribe a Class/Activity to the specified topic
+     * Usually the given TopicListener should be "this"
+     */
     fun subscribe(topic: String, listener: TopicListener) {
         var listenerList: ArrayList<TopicListener>? = listeners[topic]
         if (listenerList == null) {
@@ -67,6 +79,9 @@ class MirrorApiListener : WebSocketListener() {
         }
     }
 
+    /**
+     * This method sends any Object to anyone subscribed to the specified topic
+     */
     fun publish(topic: String, payload: Any?) {
         val sendPackage = SendPackage()
         sendPackage.topic = topic
@@ -80,6 +95,9 @@ class MirrorApiListener : WebSocketListener() {
         }
     }
 
+    /**
+     * This method sends a JsonNode to anyone subscribed to the specified topic
+     */
     fun publish(topic: String, payload: JsonNode) {
         val sendPackage = SendPackage()
         sendPackage.topic = topic
@@ -93,6 +111,9 @@ class MirrorApiListener : WebSocketListener() {
         }
     }
 
+    /**
+     * Singleton Pattern is used for instantiation
+     */
     companion object {
         private var instance: MirrorApiListener? = null
         fun getInstance(): MirrorApiListener? {

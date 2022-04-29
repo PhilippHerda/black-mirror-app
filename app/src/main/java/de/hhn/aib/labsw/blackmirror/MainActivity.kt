@@ -25,7 +25,9 @@ class MainActivity : AppCompatActivity(), TopicListener {
             .url("ws://10.0.2.2:80")
             .build()
 
+        // create a webSocket
         val webSocket = httpClient.newWebSocket(request, mas)
+        // TESTING only: sending an example object (here as String) via the webSocket
         webSocket.send("{\n" +
                 "  \"topic\":\"location\",\n" +
                 "  \"payload\":{\n" +
@@ -34,8 +36,15 @@ class MainActivity : AppCompatActivity(), TopicListener {
                 "  }\n" +
                 "}")
 
-        // subscribe this activity
+        // if you have an Object (e.g. an "Location") you can use the publish() method:
+        // mas.publish("location", loc)
+        // first parameter is the topic name under which you publish your data
+        // second parameter is an instance of Location
+
+        // subscribe this activity to the topic "location"
         mas.subscribe("location", this)
+
+
 
         val helloBtn = findViewById<Button>(R.id.btn_hello)
         helloBtn.setOnClickListener {
