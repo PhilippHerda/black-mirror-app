@@ -3,33 +3,38 @@ package de.hhn.aib.labsw.blackmirror
 import android.bluetooth.BluetoothGatt
 import android.bluetooth.BluetoothGattService
 import android.content.Context
+import android.content.Intent
+import android.os.Bundle
+import android.os.PersistableBundle
+import androidx.appcompat.app.AppCompatActivity
 import java.io.Closeable
 import java.util.*
 
 /**
  * @author Markus Marewitz
- * @version 2022-04-27
+ * @version 2022-04-29
  */
 class BleAPIImpl(private val context: Context) : BleAPI {
 
     // FIELDS
 
     // scans for 20 sec by default
-    private var scanDurationMillis: Long = 20 * 1000;
+    private var scanDurationMillis: Long = 20 * 1000
 
     // INTERFACE METHODS
 
     override fun ensurePermissions(
         onPermissionsEnsured: () -> Unit,
         onPermissionsDenied: () -> Unit
-    ) {
+    ): (Int, Array<out String>, IntArray) -> Unit {
+        context.startActivity(Intent(context, EnsurePermissionsActivity::class.java))
         TODO("Not yet implemented")
     }
 
     override fun ensureServices(
         onServicesEnsured: () -> Unit,
         onServiceRequestRejected: () -> Unit
-    ) {
+    ): (Int, Int, Intent?) -> Unit {
         TODO("Not yet implemented")
     }
 
@@ -48,8 +53,6 @@ class BleAPIImpl(private val context: Context) : BleAPI {
     override fun stopScanning() {
         TODO("Not yet implemented")
     }
-
-    // IMPLEMENTATION METHODS
 
     // CLASSES
 
@@ -70,5 +73,10 @@ class BleAPIImpl(private val context: Context) : BleAPI {
         override fun close() {
             TODO("Not yet implemented")
         }
+    }
+
+    // ACTIVITIES
+
+    private class EnsurePermissionsActivity : AppCompatActivity() {
     }
 }

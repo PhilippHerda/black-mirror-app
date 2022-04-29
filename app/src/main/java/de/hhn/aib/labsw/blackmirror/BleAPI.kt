@@ -1,11 +1,12 @@
 package de.hhn.aib.labsw.blackmirror
 
+import android.content.Intent
 import java.util.*
 
 /**
  * API to connect and communicate with a Ble server.
  * @author Markus Marewitz
- * @version 2022-04-26
+ * @version 2022-04-29
  */
 interface BleAPI {
 
@@ -15,15 +16,31 @@ interface BleAPI {
      * Ensures that the application has all required permissions.
      * @param onPermissionsEnsured Callback for when all required permissions have been ensured.
      * @param onPermissionsDenied Callback for when the user denied any of the required permissions.
+     * @return A function that the user of the API should call when onRequestPermissionsResult is called, like so:
+     * ```
+     * val apiPermissionsCallback = bleAPI.ensurePermissions( … )
+     * override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
+     *    // call super
+     *    apiPermissionsCallback(requestCode, permissions, grantResults)
+     * }
+     * ```
      */
-    fun ensurePermissions(onPermissionsEnsured: () -> Unit, onPermissionsDenied: () -> Unit)
+    fun ensurePermissions(onPermissionsEnsured: () -> Unit, onPermissionsDenied: () -> Unit): (Int, Array<out String>, IntArray) -> Unit
 
     /**
      * Ensures that the required services (BT, Location) are online.
      * @param onServicesEnsured Callback for when the services availability has been ensured.
      * @param onServiceRequestRejected Callback for when the user rejected the requests to enable the required services.
+     * @return A function that the user of the API should call when onActivityResult is called, like so:
+     * ```
+     * val apiServicesCallback = bleAPI.ensureServices( … )
+     * override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+     *    super.onActivityResult(requestCode, resultCode, data)
+     *    apiServicesCallback(requestCode, resultCode, data)
+     * }
+     * ```
      */
-    fun ensureServices(onServicesEnsured: () -> Unit, onServiceRequestRejected: () -> Unit)
+    fun ensureServices(onServicesEnsured: () -> Unit, onServiceRequestRejected: () -> Unit): (Int, Int, Intent?) -> Unit
 
     /**
      * Sets the duration of the BT scan.
