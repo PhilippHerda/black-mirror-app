@@ -11,20 +11,12 @@ class MirrorApiWebsockets : WebSocketListener(),MirrorApi {
     var listeners: HashMap<String, ArrayList<ApiListener>?> =
         HashMap()
 
-    override fun init() {
-        //no code atm
-    }
-
-    override fun finish() {
-        //no code atm
-    }
-
     fun getJSONMapper(): ObjectMapper {
         return mapper
     }
 
-    override fun onOpen(session: WebSocket, response: Response) {
-        sessions.add(session)
+    override fun onOpen(webSocket: WebSocket, response: Response) {
+        sessions.add(webSocket)
         print("new Connection!: ")
 
         /*Location l = new Location();
@@ -33,9 +25,9 @@ class MirrorApiWebsockets : WebSocketListener(),MirrorApi {
         publish("location", l);*/
     }
 
-    override fun onMessage(session: WebSocket, message: String) {
+    override fun onMessage(webSocket: WebSocket, text: String) {
         try {
-            val jsonNode: JsonNode = mapper.readTree(message)
+            val jsonNode: JsonNode = mapper.readTree(text)
             val topic: String = jsonNode.get("topic").textValue()
             requireNotNull(jsonNode.get("payload")) { "wrong json format" }
             val listenersList: ArrayList<ApiListener>? = listeners[topic]
@@ -51,32 +43,48 @@ class MirrorApiWebsockets : WebSocketListener(),MirrorApi {
         }
     }
 
-    override fun onClosed(session: WebSocket, code: Int, reason: String) {
+    override fun onClosed(webSocket: WebSocket, code: Int, reason: String) {
         // WebSocket connection closes
         print("Connection closed: ")
-        sessions.remove(session)
+        sessions.remove(webSocket)
     }
 
-    override fun onFailure(session: WebSocket, ex: Throwable, response: Response?) {
-        session.close(1013, "try again later")
-        sessions.remove(session)
+    override fun onFailure(webSocket: WebSocket, t: Throwable, response: Response?) {
+        webSocket.close(1013, "try again later")
+        sessions.remove(webSocket)
     }
 
+    /**
+     * add a subscription on a specific topic
+     * @param topic topic to subscribe, not null
+     * @param listener listener to receive updates, not null
+     */
     override fun subscribe(topic: String, listener: ApiListener) {
-        var listenerList: ArrayList<ApiListener>? = listeners[topic]
+        var listenerList: java.util.ArrayList<ApiListener>? = listeners[topic]
         if (listenerList == null) {
             listenerList = ArrayList()
-            listenerList!!.add(listener)
+            listenerList.add(listener)
             listeners[topic] = listenerList
         } else {
             listenerList.add(listener)
         }
     }
 
+    /**
+     * revoke a subscription on a specific topic
+     * @param topic topic of the subscription, not null
+     * @param listener listener to remove, not null
+     */
     override fun unsubscribe(topic: String, listener: ApiListener) {
-        TODO("Not yet implemented")
+        val listenerList: MutableList<ApiListener>? = listeners[topic]
+        listenerList?.remove(listener)
     }
 
+    /**
+     * send a message to the mirror
+     * @param topic topic of the message, not null
+     * @param payload payload of the message, not null
+     */
     override fun publish(topic: String, payload: Any) {
         val sendPackage = SendPackage()
         sendPackage.topic = topic
@@ -90,6 +98,11 @@ class MirrorApiWebsockets : WebSocketListener(),MirrorApi {
         }
     }
 
+    /**
+     * send a message to the mirror
+     * @param topic topic of the message, not null
+     * @param payload payload of the message, not null
+     */
     override fun publish(topic: String, payload: JsonNode) {
         val sendPackage = SendPackage()
         sendPackage.topic = topic

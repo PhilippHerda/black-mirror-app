@@ -9,8 +9,6 @@ import com.fasterxml.jackson.databind.ObjectMapper
  * Version: 1.1 - 19.04.2022
  */
 interface MirrorApi {
-    fun init()
-    fun finish()
     fun subscribe(topic: String, listener: ApiListener)
     fun unsubscribe(topic: String, listener: ApiListener)
     fun publish(topic: String, payload: Any)
