@@ -93,9 +93,7 @@ class MirrorApiWebsockets : WebSocketListener(),MirrorApi {
      * @param payload payload of the message, not null
      */
     override fun publish(topic: String, payload: Any) {
-        val sendPackage = SendPackage()
-        sendPackage.topic = topic
-        sendPackage.payload = mapper.valueToTree(payload)
+        val sendPackage = SendPackage(topic, getJSONMapper().valueToTree(payload))
         sessions.forEach { session: WebSocket ->
             try {
                 session.send(mapper.writeValueAsString(sendPackage))
@@ -111,9 +109,7 @@ class MirrorApiWebsockets : WebSocketListener(),MirrorApi {
      * @param payload payload of the message, not null
      */
     override fun publish(topic: String, payload: JsonNode) {
-        val sendPackage = SendPackage()
-        sendPackage.topic = topic
-        sendPackage.payload = payload
+        val sendPackage = SendPackage(topic,payload)
         sessions.forEach { session: WebSocket ->
             try {
                 session.send(mapper.writeValueAsString(sendPackage))
