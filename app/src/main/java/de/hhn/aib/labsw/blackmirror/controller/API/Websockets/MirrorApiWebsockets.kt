@@ -5,11 +5,15 @@ import com.fasterxml.jackson.databind.ObjectMapper
 import okhttp3.*
 import java.io.IOException
 
+/**
+ * Implementation of the interface using websockets
+ * @author Luis Gutzeit
+ * @version 05.05.2022
+ */
 class MirrorApiWebsockets : WebSocketListener(),MirrorApi {
-    var sessions: ArrayList<WebSocket> = ArrayList()
+    private var sessions = mutableListOf<WebSocket>()
     private var mapper: ObjectMapper = ObjectMapper()
-    var listeners: HashMap<String, ArrayList<ApiListener>?> =
-        HashMap()
+    private var listeners = mutableMapOf<String,MutableList<ApiListener>>()
 
     fun getJSONMapper(): ObjectMapper {
         return mapper
@@ -30,12 +34,16 @@ class MirrorApiWebsockets : WebSocketListener(),MirrorApi {
             val jsonNode: JsonNode = mapper.readTree(text)
             val topic: String = jsonNode.get("topic").textValue()
             requireNotNull(jsonNode.get("payload")) { "wrong json format" }
-            val listenersList: ArrayList<ApiListener>? = listeners[topic]
-            listenersList?.forEach { element : ApiListener ->
-                try {
-                    element.dataReceived(topic, jsonNode)
-                } catch (e: NullPointerException) {
-                    listenersList.remove(element)
+            val listenersList = listeners[topic]
+            if(listenersList != null) {
+                val listIterator = listenersList.iterator()
+                while (listIterator.hasNext()) {
+                    val element = listIterator.next()
+                    try {
+                        element.dataReceived(topic, jsonNode)
+                    } catch (e: NullPointerException) {
+                        listIterator.remove()
+                    }
                 }
             }
         } catch (e: Exception) {
@@ -60,10 +68,9 @@ class MirrorApiWebsockets : WebSocketListener(),MirrorApi {
      * @param listener listener to receive updates, not null
      */
     override fun subscribe(topic: String, listener: ApiListener) {
-        var listenerList: java.util.ArrayList<ApiListener>? = listeners[topic]
+        var listenerList = listeners[topic]
         if (listenerList == null) {
-            listenerList = ArrayList()
-            listenerList.add(listener)
+            listenerList = mutableListOf(listener)
             listeners[topic] = listenerList
         } else {
             listenerList.add(listener)
@@ -76,7 +83,7 @@ class MirrorApiWebsockets : WebSocketListener(),MirrorApi {
      * @param listener listener to remove, not null
      */
     override fun unsubscribe(topic: String, listener: ApiListener) {
-        val listenerList: MutableList<ApiListener>? = listeners[topic]
+        val listenerList  = listeners[topic]
         listenerList?.remove(listener)
     }
 
