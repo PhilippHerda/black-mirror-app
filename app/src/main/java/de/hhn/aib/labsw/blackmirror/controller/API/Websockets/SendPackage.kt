@@ -2,7 +2,9 @@ package de.hhn.aib.labsw.blackmirror.controller.API.Websockets
 
 import com.fasterxml.jackson.databind.JsonNode
 
-class SendPackage {
-    var topic: String? = null
-    var payload: JsonNode? = null
-}
+/**
+ * SendPackage that contains the information to be send
+ */
+data class SendPackage(
+    var topic: String,
+    var payload: JsonNode)
