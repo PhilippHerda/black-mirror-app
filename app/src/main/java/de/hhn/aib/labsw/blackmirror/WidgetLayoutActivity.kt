@@ -12,7 +12,6 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.content.res.AppCompatResources
 import androidx.core.view.iterator
 import androidx.gridlayout.widget.GridLayout
-import android.view.ViewGroup
 import androidx.annotation.RequiresApi
 
 
@@ -36,9 +35,12 @@ class WidgetLayoutActivity : AppCompatActivity() {
         for (i in 0 until widgets.size) {
             val widget = ImageView(this)
             when (widgets[i]) {
-                "Wetter" -> widget.background = AppCompatResources.getDrawable(this, R.drawable.box)
+                "Wetter" -> {
+                    widget.background = AppCompatResources.getDrawable(this, R.drawable.widget_box)
+                    widget.foreground = AppCompatResources.getDrawable(this, R.drawable.weather_widget_icon_foreground)
+                }
                 "Kalendar" -> widget.background =
-                    AppCompatResources.getDrawable(this, R.drawable.box)
+                    AppCompatResources.getDrawable(this, R.drawable.widget_box)
             }
             widget.setOnTouchListener(MyOnTouchListener())
             widgetList.addView(widget, i)
@@ -55,30 +57,26 @@ class WidgetLayoutActivity : AppCompatActivity() {
     inner class MyDragListener : View.OnDragListener {
 
         override fun onDrag(v: View?, event: DragEvent?): Boolean {
+            var priorDropTarget = null
             when (event!!.action) {
                 DragEvent.ACTION_DRAG_STARTED -> {}
-                DragEvent.ACTION_DRAG_ENTERED -> {}
-                DragEvent.ACTION_DRAG_EXITED -> {}
+                DragEvent.ACTION_DRAG_ENTERED -> {
+                    v!!.background = AppCompatResources.getDrawable(this@WidgetLayoutActivity, R.drawable.selectable_box)
+                }
+                DragEvent.ACTION_DRAG_EXITED -> {
+                    v!!.background = AppCompatResources.getDrawable(this@WidgetLayoutActivity, R.drawable.box)
+                }
                 DragEvent.ACTION_DROP
                 -> {
-                    val view = event?.localState as View
-
-                    when (view.background) {
-                        AppCompatResources.getDrawable(this@WidgetLayoutActivity, R.drawable.box) -> view.background =
-                            AppCompatResources.getDrawable(this@WidgetLayoutActivity, R.drawable.box)
-                        AppCompatResources.getDrawable(this@WidgetLayoutActivity, R.drawable.box) -> view.background =
-                            AppCompatResources.getDrawable(this@WidgetLayoutActivity, R.drawable.box)
-                    }
-                    v!!.background = AppCompatResources.getDrawable(this@WidgetLayoutActivity, R.drawable.selected_box)
+                    val view = event?.localState as ImageView
+                    v as ImageView
+                    v.background = view.background
+                    v.foreground = view.foreground
 
                 }
                 else -> {}
             }
             return true
-        }
-
-        fun checkIfWidgetOnBox(dragEvent: DragEvent): Boolean {
-           return true
         }
     }
 

@@ -58,74 +58,74 @@
             android:id="@+id/box11"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:srcCompat="@drawable/box"
+            android:background="@drawable/box"
             tools:ignore="ImageContrastCheck" />
 
         <ImageView
             android:id="@+id/box12"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:srcCompat="@drawable/box" />
+            android:background="@drawable/box" />
 
         <ImageView
             android:id="@+id/box13"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:srcCompat="@drawable/box" />
+            android:background="@drawable/box" />
 
         <ImageView
             android:id="@+id/box21"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:srcCompat="@drawable/box" />
+            android:background="@drawable/box" />
 
         <ImageView
             android:id="@+id/box22"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:srcCompat="@drawable/box" />
+            android:background="@drawable/box" />
 
         <ImageView
             android:id="@+id/box23"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:srcCompat="@drawable/box" />
+            android:background="@drawable/box" />
 
         <ImageView
             android:id="@+id/box31"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:srcCompat="@drawable/box" />
+            android:background="@drawable/box" />
 
         <ImageView
             android:id="@+id/box32"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:srcCompat="@drawable/box" />
+            android:background="@drawable/box" />
 
         <ImageView
             android:id="@+id/box33"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:srcCompat="@drawable/box" />
+            android:background="@drawable/box" />
 
         <ImageView
             android:id="@+id/box41"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:srcCompat="@drawable/box" />
+            android:background="@drawable/box" />
 
         <ImageView
             android:id="@+id/box42"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:srcCompat="@drawable/box" />
+            android:background="@drawable/box" />
 
         <ImageView
             android:id="@+id/box43"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:srcCompat="@drawable/box" />
+            android:background="@drawable/box" />
     </androidx.gridlayout.widget.GridLayout>
 
     <HorizontalScrollView
@@ -141,7 +141,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:padding="5dip" />
+            android:padding="5dp"
+            />
     </HorizontalScrollView>
 
     <com.google.android.material.button.MaterialButton
