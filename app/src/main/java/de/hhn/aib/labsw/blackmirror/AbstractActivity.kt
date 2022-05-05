@@ -9,14 +9,18 @@ import de.hhn.aib.labsw.blackmirror.controller.API.Websockets.MirrorApiWebsocket
 import okhttp3.OkHttpClient
 import okhttp3.Request
 
-
+/**
+ * Abstract activity providing api access
+ * @author Luis Gutzeit
+ * @version 05.05.2022
+ */
 abstract class AbstractActivity: AppCompatActivity(),ApiListener {
     /**
      * call this method to send data to the mirror
      * @param topic topic of the message, not null
      * @param payload payload of the message, not null
      */
-    protected open fun publish(topic:String, payload: JsonNode){
+    protected open fun publishToRemotes(topic:String, payload: JsonNode){
         api.publish(topic,payload)
     }
 
@@ -25,7 +29,7 @@ abstract class AbstractActivity: AppCompatActivity(),ApiListener {
      * @param topic topic of the message, not null
      * @param payload payload of the message, not null
      */
-    protected open fun publish(topic:String, payload:Any){
+    protected open fun publishToRemotes(topic:String, payload:Any){
         api.publish(topic,payload)
     }
 
