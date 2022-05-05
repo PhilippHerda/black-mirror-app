@@ -1,9 +1,3 @@
 <resources>
     <string name="app_name">black-mirror-app</string>
-
-    <string name="wifiInput_wifiSSID_hint">Wifi SSID / Wifi Name</string>
-    <string name="wifiInput_wifiPassword_hint">Wifi Passwort</string>
-    <string name="wifiInput_wifiPasswordAdvice_text">Wenn das Wifi nicht passwortgesichert ist, soll das Feld einfach leer bleiben.</string>
-    <string name="wifiInput_confirm_buttonText">Bestätigen</string>
-    <string name="wifiInput_emptyWifiSSID_toastText">Wifi SSID darf nicht leer sein!</string>
 </resources>
