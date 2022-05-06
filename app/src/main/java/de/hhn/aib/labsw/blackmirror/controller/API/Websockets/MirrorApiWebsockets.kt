@@ -11,22 +11,14 @@ import java.io.IOException
  * @version 05.05.2022
  */
 class MirrorApiWebsockets : WebSocketListener(),MirrorApi {
-    private var sessions = mutableListOf<WebSocket>()
-    private var mapper: ObjectMapper = ObjectMapper()
-    private var listeners = mutableMapOf<String,MutableList<ApiListener>>()
+    private val sessions = mutableListOf<WebSocket>()
+    private val listeners = mutableMapOf<String,MutableList<ApiListener>>()
 
-    fun getJSONMapper(): ObjectMapper {
-        return mapper
-    }
+    val mapper: ObjectMapper = ObjectMapper()
 
     override fun onOpen(webSocket: WebSocket, response: Response) {
         sessions.add(webSocket)
         print("new Connection!: ")
-
-        /*Location l = new Location();
-        l.lat = 3.123;
-        l.lon = 1.452;
-        publish("location", l);*/
     }
 
     override fun onMessage(webSocket: WebSocket, text: String) {
@@ -38,12 +30,7 @@ class MirrorApiWebsockets : WebSocketListener(),MirrorApi {
             if(listenersList != null) {
                 val listIterator = listenersList.iterator()
                 while (listIterator.hasNext()) {
-                    val element = listIterator.next()
-                    try {
-                        element.dataReceived(topic, jsonNode)
-                    } catch (e: NullPointerException) {
-                        listIterator.remove()
-                    }
+                    listIterator.next().dataReceived(topic, jsonNode)
                 }
             }
         } catch (e: Exception) {
@@ -93,7 +80,7 @@ class MirrorApiWebsockets : WebSocketListener(),MirrorApi {
      * @param payload payload of the message, not null
      */
     override fun publish(topic: String, payload: Any) {
-        val sendPackage = SendPackage(topic, getJSONMapper().valueToTree(payload))
+        val sendPackage = SendPackage(topic, mapper.valueToTree(payload))
         sessions.forEach { session: WebSocket ->
             try {
                 session.send(mapper.writeValueAsString(sendPackage))
