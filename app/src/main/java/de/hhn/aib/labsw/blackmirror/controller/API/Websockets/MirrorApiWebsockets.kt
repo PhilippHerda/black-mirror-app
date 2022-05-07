@@ -10,9 +10,9 @@ import java.io.IOException
  * @author Luis Gutzeit
  * @version 05.05.2022
  */
-class MirrorApiWebsockets : WebSocketListener(),MirrorApi {
+class MirrorApiWebsockets : WebSocketListener(), MirrorApi {
     private val sessions = mutableListOf<WebSocket>()
-    private val listeners = mutableMapOf<String,MutableList<ApiListener>>()
+    private val listeners = mutableMapOf<String, MutableList<ApiListener>>()
 
     val mapper: ObjectMapper = ObjectMapper()
 
@@ -27,11 +27,8 @@ class MirrorApiWebsockets : WebSocketListener(),MirrorApi {
             val topic: String = jsonNode.get("topic").textValue()
             requireNotNull(jsonNode.get("payload")) { "wrong json format" }
             val listenersList = listeners[topic]
-            if(listenersList != null) {
-                val listIterator = listenersList.iterator()
-                while (listIterator.hasNext()) {
-                    listIterator.next().dataReceived(topic, jsonNode)
-                }
+            listenersList?.forEach { e ->
+                e.dataReceived(topic, jsonNode)
             }
         } catch (e: Exception) {
             println(e.message)
@@ -70,7 +67,7 @@ class MirrorApiWebsockets : WebSocketListener(),MirrorApi {
      * @param listener listener to remove, not null
      */
     override fun unsubscribe(topic: String, listener: ApiListener) {
-        val listenerList  = listeners[topic]
+        val listenerList = listeners[topic]
         listenerList?.remove(listener)
     }
 
@@ -96,7 +93,7 @@ class MirrorApiWebsockets : WebSocketListener(),MirrorApi {
      * @param payload payload of the message, not null
      */
     override fun publish(topic: String, payload: JsonNode) {
-        val sendPackage = SendPackage(topic,payload)
+        val sendPackage = SendPackage(topic, payload)
         sessions.forEach { session: WebSocket ->
             try {
                 session.send(mapper.writeValueAsString(sendPackage))

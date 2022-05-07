@@ -59,7 +59,7 @@ abstract class AbstractActivity: AppCompatActivity(),ApiListener {
      */
     @Throws(JsonProcessingException::class)
     protected fun <T> nodeToObject(node: JsonNode, tClass: Class<T>): T {
-        return api.getJSONMapper().treeToValue(node, tClass)
+        return api.mapper.treeToValue(node, tClass)
     }
 
     /**
