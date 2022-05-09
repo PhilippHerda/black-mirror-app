@@ -43,6 +43,8 @@ class MirrorApiWebsockets : WebSocketListener(), MirrorApi {
 
     override fun onFailure(webSocket: WebSocket, t: Throwable, response: Response?) {
         webSocket.close(1013, "try again later")
+        println("SOCKET API ERROR!")
+        println(t.stackTraceToString())
         sessions.remove(webSocket)
     }
 
