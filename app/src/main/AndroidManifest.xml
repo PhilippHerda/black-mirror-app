@@ -10,8 +10,8 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Blackmirrorapp">
         <activity
-            android:name=".WifiInputActivity"
-            android:exported="false" />
+            android:name=".WeatherLocationActivity"
+            android:exported="true" />
         <activity
             android:name=".WidgetLayoutActivity"
             android:exported="true" />

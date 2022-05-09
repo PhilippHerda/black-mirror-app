@@ -1,6 +1,17 @@
 <resources>
     <string name="app_name">black-mirror-app</string>
-    <string name="textIcon_str">TESTICON</string>
+  
+  // WidgetLayout Strings:
     <string name="Str_widgetSaveButton">save</string>
     <string name="Str_widgetExitButton">exit</string>
+
+    <string name="weatherLocationDescr">Enter the location used for your weather data.\n\nA location consists of a latitude (north-south) and a longitude (west-east).</string>
+    <string name="longitude">Longitude</string>
+    <string name="latitude">Latitude</string>
+    <string name="invalidLatTitle">Invalid latitude</string>
+    <string name="invalidLatMsg">The latitude must be between -90.0° and +90.0°.</string>
+    <string name="invalidLonTitle">Invalid longitude</string>
+    <string name="invalidLonMsg">The longitude must be between -180.0° and +180.0°.</string>
+    <string name="invalidDoubleTitle">Invalid input</string>
+    <string name="invalidDoubleMsg">Failed to read number. Expected the format 25.314.</string>
 </resources>
