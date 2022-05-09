@@ -76,7 +76,8 @@ abstract class AbstractActivity: AppCompatActivity(),ApiListener {
     companion object{
         //set URL here
         //10.0.2.2 is localhost of the computer running the emulator
-        private val SOCKETS_URL = "ws:\\\\10.0.2.2"
+        private val SOCKETS_URL = "ws:\\\\blackmirror:2306"
+        //private const val SOCKETS_URL = "ws:\\\\LuisRechner:2306"
 
         //create the apiListener and create a socket
         private val api = MirrorApiWebsockets()
