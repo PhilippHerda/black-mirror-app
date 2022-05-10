@@ -1,5 +1,10 @@
 <resources>
     <string name="app_name">black-mirror-app</string>
+  
+  // WidgetLayout Strings:
+    <string name="Str_widgetSaveButton">save</string>
+    <string name="Str_widgetExitButton">exit</string>
+
     <string name="weatherLocationDescr">Enter the location used for your weather data.\n\nA location consists of a latitude (north-south) and a longitude (west-east).</string>
     <string name="longitude">Longitude</string>
     <string name="latitude">Latitude</string>

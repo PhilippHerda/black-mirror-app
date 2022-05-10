@@ -15,6 +15,9 @@
             android:name=".WeatherLocationActivity"
             android:exported="true" />
         <activity
+            android:name=".WidgetLayoutActivity"
+            android:exported="true" />
+        <activity
             android:name=".MainActivity"
             android:exported="true">
             <intent-filter>
