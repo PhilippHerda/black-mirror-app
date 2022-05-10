@@ -10,7 +10,6 @@
         android:layout_width="72dp"
         android:layout_height="72dp"
         android:background="#373636"
-        android:text="@string/textIcon_str"
         android:textAlignment="center"
         android:textColor="#F4F3F3"
         app:layout_constraintBottom_toBottomOf="parent"
