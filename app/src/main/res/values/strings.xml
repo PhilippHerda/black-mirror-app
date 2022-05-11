@@ -1,7 +1,8 @@
 <resources>
     <string name="app_name">black-mirror-app</string>
-  
-  // WidgetLayout Strings:
+    //Loading Screen Strings:
+    <string name="blackMirror_logo_contentDescription">Blackmirror content description</string>
+    // WidgetLayout Strings:
     <string name="Str_widgetSaveButton">save</string>
     <string name="Str_widgetExitButton">exit</string>
 
