@@ -1,6 +1,8 @@
 package de.hhn.aib.labsw.blackmirror
 
+import android.app.AlertDialog
 import android.content.ClipData
+import android.content.Intent
 import android.os.Build
 import android.os.Bundle
 import android.view.DragEvent
@@ -8,12 +10,13 @@ import android.view.View
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.Toast
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.content.res.AppCompatResources
 import androidx.core.view.iterator
 import androidx.gridlayout.widget.GridLayout
-import androidx.annotation.RequiresApi
 import com.google.android.material.button.MaterialButton
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 import de.hhn.aib.labsw.blackmirror.dataclasses.MyPage
 import de.hhn.aib.labsw.blackmirror.dataclasses.Widget
 
@@ -22,8 +25,8 @@ import de.hhn.aib.labsw.blackmirror.dataclasses.Widget
  * simulated mirror. These layouts can be saved.
  * This allows customizable mirror layouts.
  *
- * @author Selim Özdemir
- * @version 09-05-2022
+ * @author Selim Özdemir, Niklas Binder
+ * @version 12-05-2022
  */
 class WidgetLayoutActivity : AppCompatActivity() {
 
@@ -171,15 +174,52 @@ class WidgetLayoutActivity : AppCompatActivity() {
             myToast.show()
         }
 
+        val clearButton: MaterialButton = findViewById(R.id.clearButton)
+        clearButton.setOnClickListener {
+            val builder = AlertDialog.Builder(this@WidgetLayoutActivity)
+            builder.setMessage(resources.getString(R.string.Str_widgetConfirmClearTxt))
+                .setCancelable(false)
+                .setPositiveButton(
+                    resources.getString(R.string.Str_widgetConfirmClearYesTxt)
+                ) { dialog, id -> clearWidgetGrid() }
+                .setNegativeButton(
+                    resources.getString(R.string.Str_widgetConfirmClearNoTxt)
+                ) { dialog, id -> dialog.cancel() }
+            val alert = builder.create()
+            alert.show()
+        }
 
-        // TODO: Create a PageActivity which uses the given MyPage extra
-        //val exitButton: MaterialButton = findViewById(R.id.exitButton)
-        //exitButton.setOnClickListener {
-        //
-        //    intent = Intent(this, PagesActivity::class.java)
-        //    intent.putExtra("newPage", savedPage)
-        //    startActivity(intent)
-        //}
+        val configPagesButton: MaterialButton = findViewById(R.id.configPagesButton)
+        configPagesButton.setOnClickListener {
+            saveCurrentPage()
+            //    TODO: Create a PageActivity which uses the given MyPage extra
+            //    intent = Intent(this, PagesActivity::class.java)
+            //    intent.putExtra("newPage", savedPage)
+            //    startActivity(intent)
+        }
+
+        val navigateLeftButton = findViewById<FloatingActionButton>(R.id.navigateLeft_fab)
+        navigateLeftButton.setOnClickListener {
+            saveCurrentPage()
+            clearWidgetGrid()
+        }
+
+        val navigateRightButton = findViewById<FloatingActionButton>(R.id.navigateRight_fab)
+        navigateRightButton.setOnClickListener {
+            saveCurrentPage()
+            clearWidgetGrid()
+        }
+    }
+
+    private fun saveCurrentPage() {
+        // TODO: Safe Positions of the widgets on the page
+    }
+
+    private fun clearWidgetGrid() {
+        for (box in myGridLayout) {
+            box.foreground = null
+            box.background = AppCompatResources.getDrawable(this, R.drawable.box)
+        }
     }
 
     /**
@@ -230,5 +270,19 @@ class WidgetLayoutActivity : AppCompatActivity() {
             }
             return true
         }
+    }
+
+    override fun onBackPressed() {
+        val builder = AlertDialog.Builder(this@WidgetLayoutActivity)
+        builder.setMessage(resources.getString(R.string.Str_widgetConfirmExitApplicationTxt))
+            .setCancelable(false)
+            .setPositiveButton(
+                resources.getString(R.string.Str_widgetConfirmClearYesTxt)
+            ) { dialog, id -> this@WidgetLayoutActivity.finishAffinity() }
+            .setNegativeButton(
+                resources.getString(R.string.Str_widgetConfirmClearNoTxt)
+            ) { dialog, id -> dialog.cancel() }
+        val alert = builder.create()
+        alert.show()
     }
 }

@@ -4,7 +4,14 @@
     <string name="blackMirror_logo_contentDescription">Blackmirror content description</string>
     // WidgetLayout Strings:
     <string name="Str_widgetSaveButton">save</string>
-    <string name="Str_widgetExitButton">exit</string>
+    <string name="Str_widgetConfigPagesButton">config pages</string>
+    <string name="Str_widgetGoLeftButton">Go Left</string>
+    <string name="Str_widgetGoRightButton">Go Right</string>
+    <string name="Str_widgetClearButton">clear</string>
+    <string name="Str_widgetConfirmClearTxt">Are you sure you want to delete the whole configuration?</string>
+    <string name="Str_widgetConfirmClearYesTxt">Yes</string>
+    <string name="Str_widgetConfirmClearNoTxt">No</string>
+    <string name="Str_widgetConfirmExitApplicationTxt">Are you sure you want to exit the application?</string>
 
     <string name="weatherLocationDescr">Enter the location used for your weather data.\n\nA location consists of a latitude (north-south) and a longitude (west-east).</string>
     <string name="longitude">Longitude</string>
