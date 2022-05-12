@@ -1,5 +1,11 @@
 <resources>
     <string name="app_name">black-mirror-app</string>
+  // EmailData Strings:  
+    <string name="tv_email">Email:</string>
+    <string name="tv_password">Password:</string>
+    <string name="tv_imap">Imap Server:</string>
+    <string name="tv_inbox">Inbox Name:</string>
+    <string name="btn_save">Save</string>
   
   // WidgetLayout Strings:
     <string name="Str_widgetSaveButton">save</string>
