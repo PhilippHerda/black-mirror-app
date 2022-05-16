@@ -1,21 +1,26 @@
 package de.hhn.aib.labsw.blackmirror
 
+import android.annotation.SuppressLint
 import android.content.ClipData
+import android.content.Intent
 import android.os.Build
 import android.os.Bundle
 import android.view.DragEvent
+import android.view.GestureDetector
+import android.view.MotionEvent
 import android.view.View
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.Toast
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.content.res.AppCompatResources
 import androidx.core.view.iterator
 import androidx.gridlayout.widget.GridLayout
-import androidx.annotation.RequiresApi
 import com.google.android.material.button.MaterialButton
 import de.hhn.aib.labsw.blackmirror.dataclasses.MyPage
 import de.hhn.aib.labsw.blackmirror.dataclasses.Widget
+
 
 /**
  * This activity initializes an interface where different widgets can be dragged on a
@@ -104,10 +109,52 @@ class WidgetLayoutActivity : AppCompatActivity() {
     /**
      * Initializes the grid functionality and the buttons.
      */
+    @SuppressLint("ClickableViewAccessibility")
     private fun init() {
         myGridLayout = findViewById(R.id.widgetGrid)
         for (box in myGridLayout) {
-            box.setOnDragListener(MyDragListener())
+            box.setOnClickListener {
+                if (box.foreground != null) {
+                    intent = null
+                    when (box.foreground) {
+                        AppCompatResources.getDrawable(
+                            this@WidgetLayoutActivity,
+                            R.drawable.mail_widget_icon_foreground
+                        ) -> {
+                            // intent = Intent(this@WidgetLayoutActivity, Activity::class.java) mail configuration
+                        }
+                        AppCompatResources.getDrawable(
+                            this@WidgetLayoutActivity,
+                            R.drawable.calendar_widget_icon_foreground
+                        ) -> {
+                            // intent = Intent(this@WidgetLayoutActivity, Activity::class.java) calendar configuration
+                        }
+                        AppCompatResources.getDrawable(
+                            this@WidgetLayoutActivity,
+                            R.drawable.weather_widget_icon_foreground
+                        ) -> {
+                            intent = Intent(
+                                this@WidgetLayoutActivity,
+                                WeatherLocationActivity::class.java
+                            )
+                        }
+                        AppCompatResources.getDrawable(
+                            this@WidgetLayoutActivity,
+                            R.drawable.clock_widget_icon_foreground
+                        ) -> {
+                            // intent = Intent(this@WidgetLayoutActivity, Activity::class.java) clock configuration
+                        }
+                        AppCompatResources.getDrawable(
+                            this@WidgetLayoutActivity,
+                            R.drawable.reminder_widget_icon_foreground
+                        ) -> {
+                            // intent = Intent(this@WidgetLayoutActivity, Activity::class.java) reminder configuration
+                        }
+                    }
+                    startActivity(intent)
+                }
+            }
+
             box.setOnLongClickListener {
                 if (box.foreground != null) {
                     for (widget in widgetList) {
@@ -124,6 +171,8 @@ class WidgetLayoutActivity : AppCompatActivity() {
                 }
                 return@setOnLongClickListener true
             }
+
+            box.setOnDragListener(MyDragListener())
         }
 
         val saveButton: MaterialButton = findViewById(R.id.saveButton)
@@ -170,16 +219,6 @@ class WidgetLayoutActivity : AppCompatActivity() {
                 Toast.makeText(applicationContext, "Successfully saved!", Toast.LENGTH_SHORT)
             myToast.show()
         }
-
-
-        // TODO: Create a PageActivity which uses the given MyPage extra
-        //val exitButton: MaterialButton = findViewById(R.id.exitButton)
-        //exitButton.setOnClickListener {
-        //
-        //    intent = Intent(this, PagesActivity::class.java)
-        //    intent.putExtra("newPage", savedPage)
-        //    startActivity(intent)
-        //}
     }
 
     /**
@@ -231,4 +270,94 @@ class WidgetLayoutActivity : AppCompatActivity() {
             return true
         }
     }
+
+    inner class MyBoxClickListener(v: ImageView) : GestureDetector.OnGestureListener {
+        var view: ImageView = v
+
+        override fun onDown(e: MotionEvent?): Boolean {
+            return false
+        }
+
+        override fun onShowPress(e: MotionEvent?) {
+        }
+
+        override fun onSingleTapUp(e: MotionEvent?): Boolean {
+            if (view.foreground != null) {
+                intent = null
+                when (view.foreground) {
+                    AppCompatResources.getDrawable(
+                        this@WidgetLayoutActivity,
+                        R.drawable.mail_widget_icon_foreground
+                    ) -> {
+                        // intent = Intent(this@WidgetLayoutActivity, Activity::class.java) mail configuration
+                    }
+                    AppCompatResources.getDrawable(
+                        this@WidgetLayoutActivity,
+                        R.drawable.calendar_widget_icon_foreground
+                    ) -> {
+                        // intent = Intent(this@WidgetLayoutActivity, Activity::class.java) calendar configuration
+                    }
+                    AppCompatResources.getDrawable(
+                        this@WidgetLayoutActivity,
+                        R.drawable.weather_widget_icon_foreground
+                    ) -> {
+                        intent = Intent(
+                            this@WidgetLayoutActivity,
+                            WeatherLocationActivity::class.java
+                        )
+                    }
+                    AppCompatResources.getDrawable(
+                        this@WidgetLayoutActivity,
+                        R.drawable.clock_widget_icon_foreground
+                    ) -> {
+                        // intent = Intent(this@WidgetLayoutActivity, Activity::class.java) clock configuration
+                    }
+                    AppCompatResources.getDrawable(
+                        this@WidgetLayoutActivity,
+                        R.drawable.reminder_widget_icon_foreground
+                    ) -> {
+                        // intent = Intent(this@WidgetLayoutActivity, Activity::class.java) reminder configuration
+                    }
+                }
+                startActivity(intent)
+                return true
+            }
+            return false
+        }
+
+        override fun onScroll(
+            e1: MotionEvent?,
+            e2: MotionEvent?,
+            distanceX: Float,
+            distanceY: Float
+        ): Boolean {
+            return false
+        }
+
+        override fun onLongPress(e: MotionEvent?) {
+            if (view.foreground != null) {
+                for (widget in widgetList) {
+                    if (view.foreground == widget.foreground) {
+                        widget.performLongClick()
+                    }
+                }
+                view.background =
+                    AppCompatResources.getDrawable(
+                        this@WidgetLayoutActivity,
+                        R.drawable.box
+                    )
+                view.foreground = null
+            }
+        }
+
+        override fun onFling(
+            e1: MotionEvent?,
+            e2: MotionEvent?,
+            velocityX: Float,
+            velocityY: Float
+        ): Boolean {
+            return false
+        }
+    }
 }
+
