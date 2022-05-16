@@ -6,8 +6,6 @@ import android.content.Intent
 import android.os.Build
 import android.os.Bundle
 import android.view.DragEvent
-import android.view.GestureDetector
-import android.view.MotionEvent
 import android.view.View
 import android.widget.ImageView
 import android.widget.LinearLayout
@@ -268,95 +266,6 @@ class WidgetLayoutActivity : AppCompatActivity() {
                 else -> {}
             }
             return true
-        }
-    }
-
-    inner class MyBoxClickListener(v: ImageView) : GestureDetector.OnGestureListener {
-        var view: ImageView = v
-
-        override fun onDown(e: MotionEvent?): Boolean {
-            return false
-        }
-
-        override fun onShowPress(e: MotionEvent?) {
-        }
-
-        override fun onSingleTapUp(e: MotionEvent?): Boolean {
-            if (view.foreground != null) {
-                intent = null
-                when (view.foreground) {
-                    AppCompatResources.getDrawable(
-                        this@WidgetLayoutActivity,
-                        R.drawable.mail_widget_icon_foreground
-                    ) -> {
-                        // intent = Intent(this@WidgetLayoutActivity, Activity::class.java) mail configuration
-                    }
-                    AppCompatResources.getDrawable(
-                        this@WidgetLayoutActivity,
-                        R.drawable.calendar_widget_icon_foreground
-                    ) -> {
-                        // intent = Intent(this@WidgetLayoutActivity, Activity::class.java) calendar configuration
-                    }
-                    AppCompatResources.getDrawable(
-                        this@WidgetLayoutActivity,
-                        R.drawable.weather_widget_icon_foreground
-                    ) -> {
-                        intent = Intent(
-                            this@WidgetLayoutActivity,
-                            WeatherLocationActivity::class.java
-                        )
-                    }
-                    AppCompatResources.getDrawable(
-                        this@WidgetLayoutActivity,
-                        R.drawable.clock_widget_icon_foreground
-                    ) -> {
-                        // intent = Intent(this@WidgetLayoutActivity, Activity::class.java) clock configuration
-                    }
-                    AppCompatResources.getDrawable(
-                        this@WidgetLayoutActivity,
-                        R.drawable.reminder_widget_icon_foreground
-                    ) -> {
-                        // intent = Intent(this@WidgetLayoutActivity, Activity::class.java) reminder configuration
-                    }
-                }
-                startActivity(intent)
-                return true
-            }
-            return false
-        }
-
-        override fun onScroll(
-            e1: MotionEvent?,
-            e2: MotionEvent?,
-            distanceX: Float,
-            distanceY: Float
-        ): Boolean {
-            return false
-        }
-
-        override fun onLongPress(e: MotionEvent?) {
-            if (view.foreground != null) {
-                for (widget in widgetList) {
-                    if (view.foreground == widget.foreground) {
-                        widget.performLongClick()
-                    }
-                }
-                view.background =
-                    AppCompatResources.getDrawable(
-                        this@WidgetLayoutActivity,
-                        R.drawable.box
-                    )
-                view.foreground = null
-            }
-        }
-
-        override fun onFling(
-            e1: MotionEvent?,
-            e2: MotionEvent?,
-            velocityX: Float,
-            velocityY: Float
-        ): Boolean {
-            return false
         }
     }
 }
