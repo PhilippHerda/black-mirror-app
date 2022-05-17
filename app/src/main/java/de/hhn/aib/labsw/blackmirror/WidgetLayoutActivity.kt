@@ -2,7 +2,6 @@ package de.hhn.aib.labsw.blackmirror
 
 import android.app.AlertDialog
 import android.content.ClipData
-import android.content.Intent
 import android.os.Build
 import android.os.Bundle
 import android.view.DragEvent
@@ -17,8 +16,9 @@ import androidx.core.view.iterator
 import androidx.gridlayout.widget.GridLayout
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.floatingactionbutton.FloatingActionButton
-import de.hhn.aib.labsw.blackmirror.dataclasses.MyPage
+import de.hhn.aib.labsw.blackmirror.dataclasses.Page
 import de.hhn.aib.labsw.blackmirror.dataclasses.Widget
+import de.hhn.aib.labsw.blackmirror.dataclasses.WidgetType
 
 /**
  * This activity initializes an interface where different widgets can be dragged on a
@@ -33,7 +33,7 @@ class WidgetLayoutActivity : AppCompatActivity() {
     private val widgets: MutableList<String?> = ArrayList()
     lateinit var myGridLayout: GridLayout
     private lateinit var widgetList: LinearLayout
-    private lateinit var savedPage: MyPage
+    private lateinit var savedPage: Page
 
     @RequiresApi(Build.VERSION_CODES.N)
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -131,7 +131,7 @@ class WidgetLayoutActivity : AppCompatActivity() {
 
         val saveButton: MaterialButton = findViewById(R.id.saveButton)
         saveButton.setOnClickListener {
-            val page = MyPage()
+            val page = Page()
             var pos = 1
             for (box in myGridLayout) {
                 when (box.foreground) {
@@ -139,31 +139,31 @@ class WidgetLayoutActivity : AppCompatActivity() {
                         this,
                         R.drawable.mail_widget_icon_foreground
                     ) -> {
-                        page.addWidget(Widget("mail", pos % 3, pos / 3 + 1))
+                        page.addWidget(Widget(WidgetType.MAIL, pos % 3, pos / 3 + 1))
                     }
                     AppCompatResources.getDrawable(
                         this,
                         R.drawable.calendar_widget_icon_foreground
                     ) -> {
-                        page.addWidget(Widget("calendar", pos % 3, pos / 3 + 1))
+                        page.addWidget(Widget(WidgetType.CALENDAR, pos % 3, pos / 3 + 1))
                     }
                     AppCompatResources.getDrawable(
                         this,
                         R.drawable.weather_widget_icon_foreground
                     ) -> {
-                        page.addWidget(Widget("weather", pos % 3, pos / 3 + 1))
+                        page.addWidget(Widget(WidgetType.WEATHER, pos % 3, pos / 3 + 1))
                     }
                     AppCompatResources.getDrawable(
                         this,
                         R.drawable.clock_widget_icon_foreground
                     ) -> {
-                        page.addWidget(Widget("clock", pos % 3, pos / 3 + 1))
+                        page.addWidget(Widget(WidgetType.CLOCK, pos % 3, pos / 3 + 1))
                     }
                     AppCompatResources.getDrawable(
                         this,
                         R.drawable.reminder_widget_icon_foreground
                     ) -> {
-                        page.addWidget(Widget("reminder", pos % 3, pos / 3 + 1))
+                        page.addWidget(Widget(WidgetType.CLOCK, pos % 3, pos / 3 + 1))
                     }
                 }
                 pos++
