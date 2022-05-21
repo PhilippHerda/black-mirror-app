@@ -134,38 +134,47 @@ class WidgetLayoutActivity : AppCompatActivity() {
             val page = MyPage()
             var pos = 1
             for (box in myGridLayout) {
-                when (box.foreground) {
-                    AppCompatResources.getDrawable(
-                        this,
-                        R.drawable.mail_widget_icon_foreground
-                    ) -> {
-                        page.addWidget(Widget("mail", pos % 3, pos / 3 + 1))
+                if (box.foreground != null) {
+                    when (box.foreground.constantState) {
+                        AppCompatResources.getDrawable(
+                            this,
+                            R.drawable.mail_widget_icon_foreground
+                        )?.constantState -> {
+                            page.addWidget(Widget("mail", pos % 3, pos / 3 + 1))
+                            println("saved")
+                        }
+                        AppCompatResources.getDrawable(
+                            this,
+                            R.drawable.calendar_widget_icon_foreground
+                        )?.constantState -> {
+                            page.addWidget(Widget("calendar", pos % 3, pos / 3 + 1))
+                            println("saved")
+                        }
+                        AppCompatResources.getDrawable(
+                            this,
+                            R.drawable.weather_widget_icon_foreground
+                        )?.constantState -> {
+                            page.addWidget(Widget("weather", pos % 3, pos / 3 + 1))
+                            println("saved")
+                        }
+                        AppCompatResources.getDrawable(
+                            this,
+                            R.drawable.clock_widget_icon_foreground
+                        )?.constantState -> {
+                            page.addWidget(Widget("clock", pos % 3, pos / 3 + 1))
+                            println("saved")
+                        }
+                        AppCompatResources.getDrawable(
+                            this,
+                            R.drawable.reminder_widget_icon_foreground
+                        )?.constantState -> {
+                            page.addWidget(Widget("reminder", pos % 3, pos / 3 + 1))
+                            println("saved")
+                        }
                     }
-                    AppCompatResources.getDrawable(
-                        this,
-                        R.drawable.calendar_widget_icon_foreground
-                    ) -> {
-                        page.addWidget(Widget("calendar", pos % 3, pos / 3 + 1))
-                    }
-                    AppCompatResources.getDrawable(
-                        this,
-                        R.drawable.weather_widget_icon_foreground
-                    ) -> {
-                        page.addWidget(Widget("weather", pos % 3, pos / 3 + 1))
-                    }
-                    AppCompatResources.getDrawable(
-                        this,
-                        R.drawable.clock_widget_icon_foreground
-                    ) -> {
-                        page.addWidget(Widget("clock", pos % 3, pos / 3 + 1))
-                    }
-                    AppCompatResources.getDrawable(
-                        this,
-                        R.drawable.reminder_widget_icon_foreground
-                    ) -> {
-                        page.addWidget(Widget("reminder", pos % 3, pos / 3 + 1))
-                    }
+                    println(box.foreground.constantState)
                 }
+                println(pos)
                 pos++
             }
             savedPage = page
