@@ -183,7 +183,7 @@ class WidgetLayoutActivity : AppCompatActivity() {
     }
 
     private fun saveCurrentPage() {
-        val page = MyPage()
+        val page = Page()
         var pos = 1
         for (box in myGridLayout) {
             if (box.foreground != null) {
@@ -222,14 +222,14 @@ class WidgetLayoutActivity : AppCompatActivity() {
             }
             pos++
         }
-        savedPage = page
+        myMirror.addPage(page)
     }
 
     private fun loadCurrentPage() {
         val allWidgets: ArrayList<Widget> = myMirror.getCurrentPage().widgets
         for (widget in allWidgets) {
             val pos: Int = widget.getX() + widget.getY() * 3
-            myGridLayout.get(pos).foreground = getDrawableForWidget(widget)
+            myGridLayout[pos].foreground = getDrawableForWidget(widget)
         }
     }
 
