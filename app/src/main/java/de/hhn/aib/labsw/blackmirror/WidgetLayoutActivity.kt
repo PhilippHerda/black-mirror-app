@@ -141,40 +141,33 @@ class WidgetLayoutActivity : AppCompatActivity() {
                             R.drawable.mail_widget_icon_foreground
                         )?.constantState -> {
                             page.addWidget(Widget("mail", pos % 3, pos / 3 + 1))
-                            println("saved")
                         }
                         AppCompatResources.getDrawable(
                             this,
                             R.drawable.calendar_widget_icon_foreground
                         )?.constantState -> {
                             page.addWidget(Widget("calendar", pos % 3, pos / 3 + 1))
-                            println("saved")
                         }
                         AppCompatResources.getDrawable(
                             this,
                             R.drawable.weather_widget_icon_foreground
                         )?.constantState -> {
                             page.addWidget(Widget("weather", pos % 3, pos / 3 + 1))
-                            println("saved")
                         }
                         AppCompatResources.getDrawable(
                             this,
                             R.drawable.clock_widget_icon_foreground
                         )?.constantState -> {
                             page.addWidget(Widget("clock", pos % 3, pos / 3 + 1))
-                            println("saved")
                         }
                         AppCompatResources.getDrawable(
                             this,
                             R.drawable.reminder_widget_icon_foreground
                         )?.constantState -> {
                             page.addWidget(Widget("reminder", pos % 3, pos / 3 + 1))
-                            println("saved")
                         }
                     }
-                    println(box.foreground.constantState)
                 }
-                println(pos)
                 pos++
             }
             savedPage = page
