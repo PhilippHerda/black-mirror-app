@@ -2,7 +2,7 @@ package de.hhn.aib.labsw.blackmirror
 
 import android.app.AlertDialog
 import android.content.ClipData
-import android.content.Intent
+import android.graphics.drawable.Drawable
 import android.os.Build
 import android.os.Bundle
 import android.view.DragEvent
@@ -13,12 +13,12 @@ import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.content.res.AppCompatResources
+import androidx.core.view.get
 import androidx.core.view.iterator
 import androidx.gridlayout.widget.GridLayout
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.floatingactionbutton.FloatingActionButton
-import de.hhn.aib.labsw.blackmirror.dataclasses.MyPage
-import de.hhn.aib.labsw.blackmirror.dataclasses.Widget
+import de.hhn.aib.labsw.blackmirror.dataclasses.*
 
 /**
  * This activity initializes an interface where different widgets can be dragged on a
@@ -33,7 +33,7 @@ class WidgetLayoutActivity : AppCompatActivity() {
     private val widgets: MutableList<String?> = ArrayList()
     lateinit var myGridLayout: GridLayout
     private lateinit var widgetList: LinearLayout
-    private lateinit var savedPage: MyPage
+    private lateinit var myMirror: MyMirror
 
     @RequiresApi(Build.VERSION_CODES.N)
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -41,6 +41,10 @@ class WidgetLayoutActivity : AppCompatActivity() {
         setContentView(R.layout.activity_widget_layout)
         init()
         placeWidgetItems()
+        myMirror = MyMirror()
+        myMirror.addPage(Page())
+        myMirror.addPage(Page())
+        myMirror.addPage(Page())
     }
 
     /**
@@ -131,49 +135,7 @@ class WidgetLayoutActivity : AppCompatActivity() {
 
         val saveButton: MaterialButton = findViewById(R.id.saveButton)
         saveButton.setOnClickListener {
-            val page = MyPage()
-            var pos = 1
-            for (box in myGridLayout) {
-                if (box.foreground != null) {
-                    when (box.foreground.constantState) {
-                        AppCompatResources.getDrawable(
-                            this,
-                            R.drawable.mail_widget_icon_foreground
-                        )?.constantState -> {
-                            page.addWidget(Widget("mail", pos % 3, pos / 3 + 1))
-                        }
-                        AppCompatResources.getDrawable(
-                            this,
-                            R.drawable.calendar_widget_icon_foreground
-                        )?.constantState -> {
-                            page.addWidget(Widget("calendar", pos % 3, pos / 3 + 1))
-                        }
-                        AppCompatResources.getDrawable(
-                            this,
-                            R.drawable.weather_widget_icon_foreground
-                        )?.constantState -> {
-                            page.addWidget(Widget("weather", pos % 3, pos / 3 + 1))
-                        }
-                        AppCompatResources.getDrawable(
-                            this,
-                            R.drawable.clock_widget_icon_foreground
-                        )?.constantState -> {
-                            page.addWidget(Widget("clock", pos % 3, pos / 3 + 1))
-                        }
-                        AppCompatResources.getDrawable(
-                            this,
-                            R.drawable.reminder_widget_icon_foreground
-                        )?.constantState -> {
-                            page.addWidget(Widget("reminder", pos % 3, pos / 3 + 1))
-                        }
-                    }
-                }
-                pos++
-            }
-            savedPage = page
-            val myToast =
-                Toast.makeText(applicationContext, "Successfully saved!", Toast.LENGTH_SHORT)
-            myToast.show()
+            saveConfiguration()
         }
 
         val clearButton: MaterialButton = findViewById(R.id.clearButton)
@@ -194,27 +156,118 @@ class WidgetLayoutActivity : AppCompatActivity() {
         val configPagesButton: MaterialButton = findViewById(R.id.configPagesButton)
         configPagesButton.setOnClickListener {
             saveCurrentPage()
-            //    TODO: Create a PageActivity which uses the given MyPage extra
-            //    intent = Intent(this, PagesActivity::class.java)
-            //    intent.putExtra("newPage", savedPage)
-            //    startActivity(intent)
+            //    TODO: Create a PageActivity which uses the given MyMirror
         }
 
         val navigateLeftButton = findViewById<FloatingActionButton>(R.id.navigateLeft_fab)
         navigateLeftButton.setOnClickListener {
             saveCurrentPage()
+            myMirror.goToPreviousPage()
             clearWidgetGrid()
+            loadCurrentPage()
         }
 
         val navigateRightButton = findViewById<FloatingActionButton>(R.id.navigateRight_fab)
         navigateRightButton.setOnClickListener {
             saveCurrentPage()
+            myMirror.goToNextPage()
             clearWidgetGrid()
+            loadCurrentPage()
         }
     }
 
+    private fun saveConfiguration() {
+        val myToast =
+            Toast.makeText(applicationContext, "Successfully saved!", Toast.LENGTH_SHORT)
+        myToast.show()
+    }
+
     private fun saveCurrentPage() {
-        // TODO: Safe Positions of the widgets on the page
+        val page = MyPage()
+        var pos = 1
+        for (box in myGridLayout) {
+            if (box.foreground != null) {
+                when (box.foreground.constantState) {
+                    AppCompatResources.getDrawable(
+                        this,
+                        R.drawable.mail_widget_icon_foreground
+                    )?.constantState -> {
+                        page.addWidget(Widget(WidgetType.MAIL, pos % 3, pos / 3 + 1))
+                    }
+                    AppCompatResources.getDrawable(
+                        this,
+                        R.drawable.calendar_widget_icon_foreground
+                    )?.constantState -> {
+                        page.addWidget(Widget(WidgetType.CALENDAR, pos % 3, pos / 3 + 1))
+                    }
+                    AppCompatResources.getDrawable(
+                        this,
+                        R.drawable.weather_widget_icon_foreground
+                    )?.constantState -> {
+                        page.addWidget(Widget(WidgetType.WEATHER, pos % 3, pos / 3 + 1))
+                    }
+                    AppCompatResources.getDrawable(
+                        this,
+                        R.drawable.clock_widget_icon_foreground
+                    )?.constantState -> {
+                        page.addWidget(Widget(WidgetType.CLOCK, pos % 3, pos / 3 + 1))
+                    }
+                    AppCompatResources.getDrawable(
+                        this,
+                        R.drawable.reminder_widget_icon_foreground
+                    )?.constantState -> {
+                        page.addWidget(Widget(WidgetType.REMINDER, pos % 3, pos / 3 + 1))
+                    }
+                }
+            }
+            pos++
+        }
+        savedPage = page
+    }
+
+    private fun loadCurrentPage() {
+        val allWidgets: ArrayList<Widget> = myMirror.getCurrentPage().widgets
+        for (widget in allWidgets) {
+            val pos: Int = widget.getX() + widget.getY() * 3
+            myGridLayout.get(pos).foreground = getDrawableForWidget(widget)
+        }
+    }
+
+    private fun getDrawableForWidget(widget: Widget): Drawable {
+        lateinit var drawable: Drawable
+        when {
+            widget.getWidgetType() == WidgetType.CALENDAR -> {
+                drawable = AppCompatResources.getDrawable(
+                    this,
+                    R.drawable.calendar_widget_icon_foreground
+                )!!
+            }
+            widget.getWidgetType() == WidgetType.CLOCK -> {
+                drawable = AppCompatResources.getDrawable(
+                    this,
+                    R.drawable.clock_widget_icon_foreground
+                )!!
+            }
+            widget.getWidgetType() == WidgetType.MAIL -> {
+                drawable = AppCompatResources.getDrawable(
+                    this,
+                    R.drawable.mail_widget_icon_foreground
+                )!!
+            }
+            widget.getWidgetType() == WidgetType.REMINDER -> {
+                drawable = AppCompatResources.getDrawable(
+                    this,
+                    R.drawable.reminder_widget_icon_foreground
+                )!!
+            }
+            widget.getWidgetType() == WidgetType.WEATHER -> {
+                drawable = AppCompatResources.getDrawable(
+                    this,
+                    R.drawable.weather_widget_icon_foreground
+                )!!
+            }
+        }
+        return drawable;
     }
 
     private fun clearWidgetGrid() {
