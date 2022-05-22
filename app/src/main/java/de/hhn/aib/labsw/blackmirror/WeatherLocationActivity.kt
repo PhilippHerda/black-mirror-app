@@ -1,20 +1,21 @@
 package de.hhn.aib.labsw.blackmirror
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.text.Editable
+import android.widget.Button
 import android.widget.EditText
 import androidx.annotation.StringRes
 import androidx.appcompat.app.AlertDialog
+import de.hhn.aib.labsw.blackmirror.dataclasses.Location
 import java.lang.NumberFormatException
 
 /**
  * @author Markus Marewitz
  * @version 2022-04-17
  */
-class WeatherLocationActivity : AppCompatActivity() {
+class WeatherLocationActivity : AbstractActivity() {
     lateinit var editTextLat: EditText
     lateinit var editTextLon: EditText
+    private lateinit var sendWeatherLocationButton : Button
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -22,6 +23,7 @@ class WeatherLocationActivity : AppCompatActivity() {
 
         editTextLat = findViewById(R.id.editTextLat)
         editTextLon = findViewById(R.id.editTextLon)
+        sendWeatherLocationButton = findViewById(R.id.btnSendWeatherLocationData)
 
         editTextLat.setText((49.066).toString())
         editTextLon.setText((9.220).toString())
@@ -36,6 +38,14 @@ class WeatherLocationActivity : AppCompatActivity() {
             override fun onTextEdited(newText: String): Boolean {
                 return validateLon(newText)
             }
+
+        }
+
+        sendWeatherLocationButton.setOnClickListener {
+            val location = Location(editTextLat.text.toString().toDouble(),
+                                    editTextLon.text.toString().toDouble())
+
+            publishToRemotes("location", location)
         }
     }
 
