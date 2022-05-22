@@ -14,7 +14,7 @@
         <activity
             android:name=".EmailDataActivity"
             android:exported="false" />
-
+        <activity
             android:name=".WeatherLocationActivity"
             android:exported="true" />
         <activity
