@@ -5,6 +5,12 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.CountDownTimer
 
+/**
+ * This class starts up the widgetLayoutActivity after a few seconds.
+ *
+ * @author Niklas Binder
+ * @version 24-05-2022
+ */
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

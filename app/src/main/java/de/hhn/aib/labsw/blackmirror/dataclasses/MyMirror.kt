@@ -3,12 +3,18 @@ package de.hhn.aib.labsw.blackmirror.dataclasses
 import java.io.Serializable
 import java.util.ArrayList
 
+/**
+ * This class represents the mirror.
+ *
+ * @author Niklas Binder
+ * @version 24-05-2022
+ */
 class MyMirror : Serializable {
-    private var pages: ArrayList<Page> = ArrayList();
-    private var currentPageIndex = 0;
+    private var pages: ArrayList<Page> = ArrayList()
+    private var currentPageIndex = 0
 
     fun getPageIndex(): Int {
-        return currentPageIndex;
+        return currentPageIndex
     }
 
     fun addPage(page: Page) {

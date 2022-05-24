@@ -30,7 +30,7 @@ import de.hhn.aib.labsw.blackmirror.dataclasses.*
  * This allows customizable mirror layouts.
  *
  * @author Selim Özdemir, Niklas Binder
- * @version 12-05-2022
+ * @version 24-05-2022
  */
 class WidgetLayoutActivity : AppCompatActivity() {
 
@@ -113,7 +113,9 @@ class WidgetLayoutActivity : AppCompatActivity() {
     }
 
     /**
-     * Initializes the grid functionality and the buttons.
+     * Initializes the grid functionality and the onClick funcionality for the widget configuration.
+     *
+     * @Team Add your intents at the commented out lines.
      */
     @SuppressLint("ClickableViewAccessibility")
     private fun init() {
@@ -122,23 +124,23 @@ class WidgetLayoutActivity : AppCompatActivity() {
             box.setOnClickListener {
                 if (box.foreground != null) {
                     intent = null
-                    when (box.foreground) {
+                    when (box.foreground.constantState) {
                         AppCompatResources.getDrawable(
                             this@WidgetLayoutActivity,
                             R.drawable.mail_widget_icon_foreground
-                        ) -> {
+                        )?.constantState -> {
                             // intent = Intent(this@WidgetLayoutActivity, Activity::class.java) mail configuration
                         }
                         AppCompatResources.getDrawable(
                             this@WidgetLayoutActivity,
                             R.drawable.calendar_widget_icon_foreground
-                        ) -> {
+                        )?.constantState -> {
                             // intent = Intent(this@WidgetLayoutActivity, Activity::class.java) calendar configuration
                         }
                         AppCompatResources.getDrawable(
                             this@WidgetLayoutActivity,
                             R.drawable.weather_widget_icon_foreground
-                        ) -> {
+                        )?.constantState -> {
                             intent = Intent(
                                 this@WidgetLayoutActivity,
                                 WeatherLocationActivity::class.java
@@ -147,17 +149,21 @@ class WidgetLayoutActivity : AppCompatActivity() {
                         AppCompatResources.getDrawable(
                             this@WidgetLayoutActivity,
                             R.drawable.clock_widget_icon_foreground
-                        ) -> {
+                        )?.constantState -> {
                             // intent = Intent(this@WidgetLayoutActivity, Activity::class.java) clock configuration
                         }
                         AppCompatResources.getDrawable(
                             this@WidgetLayoutActivity,
                             R.drawable.reminder_widget_icon_foreground
-                        ) -> {
+                        )?.constantState -> {
                             // intent = Intent(this@WidgetLayoutActivity, Activity::class.java) reminder configuration
                         }
                     }
-                    startActivity(intent)
+                    if(intent == null) {
+                        Toast.makeText(applicationContext, "There is no configuration available for this widget!", Toast.LENGTH_SHORT).show()
+                    } else {
+                        startActivity(intent)
+                    }
                 }
             }
 
@@ -183,7 +189,7 @@ class WidgetLayoutActivity : AppCompatActivity() {
 
         val saveButton: MaterialButton = findViewById(R.id.saveButton)
         saveButton.setOnClickListener {
-            saveConfiguration()
+            sendConfiguration()
         }
 
         val clearButton: MaterialButton = findViewById(R.id.clearButton)
@@ -224,12 +230,21 @@ class WidgetLayoutActivity : AppCompatActivity() {
         }
     }
 
-    private fun saveConfiguration() {
+    /**
+     * Method to send the current configuration to the mirror.
+     */
+    private fun sendConfiguration() {
+        saveCurrentPage()
+        //TODO: Send the data to the mirror.
         val myToast =
             Toast.makeText(applicationContext, "Successfully saved!", Toast.LENGTH_SHORT)
         myToast.show()
     }
 
+    /**
+     * Method to save the current page.
+     * Gets called everytime the page gets switched.
+     */
     private fun saveCurrentPage() {
         val page = Page()
         var pos = 1
@@ -273,6 +288,9 @@ class WidgetLayoutActivity : AppCompatActivity() {
         myMirror.replaceCurrentPage(page)
     }
 
+    /**
+     * Method to load all widgets from the myMirror object and display it on the grid.
+     */
     private fun loadCurrentPage() {
         println("Current Page: " + myMirror.getPageIndex())
         val allWidgets: ArrayList<Widget> = myMirror.getCurrentPage().widgets
@@ -320,6 +338,10 @@ class WidgetLayoutActivity : AppCompatActivity() {
         return drawable;
     }
 
+    /**
+     * Method to clear the grid.
+     * Gets called everytime the page gets changed.
+     */
     private fun clearWidgetGrid() {
         for (box in myGridLayout) {
             box.foreground = null
