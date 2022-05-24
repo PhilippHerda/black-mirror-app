@@ -222,14 +222,16 @@ class WidgetLayoutActivity : AppCompatActivity() {
             }
             pos++
         }
-        myMirror.addPage(page)
+        myMirror.replaceCurrentPage(page)
     }
 
     private fun loadCurrentPage() {
+        println("Current Page: " + myMirror.getPageIndex())
         val allWidgets: ArrayList<Widget> = myMirror.getCurrentPage().widgets
         for (widget in allWidgets) {
-            val pos: Int = widget.getX() + widget.getY() * 3
+            val pos: Int = (widget.getX() - 1) + (widget.getY() - 1) * 3
             myGridLayout[pos].foreground = getDrawableForWidget(widget)
+            myGridLayout[pos].background = AppCompatResources.getDrawable(this, R.drawable.widget_box)
         }
     }
 

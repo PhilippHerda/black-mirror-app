@@ -7,6 +7,10 @@ class MyMirror : Serializable {
     private var pages: ArrayList<Page> = ArrayList();
     private var currentPageIndex = 0;
 
+    fun getPageIndex(): Int {
+        return currentPageIndex;
+    }
+
     fun addPage(page: Page) {
         pages.add(page)
     }
