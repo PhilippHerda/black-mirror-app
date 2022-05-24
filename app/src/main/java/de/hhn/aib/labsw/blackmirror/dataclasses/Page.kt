@@ -1,9 +1,8 @@
 package de.hhn.aib.labsw.blackmirror.dataclasses
 
-import java.io.Serializable
 
-class MyPage: Serializable{
-    var widgets: ArrayList<Widget> = ArrayList<Widget>()
+class Page {
+    var widgets: ArrayList<Widget> = ArrayList()
 
     fun addWidget(widget: Widget) {
         widgets.add(widget)
