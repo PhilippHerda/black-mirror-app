@@ -1,7 +1,10 @@
 package de.hhn.aib.labsw.blackmirror
 
-import android.app.AlertDialog
+
+import android.annotation.SuppressLint
 import android.content.ClipData
+import android.content.Intent
+import android.app.AlertDialog
 import android.graphics.drawable.Drawable
 import android.os.Build
 import android.os.Bundle
@@ -19,6 +22,7 @@ import androidx.gridlayout.widget.GridLayout
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import de.hhn.aib.labsw.blackmirror.dataclasses.*
+
 
 /**
  * This activity initializes an interface where different widgets can be dragged on a
@@ -111,10 +115,52 @@ class WidgetLayoutActivity : AppCompatActivity() {
     /**
      * Initializes the grid functionality and the buttons.
      */
+    @SuppressLint("ClickableViewAccessibility")
     private fun init() {
         myGridLayout = findViewById(R.id.widgetGrid)
         for (box in myGridLayout) {
-            box.setOnDragListener(MyDragListener())
+            box.setOnClickListener {
+                if (box.foreground != null) {
+                    intent = null
+                    when (box.foreground) {
+                        AppCompatResources.getDrawable(
+                            this@WidgetLayoutActivity,
+                            R.drawable.mail_widget_icon_foreground
+                        ) -> {
+                            // intent = Intent(this@WidgetLayoutActivity, Activity::class.java) mail configuration
+                        }
+                        AppCompatResources.getDrawable(
+                            this@WidgetLayoutActivity,
+                            R.drawable.calendar_widget_icon_foreground
+                        ) -> {
+                            // intent = Intent(this@WidgetLayoutActivity, Activity::class.java) calendar configuration
+                        }
+                        AppCompatResources.getDrawable(
+                            this@WidgetLayoutActivity,
+                            R.drawable.weather_widget_icon_foreground
+                        ) -> {
+                            intent = Intent(
+                                this@WidgetLayoutActivity,
+                                WeatherLocationActivity::class.java
+                            )
+                        }
+                        AppCompatResources.getDrawable(
+                            this@WidgetLayoutActivity,
+                            R.drawable.clock_widget_icon_foreground
+                        ) -> {
+                            // intent = Intent(this@WidgetLayoutActivity, Activity::class.java) clock configuration
+                        }
+                        AppCompatResources.getDrawable(
+                            this@WidgetLayoutActivity,
+                            R.drawable.reminder_widget_icon_foreground
+                        ) -> {
+                            // intent = Intent(this@WidgetLayoutActivity, Activity::class.java) reminder configuration
+                        }
+                    }
+                    startActivity(intent)
+                }
+            }
+
             box.setOnLongClickListener {
                 if (box.foreground != null) {
                     for (widget in widgetList) {
@@ -131,6 +177,8 @@ class WidgetLayoutActivity : AppCompatActivity() {
                 }
                 return@setOnLongClickListener true
             }
+
+            box.setOnDragListener(MyDragListener())
         }
 
         val saveButton: MaterialButton = findViewById(R.id.saveButton)
@@ -343,3 +391,4 @@ class WidgetLayoutActivity : AppCompatActivity() {
         alert.show()
     }
 }
+
