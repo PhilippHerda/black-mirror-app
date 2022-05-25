@@ -37,7 +37,7 @@ class WidgetLayoutActivity : AppCompatActivity() {
     private val widgets: MutableList<String?> = ArrayList()
     lateinit var myGridLayout: GridLayout
     private lateinit var widgetList: LinearLayout
-    private lateinit var myMirror: MyMirror
+    private lateinit var mirror: Mirror
 
     @RequiresApi(Build.VERSION_CODES.N)
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -45,10 +45,14 @@ class WidgetLayoutActivity : AppCompatActivity() {
         setContentView(R.layout.activity_widget_layout)
         init()
         placeWidgetItems()
-        myMirror = MyMirror()
-        myMirror.addPage(Page())
-        myMirror.addPage(Page())
-        myMirror.addPage(Page())
+
+        // Initializing Mirror object
+        val pages = ArrayList<Page> ()
+        val widgets = ArrayList<Widget> ()
+        pages.add(Page(widgets))
+        pages.add(Page(widgets))
+        pages.add(Page(widgets))
+        mirror = Mirror(pages)
     }
 
     /**
@@ -160,7 +164,7 @@ class WidgetLayoutActivity : AppCompatActivity() {
                         }
                     }
                     if(intent == null) {
-                        Toast.makeText(applicationContext, "There is no configuration available for this widget!", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(applicationContext, R.string.Str_widgetNoConfigAvailableToastMessage, Toast.LENGTH_SHORT).show()
                     } else {
                         startActivity(intent)
                     }
@@ -189,7 +193,7 @@ class WidgetLayoutActivity : AppCompatActivity() {
 
         val saveButton: MaterialButton = findViewById(R.id.saveButton)
         saveButton.setOnClickListener {
-            sendConfiguration()
+            sendWidgetLayout()
         }
 
         val clearButton: MaterialButton = findViewById(R.id.clearButton)
@@ -216,28 +220,28 @@ class WidgetLayoutActivity : AppCompatActivity() {
         val navigateLeftButton = findViewById<FloatingActionButton>(R.id.navigateLeft_fab)
         navigateLeftButton.setOnClickListener {
             saveCurrentPage()
-            myMirror.goToPreviousPage()
+            mirror.goToPreviousPage()
             clearWidgetGrid()
-            loadCurrentPage()
+            displayPage()
         }
 
         val navigateRightButton = findViewById<FloatingActionButton>(R.id.navigateRight_fab)
         navigateRightButton.setOnClickListener {
             saveCurrentPage()
-            myMirror.goToNextPage()
+            mirror.goToNextPage()
             clearWidgetGrid()
-            loadCurrentPage()
+            displayPage()
         }
     }
 
     /**
-     * Method to send the current configuration to the mirror.
+     * Method to send the current layout to the mirror.
      */
-    private fun sendConfiguration() {
+    private fun sendWidgetLayout() {
         saveCurrentPage()
         //TODO: Send the data to the mirror.
         val myToast =
-            Toast.makeText(applicationContext, "Successfully saved!", Toast.LENGTH_SHORT)
+            Toast.makeText(applicationContext, R.string.Str_widgetSuccessfullySavedToastMessage, Toast.LENGTH_SHORT)
         myToast.show()
     }
 
@@ -285,17 +289,16 @@ class WidgetLayoutActivity : AppCompatActivity() {
             }
             pos++
         }
-        myMirror.replaceCurrentPage(page)
+        mirror.replaceCurrentPage(page)
     }
 
     /**
      * Method to load all widgets from the myMirror object and display it on the grid.
      */
-    private fun loadCurrentPage() {
-        println("Current Page: " + myMirror.getPageIndex())
-        val allWidgets: ArrayList<Widget> = myMirror.getCurrentPage().widgets
-        for (widget in allWidgets) {
-            val pos: Int = (widget.getX() - 1) + (widget.getY() - 1) * 3
+    private fun displayPage() {
+        println("Current Page: " + mirror.currentPageIndex)
+        for (widget in mirror.getCurrentPage().widgets) {
+            val pos: Int = (widget.x - 1) + (widget.y - 1) * 3
             myGridLayout[pos].foreground = getDrawableForWidget(widget)
             myGridLayout[pos].background = AppCompatResources.getDrawable(this, R.drawable.widget_box)
         }
@@ -303,39 +306,39 @@ class WidgetLayoutActivity : AppCompatActivity() {
 
     private fun getDrawableForWidget(widget: Widget): Drawable {
         lateinit var drawable: Drawable
-        when {
-            widget.getWidgetType() == WidgetType.CALENDAR -> {
+        when (widget.type) {
+            WidgetType.CALENDAR -> {
                 drawable = AppCompatResources.getDrawable(
                     this,
                     R.drawable.calendar_widget_icon_foreground
                 )!!
             }
-            widget.getWidgetType() == WidgetType.CLOCK -> {
+            WidgetType.CLOCK -> {
                 drawable = AppCompatResources.getDrawable(
                     this,
                     R.drawable.clock_widget_icon_foreground
                 )!!
             }
-            widget.getWidgetType() == WidgetType.MAIL -> {
+            WidgetType.MAIL -> {
                 drawable = AppCompatResources.getDrawable(
                     this,
                     R.drawable.mail_widget_icon_foreground
                 )!!
             }
-            widget.getWidgetType() == WidgetType.REMINDER -> {
+            WidgetType.REMINDER -> {
                 drawable = AppCompatResources.getDrawable(
                     this,
                     R.drawable.reminder_widget_icon_foreground
                 )!!
             }
-            widget.getWidgetType() == WidgetType.WEATHER -> {
+            WidgetType.WEATHER -> {
                 drawable = AppCompatResources.getDrawable(
                     this,
                     R.drawable.weather_widget_icon_foreground
                 )!!
             }
         }
-        return drawable;
+        return drawable
     }
 
     /**

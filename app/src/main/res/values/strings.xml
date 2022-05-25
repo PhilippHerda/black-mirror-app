@@ -12,6 +12,8 @@
     <string name="Str_widgetConfirmClearYesTxt">Yes</string>
     <string name="Str_widgetConfirmClearNoTxt">No</string>
     <string name="Str_widgetConfirmExitApplicationTxt">Are you sure you want to exit the application?</string>
+    <string name="Str_widgetNoConfigAvailableToastMessage">There is no configuration available for this widget</string>
+    <string name="Str_widgetSuccessfullySavedToastMessage">Saving successful</string>
 
     <string name="weatherLocationDescr">Enter the location used for your weather data.\n\nA location consists of a latitude (north-south) and a longitude (west-east).</string>
     <string name="longitude">Longitude</string>

@@ -9,17 +9,8 @@ import java.util.ArrayList
  * @author Niklas Binder
  * @version 24-05-2022
  */
-class MyMirror : Serializable {
-    private var pages: ArrayList<Page> = ArrayList()
-    private var currentPageIndex = 0
-
-    fun getPageIndex(): Int {
-        return currentPageIndex
-    }
-
-    fun addPage(page: Page) {
-        pages.add(page)
-    }
+data class Mirror(val pages : ArrayList<Page>) : Serializable {
+    var currentPageIndex = 0
 
     fun replaceCurrentPage(page: Page) {
         pages[currentPageIndex] = page
