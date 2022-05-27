@@ -12,6 +12,7 @@ import android.view.DragEvent
 import android.view.View
 import android.widget.ImageView
 import android.widget.LinearLayout
+import android.widget.TextView
 import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
@@ -53,6 +54,8 @@ class WidgetLayoutActivity : AppCompatActivity() {
         pages.add(Page(widgets))
         pages.add(Page(widgets))
         mirror = Mirror(pages)
+        findViewById<TextView>(R.id.pageIndicatorTextView).text = "1"
+        findViewById<TextView>(R.id.pageAmountTextView).text = mirror.pages.size.toString()
     }
 
     /**
@@ -223,6 +226,7 @@ class WidgetLayoutActivity : AppCompatActivity() {
             mirror.goToPreviousPage()
             clearWidgetGrid()
             displayPage()
+            findViewById<TextView>(R.id.pageIndicatorTextView).text = (mirror.currentPageIndex + 1).toString()
         }
 
         val navigateRightButton = findViewById<FloatingActionButton>(R.id.navigateRight_fab)
@@ -231,6 +235,7 @@ class WidgetLayoutActivity : AppCompatActivity() {
             mirror.goToNextPage()
             clearWidgetGrid()
             displayPage()
+            findViewById<TextView>(R.id.pageIndicatorTextView).text = (mirror.currentPageIndex + 1).toString()
         }
     }
 
@@ -250,7 +255,8 @@ class WidgetLayoutActivity : AppCompatActivity() {
      * Gets called everytime the page gets switched.
      */
     private fun saveCurrentPage() {
-        val page = Page()
+        val widgets = ArrayList<Widget> ()
+        val page = Page(widgets)
         var pos = 1
         for (box in myGridLayout) {
             if (box.foreground != null) {
