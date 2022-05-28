@@ -31,7 +31,7 @@ import de.hhn.aib.labsw.blackmirror.dataclasses.*
  * This allows customizable mirror layouts.
  *
  * @author Selim Özdemir, Niklas Binder
- * @version 24-05-2022
+ * @version 28-05-2022
  */
 class WidgetLayoutActivity : AppCompatActivity() {
 

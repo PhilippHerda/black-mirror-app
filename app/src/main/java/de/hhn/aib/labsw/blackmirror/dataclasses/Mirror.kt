@@ -7,7 +7,7 @@ import java.util.ArrayList
  * This class represents the mirror.
  *
  * @author Niklas Binder
- * @version 24-05-2022
+ * @version 28-05-2022
  */
 data class Mirror(val pages : ArrayList<Page>) : Serializable {
     var currentPageIndex = 0
