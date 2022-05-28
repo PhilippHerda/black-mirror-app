@@ -12,11 +12,15 @@
         android:usesCleartextTraffic="true"
         android:theme="@style/Theme.Blackmirrorapp">
         <activity
+            android:name=".EmailDataActivity"
+            android:exported="false" />
+        <activity
             android:name=".WeatherLocationActivity"
             android:exported="true" />
         <activity
             android:name=".WidgetLayoutActivity"
             android:exported="true" />
+      
         <activity
             android:name=".MainActivity"
             android:exported="true">
