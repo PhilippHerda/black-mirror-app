@@ -6,9 +6,4 @@ package de.hhn.aib.labsw.blackmirror.dataclasses
  * @author Niklas Binder
  * @version 24-05-2022
  */
-data class Page(val widgets : ArrayList<Widget>) {
-
-    fun addWidget(widget: Widget) {
-        widgets.add(widget)
-    }
-}
+data class Page(val widgets : ArrayList<Widget>)

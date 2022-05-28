@@ -12,14 +12,6 @@ import java.util.ArrayList
 data class Mirror(val pages : ArrayList<Page>) : Serializable {
     var currentPageIndex = 0
 
-    fun replaceCurrentPage(page: Page) {
-        pages[currentPageIndex] = page
-    }
-
-    fun getCurrentPage(): Page {
-        return pages[currentPageIndex]
-    }
-
     fun goToPreviousPage(){
         if (currentPageIndex - 1 < 0) {
             currentPageIndex = pages.size - 1

@@ -120,11 +120,11 @@ class WidgetLayoutActivity : AppCompatActivity() {
     }
 
     /**
-     * Initializes the grid functionality and the onClick funcionality for the widget configuration.
+     * Initializes the grid functionality and the onClick functionality for the widget configuration.
      *
      * @Team Add your intents at the commented out lines.
      */
-    @SuppressLint("ClickableViewAccessibility")
+    @SuppressLint("ClickableViewAccessibility", "SetTextI18n")
     private fun init() {
         myGridLayout = findViewById(R.id.widgetGrid)
         for (box in myGridLayout) {
@@ -216,13 +216,11 @@ class WidgetLayoutActivity : AppCompatActivity() {
 
         val configPagesButton: MaterialButton = findViewById(R.id.configPagesButton)
         configPagesButton.setOnClickListener {
-            saveCurrentPage()
             //    TODO: Create a PageActivity which uses the given MyMirror
         }
 
         val navigateLeftButton = findViewById<FloatingActionButton>(R.id.navigateLeft_fab)
         navigateLeftButton.setOnClickListener {
-            saveCurrentPage()
             mirror.goToPreviousPage()
             clearWidgetGrid()
             displayPage()
@@ -231,7 +229,6 @@ class WidgetLayoutActivity : AppCompatActivity() {
 
         val navigateRightButton = findViewById<FloatingActionButton>(R.id.navigateRight_fab)
         navigateRightButton.setOnClickListener {
-            saveCurrentPage()
             mirror.goToNextPage()
             clearWidgetGrid()
             displayPage()
@@ -243,7 +240,6 @@ class WidgetLayoutActivity : AppCompatActivity() {
      * Method to send the current layout to the mirror.
      */
     private fun sendWidgetLayout() {
-        saveCurrentPage()
         //TODO: Send the data to the mirror.
         val myToast =
             Toast.makeText(applicationContext, R.string.Str_widgetSuccessfullySavedToastMessage, Toast.LENGTH_SHORT)
@@ -265,37 +261,37 @@ class WidgetLayoutActivity : AppCompatActivity() {
                         this,
                         R.drawable.mail_widget_icon_foreground
                     )?.constantState -> {
-                        page.addWidget(Widget(WidgetType.MAIL, pos % 3, pos / 3 + 1))
+                        page.widgets.add(Widget(WidgetType.MAIL, pos % 3, pos / 3 + 1))
                     }
                     AppCompatResources.getDrawable(
                         this,
                         R.drawable.calendar_widget_icon_foreground
                     )?.constantState -> {
-                        page.addWidget(Widget(WidgetType.CALENDAR, pos % 3, pos / 3 + 1))
+                        page.widgets.add(Widget(WidgetType.CALENDAR, pos % 3, pos / 3 + 1))
                     }
                     AppCompatResources.getDrawable(
                         this,
                         R.drawable.weather_widget_icon_foreground
                     )?.constantState -> {
-                        page.addWidget(Widget(WidgetType.WEATHER, pos % 3, pos / 3 + 1))
+                        page.widgets.add(Widget(WidgetType.WEATHER, pos % 3, pos / 3 + 1))
                     }
                     AppCompatResources.getDrawable(
                         this,
                         R.drawable.clock_widget_icon_foreground
                     )?.constantState -> {
-                        page.addWidget(Widget(WidgetType.CLOCK, pos % 3, pos / 3 + 1))
+                        page.widgets.add(Widget(WidgetType.CLOCK, pos % 3, pos / 3 + 1))
                     }
                     AppCompatResources.getDrawable(
                         this,
                         R.drawable.reminder_widget_icon_foreground
                     )?.constantState -> {
-                        page.addWidget(Widget(WidgetType.REMINDER, pos % 3, pos / 3 + 1))
+                        page.widgets.add(Widget(WidgetType.REMINDER, pos % 3, pos / 3 + 1))
                     }
                 }
             }
             pos++
         }
-        mirror.replaceCurrentPage(page)
+        mirror.pages[mirror.currentPageIndex] = page
     }
 
     /**
@@ -303,7 +299,7 @@ class WidgetLayoutActivity : AppCompatActivity() {
      */
     private fun displayPage() {
         println("Current Page: " + mirror.currentPageIndex)
-        for (widget in mirror.getCurrentPage().widgets) {
+        for (widget in mirror.pages[mirror.currentPageIndex].widgets) {
             val pos: Int = (widget.x - 1) + (widget.y - 1) * 3
             myGridLayout[pos].foreground = getDrawableForWidget(widget)
             myGridLayout[pos].background = AppCompatResources.getDrawable(this, R.drawable.widget_box)
@@ -311,40 +307,38 @@ class WidgetLayoutActivity : AppCompatActivity() {
     }
 
     private fun getDrawableForWidget(widget: Widget): Drawable {
-        lateinit var drawable: Drawable
-        when (widget.type) {
+        return when (widget.type) {
             WidgetType.CALENDAR -> {
-                drawable = AppCompatResources.getDrawable(
+                AppCompatResources.getDrawable(
                     this,
                     R.drawable.calendar_widget_icon_foreground
                 )!!
             }
             WidgetType.CLOCK -> {
-                drawable = AppCompatResources.getDrawable(
+                AppCompatResources.getDrawable(
                     this,
                     R.drawable.clock_widget_icon_foreground
                 )!!
             }
             WidgetType.MAIL -> {
-                drawable = AppCompatResources.getDrawable(
+                AppCompatResources.getDrawable(
                     this,
                     R.drawable.mail_widget_icon_foreground
                 )!!
             }
             WidgetType.REMINDER -> {
-                drawable = AppCompatResources.getDrawable(
+                AppCompatResources.getDrawable(
                     this,
                     R.drawable.reminder_widget_icon_foreground
                 )!!
             }
             WidgetType.WEATHER -> {
-                drawable = AppCompatResources.getDrawable(
+                AppCompatResources.getDrawable(
                     this,
                     R.drawable.weather_widget_icon_foreground
                 )!!
             }
         }
-        return drawable
     }
 
     /**
@@ -401,6 +395,7 @@ class WidgetLayoutActivity : AppCompatActivity() {
                     }
                     v.background = view.background
                     v.foreground = view.foreground
+                    saveCurrentPage()
                 }
                 else -> {}
             }
