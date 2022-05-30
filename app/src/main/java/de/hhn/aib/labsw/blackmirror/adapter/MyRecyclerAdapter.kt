@@ -17,9 +17,9 @@ class MyRecyclerAdapter(var context: Context,
 ) : RecyclerView.Adapter<MyRecyclerAdapter.MyViewHolder>(), ItemTouchHelperAdapter {
 
     inner class MyViewHolder(itemView: View): RecyclerView.ViewHolder(itemView) {
-        //var txt_title:TextView
+        var txt_number: TextView
         init {
-            // txt_title = itemView.txt_title as TextView
+            txt_number = itemView as TextView
         }
     }
 
@@ -28,7 +28,7 @@ class MyRecyclerAdapter(var context: Context,
     }
 
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
-        // holder.txt_title!!.text = stringList[position]
+        holder.txt_number.text = (position+1).toString()
 
         holder.itemView.setOnLongClickListener {
             listener.onStartDrag(holder)

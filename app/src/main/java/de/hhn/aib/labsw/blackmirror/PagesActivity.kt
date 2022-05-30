@@ -23,7 +23,9 @@ class PagesActivity : AppCompatActivity() {
 
     private fun generateItem() {
         val data: MutableList<String?> = ArrayList()
-        // data.addAll(Arrays.asList())
+        val myMirror = intent.getSerializableExtra("myMirror")
+        // Merge required
+        // ata.addAll(Arrays.asList())
         val adapter = MyRecyclerAdapter(this, data, object:OnStartDragListener {
             override fun onStartDrag(viewHolder: RecyclerView.ViewHolder?) {
                 itemTouchHelper!!.startDrag(viewHolder!!)
@@ -41,5 +43,4 @@ class PagesActivity : AppCompatActivity() {
         val layoutManager = GridLayoutManager(this, 3)
         recyclerView.layoutManager = layoutManager
     }
-
 }

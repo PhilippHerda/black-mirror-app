@@ -20,4 +20,5 @@
     <string name="invalidLonMsg">The longitude must be between -180.0° and +180.0°.</string>
     <string name="invalidDoubleTitle">Invalid input</string>
     <string name="invalidDoubleMsg">Failed to read number. Expected the format 25.314.</string>
+    <string name="Str_defaulNumber">0</string>
 </resources>
