@@ -4,7 +4,7 @@
     <string name="tv_email">Email:</string>
     <string name="tv_password">Password:</string>
     <string name="tv_imap">Imap Server:</string>
-    <string name="tv_inbox">Inbox Name:</string>
+    <string name="tv_port">Imap Port:</string>
     <string name="btn_save">Save</string>
   
   // WidgetLayout Strings:
