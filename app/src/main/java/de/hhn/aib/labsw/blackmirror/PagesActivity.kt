@@ -5,6 +5,8 @@ import android.os.Bundle
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.button.MaterialButton
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 import de.hhn.aib.labsw.blackmirror.adapter.MyRecyclerAdapter
 import de.hhn.aib.labsw.blackmirror.helper.MyItemTouchHelperCallback
 import de.hhn.aib.labsw.blackmirror.helper.OnStartDragListener
@@ -42,5 +44,21 @@ class PagesActivity : AppCompatActivity() {
         recyclerView.setHasFixedSize(true)
         val layoutManager = GridLayoutManager(this, 3)
         recyclerView.layoutManager = layoutManager
+
+        val actionButton = findViewById<FloatingActionButton>(R.id.addPageActionButton)
+        actionButton.setOnClickListener {
+
+        }
+
+        val saveButton = findViewById<MaterialButton>(R.id.saveButton)
+        saveButton.setOnClickListener {
+
+        }
+
+        val exitButton = findViewById<MaterialButton>(R.id.exitButton)
+        exitButton.setOnClickListener {
+            // intent = Intent(this, MainMenuActivity::class.java)
+            // startActivity(intent)
+        }
     }
 }
