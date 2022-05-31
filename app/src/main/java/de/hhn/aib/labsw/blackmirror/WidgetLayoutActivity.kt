@@ -130,6 +130,10 @@ class WidgetLayoutActivity : AppCompatActivity() {
         for (box in myGridLayout) {
             box.setOnClickListener {
                 if (box.foreground != null) {
+
+                    println("test2 " + box.foreground.constantState.toString())
+                    println("test2 " + AppCompatResources.getDrawable(this, R.drawable.weather_widget_icon_foreground)?.constantState.toString())
+
                     intent = null
                     when (box.foreground.constantState) {
                         AppCompatResources.getDrawable(
@@ -256,6 +260,10 @@ class WidgetLayoutActivity : AppCompatActivity() {
         var pos = 1
         for (box in myGridLayout) {
             if (box.foreground != null) {
+
+                println("test1 " + box.foreground.constantState.toString())
+                println("test1 " + AppCompatResources.getDrawable(this, R.drawable.weather_widget_icon_foreground)?.constantState.toString())
+
                 when (box.foreground.constantState) {
                     AppCompatResources.getDrawable(
                         this,
