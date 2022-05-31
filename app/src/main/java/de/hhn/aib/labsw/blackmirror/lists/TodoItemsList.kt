@@ -18,7 +18,7 @@ class TodoItemViewHolder(
     private val context: Context
 ) : RecyclerView.ViewHolder(itemView) {
     companion object {
-        lateinit var onTodoItemClickedCallback: (TodoItem) -> Unit
+        lateinit var onTodoItemClickedCallback: (TodoItem, TodoItemViewHolder) -> Unit
     }
 
     private val dateCreatedTextView = itemView.findViewById<TextView>(R.id.dateCreatedTextView)
@@ -28,7 +28,7 @@ class TodoItemViewHolder(
 
     init {
         itemView.setOnClickListener {
-            onTodoItemClickedCallback(item)
+            onTodoItemClickedCallback(item, this)
         }
     }
 

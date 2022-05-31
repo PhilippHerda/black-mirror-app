@@ -22,4 +22,6 @@
     <string name="invalidDoubleMsg">Failed to read number. Expected the format 25.314.</string>
     <string name="set_location">Set Location</string>
     <string name="add_todo_item">Add</string>
+    <string name="todoTextHint">What\'s todo?</string>
+    <string name="todo_list_title">Todo list</string>
 </resources>
