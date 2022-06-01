@@ -42,11 +42,7 @@ class RecyclerViewList<ItemViewType : RecyclerViewList.ItemView<ModelType>, Mode
             return listItems[recentlyClickedPos]
         }
         set(value) {
-            val index = listItems.indexOf(value)
-            if (index == -1) {
-                throw IllegalArgumentException("The item is not contained in this list")
-            }
-            recentlyClickedPos = index
+            recentlyClickedPos = tryGetItemPos(value)
         }
 
 
@@ -84,6 +80,14 @@ class RecyclerViewList<ItemViewType : RecyclerViewList.ItemView<ModelType>, Mode
     }
 
     /**
+     * Call this method when an item of this list has changed
+     */
+    fun update(item: ModelType, action: (ModelType) -> Unit = {}) {
+        action(item)
+        runOnUIThread { recyclerView.adapter?.notifyItemChanged(tryGetItemPos(item)) }
+    }
+
+    /**
      * Use this method for asynchronous item click actions.
      * Call this method after the asynchronous tasks have been finished.
      */
@@ -95,10 +99,21 @@ class RecyclerViewList<ItemViewType : RecyclerViewList.ItemView<ModelType>, Mode
         runOnUIThread { recyclerView.adapter?.notifyItemChanged(recentlyClickedPos) }
     }
 
+    /**
+     * Call this method to remove an item from this list
+     */
+    fun remove(item: ModelType) {
+        val pos = tryGetItemPos(item)
+        if (pos == recentlyClickedPos) {
+            recentlyClickedPos = -1
+        }
+        listItems.remove(item)
+        runOnUIThread { recyclerView.adapter?.notifyItemRemoved(pos) }
+    }
+
     fun deleteItemOnSwipe(delete: Boolean) {
         TODO("Not yet implemented")
     }
-
 
 
     ////////////////////////////////////////////////////////////////////////////////////////
@@ -113,6 +128,14 @@ class RecyclerViewList<ItemViewType : RecyclerViewList.ItemView<ModelType>, Mode
 
     init {
         recyclerView.adapter = Adapter()
+    }
+
+    private fun tryGetItemPos(item: ModelType): Int {
+        val index = listItems.indexOf(item)
+        if (index == -1) {
+            throw IllegalArgumentException("The item is not contained in this list")
+        }
+        return index
     }
 
     private inner class ItemViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {

@@ -24,4 +24,7 @@
     <string name="add_todo_item">Add</string>
     <string name="todoTextHint">What\'s to do?</string>
     <string name="todo_list_title">Todo list</string>
+    <string name="empty_todo_dialog_msg">Todo text is empty. Todo item will be dismissed. Do you really want to return?</string>
+    <string name="empty_todo_dialog_confirm">Return</string>
+    <string name="empty_todo_dialog_cancel">Cancel</string>
 </resources>

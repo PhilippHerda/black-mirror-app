@@ -1,9 +1,11 @@
 package de.hhn.aib.labsw.blackmirror
 
+import android.content.DialogInterface
 import android.content.Intent
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.textfield.TextInputLayout
 
@@ -29,8 +31,29 @@ class EditTodoActivity : AppCompatActivity() {
     }
 
     override fun finish() {
+        if (todoTextArea.editText?.text?.isEmpty() == true) {
+            AlertDialog.Builder(this).run {
+                setTitle(null)
+                setMessage(getString(R.string.empty_todo_dialog_msg))
+                setPositiveButton(getString(R.string.empty_todo_dialog_confirm)) { dialog, _ ->
+                    dialog.dismiss()
+                    runOnUiThread(this@EditTodoActivity::onFinishConfirmed)
+                }
+                setNegativeButton(getString(R.string.empty_todo_dialog_cancel)) { dialog, _ ->
+                    dialog.dismiss()
+                }
+                create().show()
+            }
+        } else {
+            onFinishConfirmed()
+        }
+    }
+
+    private fun onFinishConfirmed() {
         val data = Intent()
-        data.putExtra(TODO_TEXT_EXTRA, todoTextArea.editText?.text.toString())
+        if (todoTextArea.editText?.text?.isNotEmpty() == true) {
+            data.putExtra(TODO_TEXT_EXTRA, todoTextArea.editText?.text.toString())
+        }
         setResult(RESULT_OK, data)
 
         super.finish()

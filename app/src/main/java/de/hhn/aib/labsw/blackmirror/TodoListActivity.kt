@@ -22,8 +22,12 @@ class TodoListActivity : AppCompatActivity() {
             registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
                 if (it.resultCode != RESULT_OK) return@registerForActivityResult
                 val todoText = it.data?.getStringExtra(TODO_TEXT_EXTRA)
-                todoList.updateRecentlyClickedItem { item ->
-                    item.text = todoText ?: return@updateRecentlyClickedItem
+                if (todoText == null) {
+                    todoList.remove(todoList.recentlyClickedItem)
+                } else {
+                    todoList.updateRecentlyClickedItem { item ->
+                        item.text = todoText
+                    }
                 }
             }
 
