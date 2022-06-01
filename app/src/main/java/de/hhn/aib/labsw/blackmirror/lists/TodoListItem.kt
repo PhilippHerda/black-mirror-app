@@ -8,16 +8,11 @@ import de.hhn.aib.labsw.blackmirror.dataclasses.TodoItem
 import java.time.format.DateTimeFormatter
 import java.time.format.FormatStyle
 
-class TodoListItem(item: TodoItem) : RecyclerViewList.ListItem<TodoItem>(item) {
-    private lateinit var dateCreatedTextView: TextView
-    private lateinit var todoTextView: TextView
+class TodoListItem(itemView: View) : RecyclerViewList.ItemView<TodoItem>() {
+    private val dateCreatedTextView = itemView.findViewById<TextView>(R.id.dateCreatedTextView)
+    private val todoTextView = itemView.findViewById<TextView>(R.id.todoTextView)
 
-    override fun populateView(itemView: View) {
-        dateCreatedTextView = itemView.findViewById(R.id.dateCreatedTextView)
-        todoTextView = itemView.findViewById(R.id.todoTextView)
-    }
-
-    override fun updateView(itemView: View) {
+    override fun onBind() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             val formatter = DateTimeFormatter.ofLocalizedDateTime(FormatStyle.SHORT)
             dateCreatedTextView.text = model.date.format(formatter)
