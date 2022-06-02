@@ -4,6 +4,7 @@ import android.app.Activity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
 
 /**
@@ -59,7 +60,6 @@ class RecyclerViewList<ItemViewType : RecyclerViewList.ItemView<ModelType>, Mode
     // ModelType has to derive from Any to declare it non-nullable
     open class ItemView<ModelType : Any> {
         lateinit var model: ModelType
-        var listPosition = -1
 
         open fun onBind() {}
     }
@@ -102,17 +102,14 @@ class RecyclerViewList<ItemViewType : RecyclerViewList.ItemView<ModelType>, Mode
     /**
      * Call this method to remove an item from this list
      */
-    fun remove(item: ModelType) {
-        val pos = tryGetItemPos(item)
-        if (pos == recentlyClickedPos) {
-            recentlyClickedPos = -1
-        }
-        listItems.remove(item)
-        runOnUIThread { recyclerView.adapter?.notifyItemRemoved(pos) }
-    }
+    fun remove(item: ModelType) = removeAt(tryGetItemPos(item))
 
-    fun deleteItemOnSwipe(delete: Boolean) {
-        TODO("Not yet implemented")
+    fun removeItemOnSwipe(remove: Boolean) {
+        if (remove) {
+            itemTouchHelper.attachToRecyclerView(recyclerView)
+        } else {
+            itemTouchHelper.attachToRecyclerView(null)
+        }
     }
 
 
@@ -126,6 +123,21 @@ class RecyclerViewList<ItemViewType : RecyclerViewList.ItemView<ModelType>, Mode
     private var onItemClickedListener: ((ModelType) -> Unit)? = null
     private var recentlyClickedPos = -1
 
+    private val itemTouchHelper =
+        ItemTouchHelper(object : ItemTouchHelper.SimpleCallback(0,
+            ItemTouchHelper.LEFT or ItemTouchHelper.RIGHT
+        ) {
+            override fun onMove(
+                v: RecyclerView,
+                h: RecyclerView.ViewHolder,
+                t: RecyclerView.ViewHolder
+            ) = false
+
+            override fun onSwiped(viewHolder: RecyclerView.ViewHolder, dir: Int) {
+                removeAt(viewHolder.adapterPosition)
+            }
+        })
+
     init {
         recyclerView.adapter = Adapter()
     }
@@ -138,6 +150,14 @@ class RecyclerViewList<ItemViewType : RecyclerViewList.ItemView<ModelType>, Mode
         return index
     }
 
+    private fun removeAt(position: Int) {
+        if (position == recentlyClickedPos) {
+            recentlyClickedPos = -1
+        }
+        listItems.removeAt(position)
+        runOnUIThread { recyclerView.adapter?.notifyItemRemoved(position) }
+    }
+
     private inner class ItemViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         private val itemViewer = itemViewCreator(itemView)
 
@@ -145,15 +165,13 @@ class RecyclerViewList<ItemViewType : RecyclerViewList.ItemView<ModelType>, Mode
             itemView.setOnClickListener {
                 // listItem can not be null because it must already have been bound
                 // to be clicked
-                val pos = itemViewer!!.listPosition
-                recentlyClickedPos = pos
-                onItemClickedListener?.invoke(listItems[pos])
+                recentlyClickedPos = adapterPosition
+                onItemClickedListener?.invoke(listItems[adapterPosition])
             }
         }
 
         fun bind(position: Int) {
             itemViewer.model = listItems[position]
-            itemViewer.listPosition = position
             itemViewer.onBind()
         }
     }

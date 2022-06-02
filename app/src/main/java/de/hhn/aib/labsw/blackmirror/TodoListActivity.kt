@@ -5,7 +5,6 @@ import android.os.Build
 import android.os.Bundle
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
-import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import de.hhn.aib.labsw.blackmirror.dataclasses.TodoItem
 import de.hhn.aib.labsw.blackmirror.lists.*
@@ -38,6 +37,7 @@ class TodoListActivity : AppCompatActivity() {
             intent.putExtra(TODO_TEXT_EXTRA, item.text)
             activityResultLauncher.launch(intent)
         }
+        todoList.removeItemOnSwipe(true)
 
         val addItemBtn = findViewById<FloatingActionButton>(R.id.addItemButton)
         addItemBtn.setOnClickListener {
@@ -48,6 +48,30 @@ class TodoListActivity : AppCompatActivity() {
                 activityResultLauncher.launch(
                     Intent(this@TodoListActivity, EditTodoActivity::class.java)
                 )
+            }
+        }
+
+        // sample todos
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            listOf(
+                TodoItem("Müll rausbringen", ZonedDateTime.now()),
+                TodoItem("Auf Klausur lernen", ZonedDateTime.now()),
+                TodoItem("Am Projekt weiterarbeiten", ZonedDateTime.now()),
+                TodoItem("Behörde zurückrufen", ZonedDateTime.now()),
+                TodoItem("Auslagen zurückzahlen", ZonedDateTime.now()),
+                TodoItem("DVD zurückgeben", ZonedDateTime.now()),
+                TodoItem("Dune anschauen", ZonedDateTime.now()),
+                TodoItem("Urlaub planen", ZonedDateTime.now()),
+                TodoItem("Ideen sammeln, wie ich reich werde", ZonedDateTime.now()),
+                TodoItem("Eine Rezension für den neuen Staubsauger schreiben", ZonedDateTime.now()),
+                TodoItem("Neujahrsvorsätze umsetzen", ZonedDateTime.now()),
+                TodoItem("Mehr Sport treiben", ZonedDateTime.now()),
+                TodoItem("E-Mails sortieren", ZonedDateTime.now()),
+                TodoItem("Milch einkaufen", ZonedDateTime.now()),
+                TodoItem("Kellerlicht reparieren", ZonedDateTime.now()),
+                TodoItem("Geburtstagsgeschenk kaufen", ZonedDateTime.now())
+            ).forEach {
+                todoList.add(it)
             }
         }
     }
