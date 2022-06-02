@@ -1,15 +1,14 @@
 package de.hhn.aib.labsw.blackmirror
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
 import android.widget.Button
 import android.widget.EditText
+import android.widget.Toast
 import de.hhn.aib.labsw.blackmirror.dataclasses.Email
 
 /**
  * @author Lukas Michalsky
- * @version 30.05.2022
+ * @version 02.06.2022
  */
 class EmailDataActivity : AbstractActivity() {
 
@@ -27,9 +26,16 @@ class EmailDataActivity : AbstractActivity() {
             var password = etPassword.text.toString()
             var imap = etImap.text.toString()
 
-            Log.i(password, email)
-            val emailData = Email(imap, 993, email, password)
-            publishToRemotes("emailData", emailData)
+
+            if(email.contains("@")) {
+                val emailData = Email(imap, 993, email, password)
+                publishToRemotes("emailData", emailData)
+                val toast = Toast.makeText(this, "Data saved", Toast.LENGTH_LONG)
+                toast.show()
+            } else {
+                val toast = Toast.makeText(this, "Invalid Email", Toast.LENGTH_LONG)
+                toast.show()
+            }
         }
     }
 
