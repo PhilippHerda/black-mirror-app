@@ -30,4 +30,8 @@
     <string name="help">Help</string>
     <string name="todo_help_title">Todo List Help</string>
     <string name="todo_help_msg">Press the + button to add a todo. Tap on an item to edit it. Swipe an item to the side to remove it.</string>
+    <string name="edit_todo_menu_confirm">OK</string>
+    <string name="edit_todo_cancel_dialog_msg">Todo text has been changed. Do you really want to discard the changes?</string>
+    <string name="edit_todo_cancel_dialog_confirm">Discard</string>
+    <string name="edit_todo_cancel_dialog_cancel">Continue editing</string>
 </resources>

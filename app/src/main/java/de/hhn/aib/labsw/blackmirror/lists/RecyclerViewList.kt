@@ -19,6 +19,7 @@ import androidx.recyclerview.widget.RecyclerView
  * a generic type so we need this workaround with a functor that invokes the constructor on the call site.
  * You can copy this sample and insert the correct class: `{ <YOUR_CLASS>(it) }`
  * @author Markus Marewitz
+ * @version 2022-06-02
  */
 // having to repeat the ModelType as type parameter for the RecyclerViewList,
 // because Kotlin has no feature to infer this type from the ListItem type parameter,
@@ -132,7 +133,8 @@ class RecyclerViewList<ItemViewType : RecyclerViewList.ItemView<ModelType>, Mode
     private var recentlyClickedPos = -1
 
     private val itemTouchHelper =
-        ItemTouchHelper(object : ItemTouchHelper.SimpleCallback(0,
+        ItemTouchHelper(object : ItemTouchHelper.SimpleCallback(
+            0,
             ItemTouchHelper.LEFT or ItemTouchHelper.RIGHT
         ) {
             override fun onMove(

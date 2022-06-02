@@ -11,9 +11,15 @@ import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import de.hhn.aib.labsw.blackmirror.dataclasses.TodoItem
-import de.hhn.aib.labsw.blackmirror.lists.*
+import de.hhn.aib.labsw.blackmirror.lists.RecyclerViewList
+import de.hhn.aib.labsw.blackmirror.lists.TodoListItem
 import java.time.ZonedDateTime
 
+/**
+ * Activity to manage (supports CRUD) a to do list.
+ * @author Markus Marewitz
+ * @version 2022-06-02
+ */
 class TodoListActivity : AppCompatActivity() {
     private lateinit var todoList: RecyclerViewList<TodoListItem, TodoItem>
 
@@ -21,16 +27,21 @@ class TodoListActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_todo_list)
 
+        supportActionBar?.title = getString(R.string.todo_list_title)
+
         val activityResultLauncher =
             registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
-                if (it.resultCode != RESULT_OK) return@registerForActivityResult
-                val todoText = it.data?.getStringExtra(TODO_TEXT_EXTRA)
-                if (todoText == null) {
-                    todoList.remove(todoList.recentlyClickedItem)
-                } else {
-                    todoList.updateRecentlyClickedItem { item ->
-                        item.text = todoText
+                if (it.resultCode == RESULT_OK) {
+                    val todoText = it.data?.getStringExtra(TODO_TEXT_EXTRA)
+                    if (todoText == null) {
+                        todoList.remove(todoList.recentlyClickedItem)
+                    } else {
+                        todoList.updateRecentlyClickedItem { item ->
+                            item.text = todoText
+                        }
+                        todoList.scrollToItem(todoList.recentlyClickedItem)
                     }
+                } else {
                     todoList.scrollToItem(todoList.recentlyClickedItem)
                 }
             }
