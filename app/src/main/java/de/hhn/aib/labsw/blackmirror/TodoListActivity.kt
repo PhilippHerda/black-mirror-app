@@ -3,7 +3,11 @@ package de.hhn.aib.labsw.blackmirror
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
+import android.view.Menu
+import android.view.MenuInflater
+import android.view.MenuItem
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import de.hhn.aib.labsw.blackmirror.dataclasses.TodoItem
@@ -27,6 +31,7 @@ class TodoListActivity : AppCompatActivity() {
                     todoList.updateRecentlyClickedItem { item ->
                         item.text = todoText
                     }
+                    todoList.scrollToItem(todoList.recentlyClickedItem)
                 }
             }
 
@@ -73,6 +78,30 @@ class TodoListActivity : AppCompatActivity() {
             ).forEach {
                 todoList.add(it)
             }
+        }
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        val inflater: MenuInflater = menuInflater
+        inflater.inflate(R.menu.todo_list_menu, menu)
+        return true
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
+            R.id.helpItem -> {
+                showHelp()
+                true
+            }
+            else -> super.onOptionsItemSelected(item)
+        }
+    }
+
+    private fun showHelp() {
+        AlertDialog.Builder(this).run {
+            setTitle(R.string.todo_help_title)
+            setMessage(getString(R.string.todo_help_msg))
+            create().show()
         }
     }
 }

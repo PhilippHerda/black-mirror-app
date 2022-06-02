@@ -64,6 +64,14 @@ class RecyclerViewList<ItemViewType : RecyclerViewList.ItemView<ModelType>, Mode
         open fun onBind() {}
     }
 
+    fun scrollToItem(item: ModelType) {
+        recyclerView.smoothScrollToPosition(tryGetItemPos(item))
+    }
+
+    fun scrollToTop() = recyclerView.smoothScrollToPosition(0)
+
+    fun scrollToBottom() = recyclerView.smoothScrollToPosition(listItems.size - 1)
+
     /**
      * Adds an item to the end of the list and updates the UI
      */

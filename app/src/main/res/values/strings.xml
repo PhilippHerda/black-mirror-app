@@ -27,4 +27,7 @@
     <string name="empty_todo_dialog_msg">Todo text is empty. Todo item will be dismissed. Do you really want to return?</string>
     <string name="empty_todo_dialog_confirm">Return</string>
     <string name="empty_todo_dialog_cancel">Cancel</string>
+    <string name="help">Help</string>
+    <string name="todo_help_title">Todo List Help</string>
+    <string name="todo_help_msg">Press the + button to add a todo. Tap on an item to edit it. Swipe an item to the side to remove it.</string>
 </resources>
