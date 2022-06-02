@@ -39,6 +39,19 @@
     </androidx.appcompat.widget.Toolbar>
 
 
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/configPagesButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:backgroundTint="#3F51B5"
+        android:text="@string/Str_widgetConfigPagesButton"
+        app:layout_constraintBottom_toBottomOf="@+id/toolbar"
+        app:layout_constraintEnd_toEndOf="@+id/toolbar"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.0" />
+
     <androidx.gridlayout.widget.GridLayout
         android:id="@+id/widgetGrid"
         android:layout_width="wrap_content"
@@ -133,34 +146,91 @@
         android:layout_width="0dp"
         android:layout_height="100dp"
         android:background="#E3E0E0"
+        android:fillViewport="true"
+        android:padding="5dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        tools:ignore="SpeakableTextPresentCheck"
-        android:fillViewport="true"
-        android:padding="5dp">
+        tools:ignore="SpeakableTextPresentCheck">
 
         <LinearLayout
             android:id="@+id/widgetList"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:divider="@drawable/divider"
             android:orientation="horizontal"
-            android:showDividers="middle"
-            android:divider="@drawable/divider"/>
+            android:showDividers="middle" />
     </HorizontalScrollView>
 
     <com.google.android.material.button.MaterialButton
-        android:id="@+id/exitButton"
+        android:id="@+id/clearButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_marginTop="4dp"
         android:backgroundTint="#3F51B5"
-        android:text="@string/Str_widgetExitButton"
+        android:text="@string/Str_widgetClearButton"
         app:layout_constraintBottom_toBottomOf="@+id/toolbar"
         app:layout_constraintStart_toStartOf="@+id/toolbar"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.0" />
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/navigateLeft_fab"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="36dp"
+        android:layout_marginBottom="38dp"
+        android:clickable="true"
+        android:contentDescription="@string/Str_widgetGoLeftButton"
+        app:layout_constraintBottom_toTopOf="@+id/horizontalScrollView"
+        app:layout_constraintStart_toStartOf="@+id/widgetGrid"
+        app:layout_constraintTop_toBottomOf="@+id/widgetGrid"
+        app:srcCompat="@drawable/arrow_left" />
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/navigateRight_fab"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="166dp"
+        android:layout_marginTop="36dp"
+        android:layout_marginBottom="38dp"
+        android:clickable="true"
+        android:contentDescription="@string/Str_widgetGoRightButton"
+        app:layout_constraintBottom_toTopOf="@+id/horizontalScrollView"
+        app:layout_constraintEnd_toEndOf="@+id/widgetGrid"
+        app:layout_constraintStart_toEndOf="@+id/navigateLeft_fab"
+        app:layout_constraintTop_toBottomOf="@+id/widgetGrid"
+        app:srcCompat="@drawable/arrow_right" />
+
+    <TextView
+        android:id="@+id/pageIndicatorSeparatorTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/Str_widgetPageIndicatorSeparator"
+        android:textSize="24sp"
+        app:layout_constraintBottom_toTopOf="@+id/horizontalScrollView"
+        app:layout_constraintEnd_toStartOf="@+id/navigateRight_fab"
+        app:layout_constraintStart_toEndOf="@+id/navigateLeft_fab"
+        app:layout_constraintTop_toBottomOf="@+id/widgetGrid" />
+
+    <TextView
+        android:id="@+id/pageIndicatorTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="24sp"
+        app:layout_constraintBottom_toBottomOf="@+id/pageIndicatorSeparatorTextView"
+        app:layout_constraintEnd_toStartOf="@+id/pageIndicatorSeparatorTextView"
+        app:layout_constraintTop_toTopOf="@+id/pageIndicatorSeparatorTextView" />
+
+    <TextView
+        android:id="@+id/pageAmountTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="24sp"
+        app:layout_constraintBottom_toBottomOf="@+id/pageIndicatorSeparatorTextView"
+        app:layout_constraintStart_toEndOf="@+id/pageIndicatorSeparatorTextView"
+        app:layout_constraintTop_toTopOf="@+id/pageIndicatorSeparatorTextView" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,36 +1,44 @@
 package de.hhn.aib.labsw.blackmirror
 
+
+import android.annotation.SuppressLint
 import android.content.ClipData
+import android.content.Intent
+import android.app.AlertDialog
+import android.graphics.drawable.Drawable
 import android.os.Build
 import android.os.Bundle
 import android.view.DragEvent
 import android.view.View
 import android.widget.ImageView
 import android.widget.LinearLayout
+import android.widget.TextView
 import android.widget.Toast
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.content.res.AppCompatResources
+import androidx.core.view.get
 import androidx.core.view.iterator
 import androidx.gridlayout.widget.GridLayout
-import androidx.annotation.RequiresApi
 import com.google.android.material.button.MaterialButton
-import de.hhn.aib.labsw.blackmirror.dataclasses.MyPage
-import de.hhn.aib.labsw.blackmirror.dataclasses.Widget
+import com.google.android.material.floatingactionbutton.FloatingActionButton
+import de.hhn.aib.labsw.blackmirror.dataclasses.*
+
 
 /**
  * This activity initializes an interface where different widgets can be dragged on a
  * simulated mirror. These layouts can be saved.
  * This allows customizable mirror layouts.
  *
- * @author Selim Özdemir
- * @version 09-05-2022
+ * @author Selim Özdemir, Niklas Binder
+ * @version 28-05-2022
  */
 class WidgetLayoutActivity : AppCompatActivity() {
 
     private val widgets: MutableList<String?> = ArrayList()
     lateinit var myGridLayout: GridLayout
     private lateinit var widgetList: LinearLayout
-    private lateinit var savedPage: MyPage
+    private lateinit var mirror: Mirror
 
     @RequiresApi(Build.VERSION_CODES.N)
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -38,6 +46,16 @@ class WidgetLayoutActivity : AppCompatActivity() {
         setContentView(R.layout.activity_widget_layout)
         init()
         placeWidgetItems()
+
+        // Initializing Mirror object
+        val pages = ArrayList<Page> ()
+        val widgets = ArrayList<Widget> ()
+        pages.add(Page(widgets))
+        pages.add(Page(widgets))
+        pages.add(Page(widgets))
+        mirror = Mirror(pages)
+        findViewById<TextView>(R.id.pageIndicatorTextView).text = "1"
+        findViewById<TextView>(R.id.pageAmountTextView).text = mirror.pages.size.toString()
     }
 
     /**
@@ -102,12 +120,64 @@ class WidgetLayoutActivity : AppCompatActivity() {
     }
 
     /**
-     * Initializes the grid functionality and the buttons.
+     * Initializes the grid functionality and the onClick functionality for the widget configuration.
+     *
+     * @Team Add your intents at the commented out lines.
      */
+    @SuppressLint("ClickableViewAccessibility", "SetTextI18n")
     private fun init() {
         myGridLayout = findViewById(R.id.widgetGrid)
         for (box in myGridLayout) {
-            box.setOnDragListener(MyDragListener())
+            box.setOnClickListener {
+                if (box.foreground != null) {
+
+                    println("test2 " + box.foreground.constantState.toString())
+                    println("test2 " + AppCompatResources.getDrawable(this, R.drawable.weather_widget_icon_foreground)?.constantState.toString())
+
+                    intent = null
+                    when (box.foreground.constantState) {
+                        AppCompatResources.getDrawable(
+                            this@WidgetLayoutActivity,
+                            R.drawable.mail_widget_icon_foreground
+                        )?.constantState -> {
+                            // intent = Intent(this@WidgetLayoutActivity, Activity::class.java) mail configuration
+                        }
+                        AppCompatResources.getDrawable(
+                            this@WidgetLayoutActivity,
+                            R.drawable.calendar_widget_icon_foreground
+                        )?.constantState -> {
+                            // intent = Intent(this@WidgetLayoutActivity, Activity::class.java) calendar configuration
+                        }
+                        AppCompatResources.getDrawable(
+                            this@WidgetLayoutActivity,
+                            R.drawable.weather_widget_icon_foreground
+                        )?.constantState -> {
+                            intent = Intent(
+                                this@WidgetLayoutActivity,
+                                WeatherLocationActivity::class.java
+                            )
+                        }
+                        AppCompatResources.getDrawable(
+                            this@WidgetLayoutActivity,
+                            R.drawable.clock_widget_icon_foreground
+                        )?.constantState -> {
+                            // intent = Intent(this@WidgetLayoutActivity, Activity::class.java) clock configuration
+                        }
+                        AppCompatResources.getDrawable(
+                            this@WidgetLayoutActivity,
+                            R.drawable.reminder_widget_icon_foreground
+                        )?.constantState -> {
+                            // intent = Intent(this@WidgetLayoutActivity, Activity::class.java) reminder configuration
+                        }
+                    }
+                    if(intent == null) {
+                        Toast.makeText(applicationContext, R.string.Str_widgetNoConfigAvailableToastMessage, Toast.LENGTH_SHORT).show()
+                    } else {
+                        startActivity(intent)
+                    }
+                }
+            }
+
             box.setOnLongClickListener {
                 if (box.foreground != null) {
                     for (widget in widgetList) {
@@ -124,62 +194,170 @@ class WidgetLayoutActivity : AppCompatActivity() {
                 }
                 return@setOnLongClickListener true
             }
+
+            box.setOnDragListener(MyDragListener())
         }
 
         val saveButton: MaterialButton = findViewById(R.id.saveButton)
         saveButton.setOnClickListener {
-            val page = MyPage()
-            var pos = 1
-            for (box in myGridLayout) {
-                when (box.foreground) {
+            sendWidgetLayout()
+        }
+
+        val clearButton: MaterialButton = findViewById(R.id.clearButton)
+        clearButton.setOnClickListener {
+            val builder = AlertDialog.Builder(this@WidgetLayoutActivity)
+            builder.setMessage(resources.getString(R.string.Str_widgetConfirmClearTxt))
+                .setCancelable(false)
+                .setPositiveButton(
+                    resources.getString(R.string.Str_widgetConfirmClearYesTxt)
+                ) { dialog, id -> clearWidgetGrid() }
+                .setNegativeButton(
+                    resources.getString(R.string.Str_widgetConfirmClearNoTxt)
+                ) { dialog, id -> dialog.cancel() }
+            val alert = builder.create()
+            alert.show()
+        }
+
+        val configPagesButton: MaterialButton = findViewById(R.id.configPagesButton)
+        configPagesButton.setOnClickListener {
+            //    TODO: Create a PageActivity which uses the given MyMirror
+        }
+
+        val navigateLeftButton = findViewById<FloatingActionButton>(R.id.navigateLeft_fab)
+        navigateLeftButton.setOnClickListener {
+            mirror.goToPreviousPage()
+            clearWidgetGrid()
+            displayPage()
+            findViewById<TextView>(R.id.pageIndicatorTextView).text = (mirror.currentPageIndex + 1).toString()
+        }
+
+        val navigateRightButton = findViewById<FloatingActionButton>(R.id.navigateRight_fab)
+        navigateRightButton.setOnClickListener {
+            mirror.goToNextPage()
+            clearWidgetGrid()
+            displayPage()
+            findViewById<TextView>(R.id.pageIndicatorTextView).text = (mirror.currentPageIndex + 1).toString()
+        }
+    }
+
+    /**
+     * Method to send the current layout to the mirror.
+     */
+    private fun sendWidgetLayout() {
+        //TODO: Send the data to the mirror.
+        val myToast =
+            Toast.makeText(applicationContext, R.string.Str_widgetSuccessfullySavedToastMessage, Toast.LENGTH_SHORT)
+        myToast.show()
+    }
+
+    /**
+     * Method to save the current page.
+     * Gets called everytime the page gets switched.
+     */
+    private fun saveCurrentPage() {
+        val widgets = ArrayList<Widget> ()
+        val page = Page(widgets)
+        var pos = 1
+        for (box in myGridLayout) {
+            if (box.foreground != null) {
+
+                println("test1 " + box.foreground.constantState.toString())
+                println("test1 " + AppCompatResources.getDrawable(this, R.drawable.weather_widget_icon_foreground)?.constantState.toString())
+
+                when (box.foreground.constantState) {
                     AppCompatResources.getDrawable(
                         this,
                         R.drawable.mail_widget_icon_foreground
-                    ) -> {
-                        page.addWidget(Widget("mail", pos % 3, pos / 3 + 1))
+                    )?.constantState -> {
+                        page.widgets.add(Widget(WidgetType.MAIL, pos % 3, pos / 3 + 1))
                     }
                     AppCompatResources.getDrawable(
                         this,
                         R.drawable.calendar_widget_icon_foreground
-                    ) -> {
-                        page.addWidget(Widget("calendar", pos % 3, pos / 3 + 1))
+                    )?.constantState -> {
+                        page.widgets.add(Widget(WidgetType.CALENDAR, pos % 3, pos / 3 + 1))
                     }
                     AppCompatResources.getDrawable(
                         this,
                         R.drawable.weather_widget_icon_foreground
-                    ) -> {
-                        page.addWidget(Widget("weather", pos % 3, pos / 3 + 1))
+                    )?.constantState -> {
+                        page.widgets.add(Widget(WidgetType.WEATHER, pos % 3, pos / 3 + 1))
                     }
                     AppCompatResources.getDrawable(
                         this,
                         R.drawable.clock_widget_icon_foreground
-                    ) -> {
-                        page.addWidget(Widget("clock", pos % 3, pos / 3 + 1))
+                    )?.constantState -> {
+                        page.widgets.add(Widget(WidgetType.CLOCK, pos % 3, pos / 3 + 1))
                     }
                     AppCompatResources.getDrawable(
                         this,
                         R.drawable.reminder_widget_icon_foreground
-                    ) -> {
-                        page.addWidget(Widget("reminder", pos % 3, pos / 3 + 1))
+                    )?.constantState -> {
+                        page.widgets.add(Widget(WidgetType.REMINDER, pos % 3, pos / 3 + 1))
                     }
                 }
-                pos++
             }
-            savedPage = page
-            val myToast =
-                Toast.makeText(applicationContext, "Successfully saved!", Toast.LENGTH_SHORT)
-            myToast.show()
+            pos++
         }
+        mirror.pages[mirror.currentPageIndex] = page
+    }
 
+    /**
+     * Method to load all widgets from the myMirror object and display it on the grid.
+     */
+    private fun displayPage() {
+        println("Current Page: " + mirror.currentPageIndex)
+        for (widget in mirror.pages[mirror.currentPageIndex].widgets) {
+            val pos: Int = (widget.x - 1) + (widget.y - 1) * 3
+            myGridLayout[pos].foreground = getDrawableForWidget(widget)
+            myGridLayout[pos].background = AppCompatResources.getDrawable(this, R.drawable.widget_box)
+        }
+    }
 
-        // TODO: Create a PageActivity which uses the given MyPage extra
-        //val exitButton: MaterialButton = findViewById(R.id.exitButton)
-        //exitButton.setOnClickListener {
-        //
-        //    intent = Intent(this, PagesActivity::class.java)
-        //    intent.putExtra("newPage", savedPage)
-        //    startActivity(intent)
-        //}
+    private fun getDrawableForWidget(widget: Widget): Drawable {
+        return when (widget.type) {
+            WidgetType.CALENDAR -> {
+                AppCompatResources.getDrawable(
+                    this,
+                    R.drawable.calendar_widget_icon_foreground
+                )!!
+            }
+            WidgetType.CLOCK -> {
+                AppCompatResources.getDrawable(
+                    this,
+                    R.drawable.clock_widget_icon_foreground
+                )!!
+            }
+            WidgetType.MAIL -> {
+                AppCompatResources.getDrawable(
+                    this,
+                    R.drawable.mail_widget_icon_foreground
+                )!!
+            }
+            WidgetType.REMINDER -> {
+                AppCompatResources.getDrawable(
+                    this,
+                    R.drawable.reminder_widget_icon_foreground
+                )!!
+            }
+            WidgetType.WEATHER -> {
+                AppCompatResources.getDrawable(
+                    this,
+                    R.drawable.weather_widget_icon_foreground
+                )!!
+            }
+        }
+    }
+
+    /**
+     * Method to clear the grid.
+     * Gets called everytime the page gets changed.
+     */
+    private fun clearWidgetGrid() {
+        for (box in myGridLayout) {
+            box.foreground = null
+            box.background = AppCompatResources.getDrawable(this, R.drawable.box)
+        }
     }
 
     /**
@@ -225,10 +403,26 @@ class WidgetLayoutActivity : AppCompatActivity() {
                     }
                     v.background = view.background
                     v.foreground = view.foreground
+                    saveCurrentPage()
                 }
                 else -> {}
             }
             return true
         }
     }
+
+    override fun onBackPressed() {
+        val builder = AlertDialog.Builder(this@WidgetLayoutActivity)
+        builder.setMessage(resources.getString(R.string.Str_widgetConfirmExitApplicationTxt))
+            .setCancelable(false)
+            .setPositiveButton(
+                resources.getString(R.string.Str_widgetConfirmClearYesTxt)
+            ) { dialog, id -> this@WidgetLayoutActivity.finishAffinity() }
+            .setNegativeButton(
+                resources.getString(R.string.Str_widgetConfirmClearNoTxt)
+            ) { dialog, id -> dialog.cancel() }
+        val alert = builder.create()
+        alert.show()
+    }
 }
+
