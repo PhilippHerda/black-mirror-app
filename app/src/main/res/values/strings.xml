@@ -4,14 +4,14 @@
     //Loading Screen Strings:
     <string name="blackMirror_logo_contentDescription">Blackmirror content description</string>
 
-  // EmailData Strings:  
+    // EmailData Strings:
     <string name="tv_email">Email:</string>
     <string name="tv_password">Password:</string>
     <string name="tv_imap">Imap Server:</string>
     <string name="tv_inbox">Inbox Name:</string>
     <string name="btn_save">Save</string>
-  
-  // WidgetLayout Strings:
+
+    // WidgetLayout Strings:
     <string name="Str_widgetSaveButton">save</string>
     <string name="Str_widgetConfigPagesButton">config pages</string>
     <string name="Str_widgetClearButton">clear</string>
@@ -35,4 +35,7 @@
     <string name="invalidDoubleTitle">Invalid input</string>
     <string name="invalidDoubleMsg">Failed to read number. Expected the format 25.314.</string>
     <string name="set_location">Set Location</string>
+
+    <string name="Str_defaulNumber">0</string>
+    <string name="Str_addPageActionButton">+</string>
 </resources>
