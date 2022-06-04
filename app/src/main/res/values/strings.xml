@@ -13,6 +13,7 @@
 
     // WidgetLayout Strings:
     <string name="Str_widgetSaveButton">save</string>
+    <string name="Str_widgetExitButton">exit</string>
     <string name="Str_widgetConfigPagesButton">config pages</string>
     <string name="Str_widgetClearButton">clear</string>
     <string name="Str_widgetConfirmClearYesTxt">Yes</string>
