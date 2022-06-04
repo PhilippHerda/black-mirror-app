@@ -135,14 +135,6 @@ class WidgetLayoutActivity : AppCompatActivity() {
         for (box in myGridLayout) {
             box.setOnClickListener {
                 if (box.foreground != null) {
-
-                    println("test2 " + box.foreground.constantState.toString())
-                    println(
-                        "test2 " + AppCompatResources.getDrawable(
-                            this,
-                            R.drawable.weather_widget_icon_foreground
-                        )?.constantState.toString()
-                    )
                     intent = null
 
                     when (box.tag) {
@@ -219,7 +211,7 @@ class WidgetLayoutActivity : AppCompatActivity() {
 
         val configPagesButton: MaterialButton = findViewById(R.id.configPagesButton)
         configPagesButton.setOnClickListener {
-            //    TODO: Create a PageActivity which uses the given MyMirror
+            startActivity(Intent(this@WidgetLayoutActivity, PagesActivity::class.java))
         }
 
         val navigateLeftButton = findViewById<FloatingActionButton>(R.id.navigateLeft_fab)
