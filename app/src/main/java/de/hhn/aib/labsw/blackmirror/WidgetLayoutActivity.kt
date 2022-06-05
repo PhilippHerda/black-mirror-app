@@ -172,7 +172,7 @@ class WidgetLayoutActivity : AppCompatActivity() {
             box.setOnLongClickListener {
                 if (box.foreground != null) {
                     for (widget in widgetList) {
-                        if (box.foreground == widget.foreground) {
+                        if (box.tag == widget.tag) {
                             widget.performLongClick()
                         }
                     }
@@ -289,6 +289,7 @@ class WidgetLayoutActivity : AppCompatActivity() {
             myGridLayout[pos].foreground = getDrawableForWidget(widget)
             myGridLayout[pos].background =
                 AppCompatResources.getDrawable(this, R.drawable.widget_box)
+            myGridLayout[pos].tag = widget.type
         }
     }
 
