@@ -63,7 +63,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:backgroundTint="#3F51B5"
-        android:text="@string/Str_widgetExitButton"
+        android:text="@string/Str_pagesExitButton"
         app:layout_constraintBottom_toBottomOf="@+id/toolbar"
         app:layout_constraintStart_toStartOf="@+id/toolbar"
         app:layout_constraintTop_toTopOf="@+id/toolbar" />

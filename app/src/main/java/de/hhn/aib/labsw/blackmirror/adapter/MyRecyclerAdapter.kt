@@ -7,19 +7,21 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import de.hhn.aib.labsw.blackmirror.R
+import de.hhn.aib.labsw.blackmirror.dataclasses.Page
 import de.hhn.aib.labsw.blackmirror.helper.ItemTouchHelperAdapter
 import de.hhn.aib.labsw.blackmirror.helper.OnStartDragListener
 import java.util.*
+import kotlin.collections.ArrayList
 
 class MyRecyclerAdapter(var context: Context,
-                        var stringList:MutableList<String?>,
+                        var stringList:ArrayList<Page>,
                         var listener: OnStartDragListener
 ) : RecyclerView.Adapter<MyRecyclerAdapter.MyViewHolder>(), ItemTouchHelperAdapter {
 
     inner class MyViewHolder(itemView: View): RecyclerView.ViewHolder(itemView) {
         var txt_number: TextView
         init {
-            txt_number = itemView as TextView
+            txt_number = itemView.findViewById(R.id.pageItemBox) as TextView
         }
     }
 

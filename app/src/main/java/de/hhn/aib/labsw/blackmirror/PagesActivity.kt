@@ -8,13 +8,16 @@ import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import de.hhn.aib.labsw.blackmirror.adapter.MyRecyclerAdapter
+import de.hhn.aib.labsw.blackmirror.dataclasses.Mirror
 import de.hhn.aib.labsw.blackmirror.helper.MyItemTouchHelperCallback
 import de.hhn.aib.labsw.blackmirror.helper.OnStartDragListener
+import java.util.*
+import kotlin.collections.ArrayList
 
 class PagesActivity : AppCompatActivity() {
 
     var itemTouchHelper: ItemTouchHelper? = null
-    private val recyclerView: RecyclerView = findViewById(R.id.pagesRecyclerView)
+    private lateinit var recyclerView: RecyclerView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -24,11 +27,8 @@ class PagesActivity : AppCompatActivity() {
     }
 
     private fun generateItem() {
-        val data: MutableList<String?> = ArrayList()
-        val myMirror = intent.getSerializableExtra("myMirror")
-        // Merge required
-        // ata.addAll(Arrays.asList())
-        val adapter = MyRecyclerAdapter(this, data, object:OnStartDragListener {
+        val myMirror = intent.getSerializableExtra("myMirror") as Mirror
+        val adapter = MyRecyclerAdapter(this, myMirror.pages, object:OnStartDragListener {
             override fun onStartDrag(viewHolder: RecyclerView.ViewHolder?) {
                 itemTouchHelper!!.startDrag(viewHolder!!)
             }
@@ -41,6 +41,7 @@ class PagesActivity : AppCompatActivity() {
     }
 
     private fun init() {
+        recyclerView = findViewById(R.id.pagesRecyclerView)
         recyclerView.setHasFixedSize(true)
         val layoutManager = GridLayoutManager(this, 3)
         recyclerView.layoutManager = layoutManager

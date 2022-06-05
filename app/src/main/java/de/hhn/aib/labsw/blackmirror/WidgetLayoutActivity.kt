@@ -220,7 +220,9 @@ class WidgetLayoutActivity : AppCompatActivity() {
 
         val configPagesButton: MaterialButton = findViewById(R.id.configPagesButton)
         configPagesButton.setOnClickListener {
-            //    TODO: Create a PageActivity which uses the given MyMirror
+            val intent = Intent(this, PagesActivity::class.java)
+            intent.putExtra("myMirror", mirror)
+            startActivity(intent)
         }
 
         val navigateLeftButton = findViewById<FloatingActionButton>(R.id.navigateLeft_fab)
