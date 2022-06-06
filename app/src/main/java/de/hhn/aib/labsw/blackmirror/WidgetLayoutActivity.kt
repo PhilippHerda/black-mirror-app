@@ -201,7 +201,7 @@ class WidgetLayoutActivity : AppCompatActivity() {
                 .setCancelable(false)
                 .setPositiveButton(
                     resources.getString(R.string.Str_widgetConfirmClearYesTxt)
-                ) { dialog, id -> clearWidgetGrid() }
+                ) { dialog, id -> deleteConfiguration() }
                 .setNegativeButton(
                     resources.getString(R.string.Str_widgetConfirmClearNoTxt)
                 ) { dialog, id -> dialog.cancel() }
@@ -326,6 +326,11 @@ class WidgetLayoutActivity : AppCompatActivity() {
                 )!!
             }
         }
+    }
+
+    private fun deleteConfiguration() {
+        clearWidgetGrid()
+        saveCurrentPage()
     }
 
     /**
