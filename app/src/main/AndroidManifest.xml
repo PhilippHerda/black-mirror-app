@@ -13,7 +13,7 @@
         android:theme="@style/Theme.Blackmirrorapp">
         <activity
             android:name=".EmailDataActivity"
-            android:exported="false" />
+            android:exported="true" />
         <activity
             android:name=".WeatherLocationActivity"
             android:exported="true" />
