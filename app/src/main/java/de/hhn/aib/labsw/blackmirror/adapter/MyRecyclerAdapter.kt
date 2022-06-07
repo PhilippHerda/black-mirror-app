@@ -19,18 +19,18 @@ class MyRecyclerAdapter(var context: Context,
 ) : RecyclerView.Adapter<MyRecyclerAdapter.MyViewHolder>(), ItemTouchHelperAdapter {
 
     inner class MyViewHolder(itemView: View): RecyclerView.ViewHolder(itemView) {
-        var txt_number: TextView
+        var txtnumber: TextView
         init {
-            txt_number = itemView.findViewById(R.id.pageItemBox) as TextView
+            txtnumber = itemView.findViewById(R.id.txt_number) as TextView
         }
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
-        return MyViewHolder(LayoutInflater.from(context).inflate(R.layout.pages_item,parent,false))
+        return MyViewHolder(LayoutInflater.from(context).inflate(R.layout.page_item,parent,false))
     }
 
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
-        holder.txt_number.text = (position+1).toString()
+        holder.txtnumber.text = (position+1).toString()
 
         holder.itemView.setOnLongClickListener {
             listener.onStartDrag(holder)

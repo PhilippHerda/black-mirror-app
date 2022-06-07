@@ -53,7 +53,7 @@
         app:layout_constraintVertical_bias="0.0" />
 
     <androidx.gridlayout.widget.GridLayout
-        android:id="@+id/widgetGrid"
+        android:id="@+id/PageItemGrid"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
@@ -184,8 +184,8 @@
         android:clickable="true"
         android:contentDescription="@string/Str_widgetGoLeftButton"
         app:layout_constraintBottom_toTopOf="@+id/horizontalScrollView"
-        app:layout_constraintStart_toStartOf="@+id/widgetGrid"
-        app:layout_constraintTop_toBottomOf="@+id/widgetGrid"
+        app:layout_constraintStart_toStartOf="@+id/PageItemGrid"
+        app:layout_constraintTop_toBottomOf="@+id/PageItemGrid"
         app:srcCompat="@drawable/arrow_left" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -198,9 +198,9 @@
         android:clickable="true"
         android:contentDescription="@string/Str_widgetGoRightButton"
         app:layout_constraintBottom_toTopOf="@+id/horizontalScrollView"
-        app:layout_constraintEnd_toEndOf="@+id/widgetGrid"
+        app:layout_constraintEnd_toEndOf="@+id/PageItemGrid"
         app:layout_constraintStart_toEndOf="@+id/navigateLeft_fab"
-        app:layout_constraintTop_toBottomOf="@+id/widgetGrid"
+        app:layout_constraintTop_toBottomOf="@+id/PageItemGrid"
         app:srcCompat="@drawable/arrow_right" />
 
     <TextView
@@ -212,7 +212,7 @@
         app:layout_constraintBottom_toTopOf="@+id/horizontalScrollView"
         app:layout_constraintEnd_toStartOf="@+id/navigateRight_fab"
         app:layout_constraintStart_toEndOf="@+id/navigateLeft_fab"
-        app:layout_constraintTop_toBottomOf="@+id/widgetGrid" />
+        app:layout_constraintTop_toBottomOf="@+id/PageItemGrid" />
 
     <TextView
         android:id="@+id/pageIndicatorTextView"

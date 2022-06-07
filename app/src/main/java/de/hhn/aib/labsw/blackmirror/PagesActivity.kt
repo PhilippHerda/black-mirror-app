@@ -43,7 +43,7 @@ class PagesActivity : AppCompatActivity() {
     private fun init() {
         recyclerView = findViewById(R.id.pagesRecyclerView)
         recyclerView.setHasFixedSize(true)
-        val layoutManager = GridLayoutManager(this, 3)
+        val layoutManager = GridLayoutManager(this, 2)
         recyclerView.layoutManager = layoutManager
 
         val actionButton = findViewById<FloatingActionButton>(R.id.addPageActionButton)

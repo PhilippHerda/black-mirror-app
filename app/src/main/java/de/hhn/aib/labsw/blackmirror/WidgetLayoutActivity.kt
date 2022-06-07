@@ -126,7 +126,7 @@ class WidgetLayoutActivity : AppCompatActivity() {
      */
     @SuppressLint("ClickableViewAccessibility", "SetTextI18n")
     private fun init() {
-        myGridLayout = findViewById(R.id.widgetGrid)
+        myGridLayout = findViewById(R.id.PageItemGrid)
         for (box in myGridLayout) {
             box.setOnClickListener {
                 if (box.foreground != null) {

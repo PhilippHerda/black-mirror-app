@@ -39,4 +39,5 @@
     <string name="Str_defaulNumber">0</string>
     <string name="Str_addPageActionButton">+</string>
     <string name="Str_pagesExitButton">exit</string>
+    <string name="Str_pageIndex">1</string>
 </resources>
