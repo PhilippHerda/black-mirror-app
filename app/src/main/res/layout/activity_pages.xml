@@ -41,6 +41,7 @@
         android:id="@+id/pagesRecyclerView"
         android:layout_width="0dp"
         android:layout_height="0dp"
+        android:layout_gravity="center_horizontal"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -53,6 +54,8 @@
         android:layout_marginEnd="30dp"
         android:layout_marginBottom="30dp"
         android:contentDescription="@string/Str_addPageActionButton"
+        android:foreground="@android:drawable/ic_input_add"
+        android:foregroundTint="#FFFFFF"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         tools:ignore="ImageContrastCheck,ImageContrastCheck" />

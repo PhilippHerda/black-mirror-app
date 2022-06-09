@@ -6,8 +6,8 @@ import java.util.ArrayList
 /**
  * This class represents the mirror.
  *
- * @author Niklas Binder
- * @version 28-05-2022
+ * @author Niklas Binder, Selim Özdemir
+ * @version 09-06-2022
  */
 data class Mirror(val pages : ArrayList<Page>) : Serializable {
     var currentPageIndex = 0
@@ -32,5 +32,9 @@ data class Mirror(val pages : ArrayList<Page>) : Serializable {
         val firstPage: Page = pages[index]
         pages[index] = pages[target]
         pages[target] = firstPage
+    }
+
+    fun removePage(index: Int) {
+        pages.removeAt(index)
     }
 }

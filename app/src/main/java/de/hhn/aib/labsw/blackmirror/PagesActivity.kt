@@ -3,7 +3,6 @@ package de.hhn.aib.labsw.blackmirror
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.widget.GridLayout
 import android.widget.RelativeLayout
 import androidx.appcompat.content.res.AppCompatResources
 import androidx.cardview.widget.CardView
@@ -21,7 +20,6 @@ import de.hhn.aib.labsw.blackmirror.dataclasses.Widget
 import de.hhn.aib.labsw.blackmirror.dataclasses.WidgetType
 import de.hhn.aib.labsw.blackmirror.helper.MyItemTouchHelperCallback
 import de.hhn.aib.labsw.blackmirror.helper.OnStartDragListener
-import java.util.*
 import kotlin.collections.ArrayList
 
 class PagesActivity : AppCompatActivity() {
@@ -39,11 +37,11 @@ class PagesActivity : AppCompatActivity() {
 
     private fun generateItem() {
         myMirror = intent.getSerializableExtra("myMirror") as Mirror
-        val adapter = MyRecyclerAdapter(this, myMirror.pages, object:OnStartDragListener {
+        val adapter = MyRecyclerAdapter(this, myMirror.pages, object : OnStartDragListener {
             override fun onStartDrag(viewHolder: RecyclerView.ViewHolder?) {
                 itemTouchHelper!!.startDrag(viewHolder!!)
             }
-        }, myMirror, this)
+        }, myMirror)
         recyclerView.adapter = adapter
         val callback = MyItemTouchHelperCallback(adapter)
         itemTouchHelper = ItemTouchHelper(callback)
@@ -60,12 +58,13 @@ class PagesActivity : AppCompatActivity() {
         val actionButton = findViewById<FloatingActionButton>(R.id.addPageActionButton)
         actionButton.setOnClickListener {
             myMirror.pages.add(Page(ArrayList()))
-            recyclerView.adapter?.notifyItemInserted(myMirror.pages.size-1)
+            recyclerView.adapter?.notifyItemInserted(myMirror.pages.size - 1)
         }
 
         val saveButton = findViewById<MaterialButton>(R.id.saveButton)
         saveButton.setOnClickListener {
             savePages()
+            sendPagesToMirror()
         }
 
         val exitButton = findViewById<MaterialButton>(R.id.exitButton)
@@ -76,51 +75,55 @@ class PagesActivity : AppCompatActivity() {
         }
     }
 
+    private fun sendPagesToMirror() {
+        TODO("Not yet implemented")
+    }
+
     private fun savePages() {
         for (item in recyclerView) {
             item as CardView
             val layout = item[0] as RelativeLayout
             val grid = layout[0] as androidx.gridlayout.widget.GridLayout
-            val widgets = ArrayList<Widget> ()
+            val widgets = ArrayList<Widget>()
             val page = Page(widgets)
             var pos = 1
-        for (box in grid) {
-            if (box.foreground != null) {
-                when (box.foreground.constantState) {
-                    AppCompatResources.getDrawable(
-                        this,
-                        R.drawable.mail_widget_icon_foreground
-                    )?.constantState -> {
-                        page.widgets.add(Widget(WidgetType.MAIL, pos % 3, pos / 3 + 1))
-                    }
-                    AppCompatResources.getDrawable(
-                        this,
-                        R.drawable.calendar_widget_icon_foreground
-                    )?.constantState -> {
-                        page.widgets.add(Widget(WidgetType.CALENDAR, pos % 3, pos / 3 + 1))
-                    }
-                    AppCompatResources.getDrawable(
-                        this,
-                        R.drawable.weather_widget_icon_foreground
-                    )?.constantState -> {
-                        page.widgets.add(Widget(WidgetType.WEATHER, pos % 3, pos / 3 + 1))
-                    }
-                    AppCompatResources.getDrawable(
-                        this,
-                        R.drawable.clock_widget_icon_foreground
-                    )?.constantState -> {
-                        page.widgets.add(Widget(WidgetType.CLOCK, pos % 3, pos / 3 + 1))
-                    }
-                    AppCompatResources.getDrawable(
-                        this,
-                        R.drawable.reminder_widget_icon_foreground
-                    )?.constantState -> {
-                        page.widgets.add(Widget(WidgetType.REMINDER, pos % 3, pos / 3 + 1))
+            for (box in grid) {
+                if (box.foreground != null) {
+                    when (box.foreground.constantState) {
+                        AppCompatResources.getDrawable(
+                            this,
+                            R.drawable.mail_widget_icon_foreground
+                        )?.constantState -> {
+                            page.widgets.add(Widget(WidgetType.MAIL, pos % 3, pos / 3 + 1))
+                        }
+                        AppCompatResources.getDrawable(
+                            this,
+                            R.drawable.calendar_widget_icon_foreground
+                        )?.constantState -> {
+                            page.widgets.add(Widget(WidgetType.CALENDAR, pos % 3, pos / 3 + 1))
+                        }
+                        AppCompatResources.getDrawable(
+                            this,
+                            R.drawable.weather_widget_icon_foreground
+                        )?.constantState -> {
+                            page.widgets.add(Widget(WidgetType.WEATHER, pos % 3, pos / 3 + 1))
+                        }
+                        AppCompatResources.getDrawable(
+                            this,
+                            R.drawable.clock_widget_icon_foreground
+                        )?.constantState -> {
+                            page.widgets.add(Widget(WidgetType.CLOCK, pos % 3, pos / 3 + 1))
+                        }
+                        AppCompatResources.getDrawable(
+                            this,
+                            R.drawable.reminder_widget_icon_foreground
+                        )?.constantState -> {
+                            page.widgets.add(Widget(WidgetType.REMINDER, pos % 3, pos / 3 + 1))
+                        }
                     }
                 }
+                pos++
             }
-            pos++
-        }
             myMirror.pages[recyclerView.indexOfChild(item)] = page
         }
     }

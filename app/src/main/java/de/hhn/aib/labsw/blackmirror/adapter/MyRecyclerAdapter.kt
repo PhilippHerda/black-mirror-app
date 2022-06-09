@@ -18,14 +18,12 @@ import de.hhn.aib.labsw.blackmirror.dataclasses.WidgetType
 import de.hhn.aib.labsw.blackmirror.helper.ItemTouchHelperAdapter
 import de.hhn.aib.labsw.blackmirror.helper.OnStartDragListener
 import java.util.*
-import kotlin.collections.ArrayList
 
 class MyRecyclerAdapter(
     private var context: Context,
     private var stringList:ArrayList<Page>,
     private var listener: OnStartDragListener,
     private var mirror: Mirror,
-    private var contextParent: Context
 ) : RecyclerView.Adapter<MyRecyclerAdapter.MyViewHolder>(), ItemTouchHelperAdapter {
 
     inner class MyViewHolder(itemView: View): RecyclerView.ViewHolder(itemView) {
@@ -41,13 +39,14 @@ class MyRecyclerAdapter(
         return MyViewHolder(LayoutInflater.from(context).inflate(R.layout.page_item,parent,false))
     }
 
-    @SuppressLint("SetTextI18n")
+    @SuppressLint("SetTextI18n", "NotifyDataSetChanged")
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
         holder.number.text = (position+1).toString()
+        holder.itemView.tag = position
         for (widget in mirror.pages[position].widgets) {
             val pos: Int = (widget.x - 1) + (widget.y - 1) * 3
             holder.grid[pos].foreground = getDrawableForWidget(widget)
-            holder.grid[pos].background = AppCompatResources.getDrawable(contextParent, R.drawable.selectable_box_small)
+            holder.grid[pos].background = AppCompatResources.getDrawable(context, R.drawable.selectable_box_small)
         }
 
         holder.itemView.setOnLongClickListener {
@@ -56,7 +55,22 @@ class MyRecyclerAdapter(
         }
 
         holder.itemView.setOnClickListener {
+            val builder: android.app.AlertDialog.Builder = android.app.AlertDialog.Builder(context)
+            builder.setMessage("Do you want to delete this page?")
 
+
+
+            builder.setPositiveButton("Yes") { dialog, _ ->
+                mirror.removePage((holder.itemView.tag as Int).toInt())
+                notifyDataSetChanged()
+                dialog.dismiss()
+            }
+            builder.setNegativeButton("No") { dialog, _ ->
+                dialog.dismiss()
+            }
+
+            val dialog: android.app.AlertDialog? = builder.create()
+            dialog?.show()
         }
     }
 
@@ -80,31 +94,31 @@ class MyRecyclerAdapter(
         return when (widget.type) {
             WidgetType.CALENDAR -> {
                 AppCompatResources.getDrawable(
-                    contextParent,
+                    context,
                     R.drawable.calendar_widget_icon_foreground
                 )!!
             }
             WidgetType.CLOCK -> {
                 AppCompatResources.getDrawable(
-                    contextParent,
+                    context,
                     R.drawable.clock_widget_icon_foreground
                 )!!
             }
             WidgetType.MAIL -> {
                 AppCompatResources.getDrawable(
-                    contextParent,
+                    context,
                     R.drawable.mail_widget_icon_foreground
                 )!!
             }
             WidgetType.REMINDER -> {
                 AppCompatResources.getDrawable(
-                    contextParent,
+                    context,
                     R.drawable.reminder_widget_icon_foreground
                 )!!
             }
             WidgetType.WEATHER -> {
                 AppCompatResources.getDrawable(
-                    contextParent,
+                    context,
                     R.drawable.weather_widget_icon_foreground
                 )!!
             }

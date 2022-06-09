@@ -31,7 +31,7 @@ import de.hhn.aib.labsw.blackmirror.dataclasses.*
  * This allows customizable mirror layouts.
  *
  * @author Selim Özdemir, Niklas Binder
- * @version 28-05-2022
+ * @version 09-06-2022
  */
 class WidgetLayoutActivity : AppCompatActivity() {
 
@@ -39,6 +39,7 @@ class WidgetLayoutActivity : AppCompatActivity() {
     lateinit var myGridLayout: GridLayout
     private lateinit var widgetList: LinearLayout
     private lateinit var mirror: Mirror
+
 
     @RequiresApi(Build.VERSION_CODES.N)
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -48,8 +49,8 @@ class WidgetLayoutActivity : AppCompatActivity() {
         placeWidgetItems()
 
         // Initializing Mirror object
-        val pages = ArrayList<Page> ()
-        val widgets = ArrayList<Widget> ()
+        val pages = ArrayList<Page>()
+        val widgets = ArrayList<Widget>()
         pages.add(Page(widgets))
         pages.add(Page(widgets))
         pages.add(Page(widgets))
@@ -132,7 +133,12 @@ class WidgetLayoutActivity : AppCompatActivity() {
                 if (box.foreground != null) {
 
                     println("test2 " + box.foreground.constantState.toString())
-                    println("test2 " + AppCompatResources.getDrawable(this, R.drawable.weather_widget_icon_foreground)?.constantState.toString())
+                    println(
+                        "test2 " + AppCompatResources.getDrawable(
+                            this,
+                            R.drawable.weather_widget_icon_foreground
+                        )?.constantState.toString()
+                    )
 
                     intent = null
                     when (box.foreground.constantState) {
@@ -170,8 +176,12 @@ class WidgetLayoutActivity : AppCompatActivity() {
                             // intent = Intent(this@WidgetLayoutActivity, Activity::class.java) reminder configuration
                         }
                     }
-                    if(intent == null) {
-                        Toast.makeText(applicationContext, R.string.Str_widgetNoConfigAvailableToastMessage, Toast.LENGTH_SHORT).show()
+                    if (intent == null) {
+                        Toast.makeText(
+                            applicationContext,
+                            R.string.Str_widgetNoConfigAvailableToastMessage,
+                            Toast.LENGTH_SHORT
+                        ).show()
                     } else {
                         startActivity(intent)
                     }
@@ -210,10 +220,10 @@ class WidgetLayoutActivity : AppCompatActivity() {
                 .setCancelable(false)
                 .setPositiveButton(
                     resources.getString(R.string.Str_widgetConfirmClearYesTxt)
-                ) { dialog, id -> clearWidgetGrid() }
+                ) { _, _ -> clearWidgetGrid() }
                 .setNegativeButton(
                     resources.getString(R.string.Str_widgetConfirmClearNoTxt)
-                ) { dialog, id -> dialog.cancel() }
+                ) { dialog, _ -> dialog.cancel() }
             val alert = builder.create()
             alert.show()
         }
@@ -230,7 +240,8 @@ class WidgetLayoutActivity : AppCompatActivity() {
             mirror.goToPreviousPage()
             clearWidgetGrid()
             displayPage()
-            findViewById<TextView>(R.id.pageIndicatorTextView).text = (mirror.currentPageIndex + 1).toString()
+            findViewById<TextView>(R.id.pageIndicatorTextView).text =
+                (mirror.currentPageIndex + 1).toString()
         }
 
         val navigateRightButton = findViewById<FloatingActionButton>(R.id.navigateRight_fab)
@@ -238,7 +249,8 @@ class WidgetLayoutActivity : AppCompatActivity() {
             mirror.goToNextPage()
             clearWidgetGrid()
             displayPage()
-            findViewById<TextView>(R.id.pageIndicatorTextView).text = (mirror.currentPageIndex + 1).toString()
+            findViewById<TextView>(R.id.pageIndicatorTextView).text =
+                (mirror.currentPageIndex + 1).toString()
         }
     }
 
@@ -248,7 +260,11 @@ class WidgetLayoutActivity : AppCompatActivity() {
     private fun sendWidgetLayout() {
         //TODO: Send the data to the mirror.
         val myToast =
-            Toast.makeText(applicationContext, R.string.Str_widgetSuccessfullySavedToastMessage, Toast.LENGTH_SHORT)
+            Toast.makeText(
+                applicationContext,
+                R.string.Str_widgetSuccessfullySavedToastMessage,
+                Toast.LENGTH_SHORT
+            )
         myToast.show()
     }
 
@@ -257,14 +273,19 @@ class WidgetLayoutActivity : AppCompatActivity() {
      * Gets called everytime the page gets switched.
      */
     private fun saveCurrentPage() {
-        val widgets = ArrayList<Widget> ()
+        val widgets = ArrayList<Widget>()
         val page = Page(widgets)
         var pos = 1
         for (box in myGridLayout) {
             if (box.foreground != null) {
 
                 println("test1 " + box.foreground.constantState.toString())
-                println("test1 " + AppCompatResources.getDrawable(this, R.drawable.weather_widget_icon_foreground)?.constantState.toString())
+                println(
+                    "test1 " + AppCompatResources.getDrawable(
+                        this,
+                        R.drawable.weather_widget_icon_foreground
+                    )?.constantState.toString()
+                )
 
                 when (box.foreground.constantState) {
                     AppCompatResources.getDrawable(
@@ -312,7 +333,8 @@ class WidgetLayoutActivity : AppCompatActivity() {
         for (widget in mirror.pages[mirror.currentPageIndex].widgets) {
             val pos: Int = (widget.x - 1) + (widget.y - 1) * 3
             myGridLayout[pos].foreground = getDrawableForWidget(widget)
-            myGridLayout[pos].background = AppCompatResources.getDrawable(this, R.drawable.widget_box)
+            myGridLayout[pos].background =
+                AppCompatResources.getDrawable(this, R.drawable.widget_box)
         }
     }
 
@@ -419,10 +441,10 @@ class WidgetLayoutActivity : AppCompatActivity() {
             .setCancelable(false)
             .setPositiveButton(
                 resources.getString(R.string.Str_widgetConfirmClearYesTxt)
-            ) { dialog, id -> this@WidgetLayoutActivity.finishAffinity() }
+            ) { _, _ -> this@WidgetLayoutActivity.finishAffinity() }
             .setNegativeButton(
                 resources.getString(R.string.Str_widgetConfirmClearNoTxt)
-            ) { dialog, id -> dialog.cancel() }
+            ) { dialog, _ -> dialog.cancel() }
         val alert = builder.create()
         alert.show()
     }
