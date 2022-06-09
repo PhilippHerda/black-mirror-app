@@ -1,12 +1,11 @@
 package de.hhn.aib.labsw.blackmirror.adapter
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.drawable.Drawable
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.GridLayout
-import android.widget.GridView
 import android.widget.TextView
 import androidx.appcompat.content.res.AppCompatResources
 import androidx.core.view.get
@@ -21,18 +20,19 @@ import de.hhn.aib.labsw.blackmirror.helper.OnStartDragListener
 import java.util.*
 import kotlin.collections.ArrayList
 
-class MyRecyclerAdapter(var context: Context,
-                        var stringList:ArrayList<Page>,
-                        var listener: OnStartDragListener,
-                        var mirror: Mirror,
-                        var contextParent: Context
+class MyRecyclerAdapter(
+    private var context: Context,
+    private var stringList:ArrayList<Page>,
+    private var listener: OnStartDragListener,
+    private var mirror: Mirror,
+    private var contextParent: Context
 ) : RecyclerView.Adapter<MyRecyclerAdapter.MyViewHolder>(), ItemTouchHelperAdapter {
 
     inner class MyViewHolder(itemView: View): RecyclerView.ViewHolder(itemView) {
-        var txtnumber: TextView
+        var number: TextView
         var grid: androidx.gridlayout.widget.GridLayout
         init {
-            txtnumber = itemView.findViewById(R.id.txt_number) as TextView
+            number = itemView.findViewById(R.id.txt_number) as TextView
             grid = itemView.findViewById(R.id.PageItemGrid)
         }
     }
@@ -41,8 +41,9 @@ class MyRecyclerAdapter(var context: Context,
         return MyViewHolder(LayoutInflater.from(context).inflate(R.layout.page_item,parent,false))
     }
 
+    @SuppressLint("SetTextI18n")
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
-        holder.txtnumber.text = (position+1).toString()
+        holder.number.text = (position+1).toString()
         for (widget in mirror.pages[position].widgets) {
             val pos: Int = (widget.x - 1) + (widget.y - 1) * 3
             holder.grid[pos].foreground = getDrawableForWidget(widget)
@@ -108,11 +109,5 @@ class MyRecyclerAdapter(var context: Context,
                 )!!
             }
         }
-    }
-
-
-    @JvmName("getMirror1")
-    public fun getMirror(): Mirror{
-        return mirror
     }
 }
