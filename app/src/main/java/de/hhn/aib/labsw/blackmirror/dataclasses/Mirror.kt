@@ -27,4 +27,10 @@ data class Mirror(val pages : ArrayList<Page>) : Serializable {
             currentPageIndex++
         }
     }
+
+    fun swapPages(index: Int, target: Int){
+        val firstPage: Page = pages[index]
+        pages[index] = pages[target]
+        pages[target] = firstPage
+    }
 }
