@@ -1,13 +1,13 @@
 <resources>
     <string name="app_name">black-mirror-app</string>
-  // EmailData Strings:  
+    // EmailData Strings:
     <string name="tv_email">Email:</string>
     <string name="tv_password">Password:</string>
     <string name="tv_imap">Imap Server:</string>
     <string name="tv_port">Imap Port:</string>
     <string name="btn_save">Save</string>
-  
-  // WidgetLayout Strings:
+
+    // WidgetLayout Strings:
     <string name="Str_widgetSaveButton">save</string>
     <string name="Str_widgetExitButton">exit</string>
 
@@ -21,4 +21,17 @@
     <string name="invalidDoubleTitle">Invalid input</string>
     <string name="invalidDoubleMsg">Failed to read number. Expected the format 25.314.</string>
     <string name="set_location">Set Location</string>
+    <string name="add_todo_item">Add</string>
+    <string name="todoTextHint">What\'s to do?</string>
+    <string name="todo_list_title">Todo list</string>
+    <string name="empty_todo_dialog_msg">Todo text is empty. Todo item will be dismissed. Do you really want to return?</string>
+    <string name="empty_todo_dialog_confirm">Return</string>
+    <string name="empty_todo_dialog_cancel">Cancel</string>
+    <string name="help">Help</string>
+    <string name="todo_help_title">Todo List Help</string>
+    <string name="todo_help_msg">Press the + button to add a todo. Tap on an item to edit it. Swipe an item to the side to remove it.</string>
+    <string name="edit_todo_menu_confirm">OK</string>
+    <string name="edit_todo_cancel_dialog_msg">Todo text has been changed. Do you really want to discard the changes?</string>
+    <string name="edit_todo_cancel_dialog_confirm">Discard</string>
+    <string name="edit_todo_cancel_dialog_cancel">Continue editing</string>
 </resources>

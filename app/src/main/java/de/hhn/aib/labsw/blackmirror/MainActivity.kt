@@ -9,6 +9,7 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        startActivity(Intent(this, EmailDataActivity::class.java))
+        startActivity(Intent(this, TodoListActivity::class.java))
+//        startActivity(Intent(this, WeatherLocationActivity::class.java))
     }
 }
