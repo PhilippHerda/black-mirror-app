@@ -58,7 +58,7 @@ class TodoListActivity : AppCompatActivity() {
         val addItemBtn = findViewById<FloatingActionButton>(R.id.addItemButton)
         addItemBtn.setOnClickListener {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                val item = TodoItem("Added item ${todoList.size + 1}", ZonedDateTime.now())
+                val item = TodoItem("", ZonedDateTime.now())
                 todoList.add(item)
                 todoList.recentlyClickedItem = item
                 activityResultLauncher.launch(

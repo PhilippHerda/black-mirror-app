@@ -87,6 +87,8 @@ class EditTodoActivity : AppCompatActivity() {
                 }
                 create().show()
             }
+        } else if (oldText == null) {
+            onFinishConfirmed()
         } else {
             onCancelConfirmed()
         }
