@@ -22,6 +22,12 @@ import de.hhn.aib.labsw.blackmirror.helper.MyItemTouchHelperCallback
 import de.hhn.aib.labsw.blackmirror.helper.OnStartDragListener
 import kotlin.collections.ArrayList
 
+/**
+ * This activity is used for
+ *
+ * @author Selim Özdemir
+ * @version 12-06-2022
+ */
 class PagesActivity : AppCompatActivity() {
 
     var itemTouchHelper: ItemTouchHelper? = null
@@ -37,7 +43,7 @@ class PagesActivity : AppCompatActivity() {
 
     private fun generateItem() {
         myMirror = intent.getSerializableExtra("myMirror") as Mirror
-        val adapter = MyRecyclerAdapter(this, myMirror.pages, object : OnStartDragListener {
+        val adapter = MyRecyclerAdapter(this, recyclerView, object : OnStartDragListener {
             override fun onStartDrag(viewHolder: RecyclerView.ViewHolder?) {
                 itemTouchHelper!!.startDrag(viewHolder!!)
             }
@@ -73,6 +79,10 @@ class PagesActivity : AppCompatActivity() {
             intent.putExtra("myMirror", myMirror)
             startActivity(intent)
         }
+    }
+
+    fun setMirror(mirror: Mirror) {
+        myMirror = mirror
     }
 
     private fun sendPagesToMirror() {

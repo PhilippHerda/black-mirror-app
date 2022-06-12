@@ -10,6 +10,7 @@ import android.widget.TextView
 import androidx.appcompat.content.res.AppCompatResources
 import androidx.core.view.get
 import androidx.recyclerview.widget.RecyclerView
+import de.hhn.aib.labsw.blackmirror.PagesActivity
 import de.hhn.aib.labsw.blackmirror.R
 import de.hhn.aib.labsw.blackmirror.dataclasses.Mirror
 import de.hhn.aib.labsw.blackmirror.dataclasses.Page
@@ -19,9 +20,16 @@ import de.hhn.aib.labsw.blackmirror.helper.ItemTouchHelperAdapter
 import de.hhn.aib.labsw.blackmirror.helper.OnStartDragListener
 import java.util.*
 
+/**
+ * This adapter is used for creating views inside a recyclerview. These views can be dragged and
+ * can be deleted.
+ *
+ * @author Selim Özdemir
+ * @version 12-06-2022
+ */
 class MyRecyclerAdapter(
     private var context: Context,
-    private var stringList:ArrayList<Page>,
+    private var recyclerView: RecyclerView,
     private var listener: OnStartDragListener,
     private var mirror: Mirror,
 ) : RecyclerView.Adapter<MyRecyclerAdapter.MyViewHolder>(), ItemTouchHelperAdapter {
@@ -32,13 +40,39 @@ class MyRecyclerAdapter(
         init {
             number = itemView.findViewById(R.id.txt_number) as TextView
             grid = itemView.findViewById(R.id.PageItemGrid)
+
+            itemView.setOnClickListener {
+                val builder: android.app.AlertDialog.Builder = android.app.AlertDialog.Builder(context)
+                builder.setMessage("Do you want to delete this page?")
+
+                builder.setPositiveButton("Yes") { dialog, _ ->
+                    mirror.removePage(adapterPosition)
+                    onItemDismiss(adapterPosition)
+                    notifyDataSetChanged()
+                    dialog.dismiss()
+                    recyclerView.invalidate()
+
+                }
+                builder.setNegativeButton("No") { dialog, _ ->
+                    dialog.dismiss()
+                }
+
+                val dialog: android.app.AlertDialog? = builder.create()
+                dialog?.show()
+            }
         }
     }
 
+    /**
+     * Create an Holder for each itemview.
+     */
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
         return MyViewHolder(LayoutInflater.from(context).inflate(R.layout.page_item,parent,false))
     }
 
+    /**
+     * Binds the Holder to the itemview. This allows the items to be dragged.
+     */
     @SuppressLint("SetTextI18n", "NotifyDataSetChanged")
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
         holder.number.text = (position+1).toString()
@@ -53,43 +87,34 @@ class MyRecyclerAdapter(
             listener.onStartDrag(holder)
             return@setOnLongClickListener true
         }
-
-        holder.itemView.setOnClickListener {
-            val builder: android.app.AlertDialog.Builder = android.app.AlertDialog.Builder(context)
-            builder.setMessage("Do you want to delete this page?")
-
-
-
-            builder.setPositiveButton("Yes") { dialog, _ ->
-                mirror.removePage((holder.itemView.tag as Int).toInt())
-                notifyDataSetChanged()
-                dialog.dismiss()
-            }
-            builder.setNegativeButton("No") { dialog, _ ->
-                dialog.dismiss()
-            }
-
-            val dialog: android.app.AlertDialog? = builder.create()
-            dialog?.show()
-        }
     }
 
+    /**
+     * Returns amount of pages.
+     */
     override fun getItemCount(): Int {
-        return stringList.size
+        return mirror.pages.size
     }
 
+    /**
+     * Notification method for swapping pages.
+     */
     override fun onItemMove(fromPos: Int, toPos: Int): Boolean {
-        Collections.swap(stringList, fromPos, toPos)
         mirror.swapPages(fromPos, toPos)
         notifyItemMoved(fromPos, toPos)
         return true
     }
 
+    /**
+     * Called if page is deleted.
+     */
     override fun onItemDismiss(pos: Int) {
-        stringList.removeAt(pos)
         notifyItemRemoved(pos)
     }
 
+    /**
+     * Returns the corresponding drawable for each widget.
+     */
     private fun getDrawableForWidget(widget: Widget): Drawable {
         return when (widget.type) {
             WidgetType.CALENDAR -> {
