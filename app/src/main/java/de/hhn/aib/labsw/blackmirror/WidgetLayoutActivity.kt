@@ -22,6 +22,7 @@ import androidx.core.view.iterator
 import androidx.gridlayout.widget.GridLayout
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.floatingactionbutton.FloatingActionButton
+import de.hhn.aib.labsw.blackmirror.WidgetLayoutActivity.LayoutConstants.PAGE_UPDATE_TOPIC
 import de.hhn.aib.labsw.blackmirror.dataclasses.*
 
 
@@ -33,12 +34,16 @@ import de.hhn.aib.labsw.blackmirror.dataclasses.*
  * @author Selim Özdemir, Niklas Binder
  * @version 28-05-2022
  */
-class WidgetLayoutActivity : AppCompatActivity() {
+class WidgetLayoutActivity : AbstractActivity() {
 
     private val widgets: MutableList<String?> = ArrayList()
     lateinit var myGridLayout: GridLayout
     private lateinit var widgetList: LinearLayout
     private lateinit var mirror: Mirror
+
+    object LayoutConstants {
+        const val PAGE_UPDATE_TOPIC = "pageUpdate"
+    }
 
     @RequiresApi(Build.VERSION_CODES.N)
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -237,7 +242,7 @@ class WidgetLayoutActivity : AppCompatActivity() {
      * Method to send the current layout to the mirror.
      */
     private fun sendWidgetLayout() {
-        //TODO: Send the data to the mirror.
+        publishToRemotes(PAGE_UPDATE_TOPIC, mirror)
         val myToast =
             Toast.makeText(
                 applicationContext,
@@ -259,19 +264,39 @@ class WidgetLayoutActivity : AppCompatActivity() {
             if (box.foreground != null) {
                 when (box.tag) {
                     WidgetType.MAIL -> {
-                        page.widgets.add(Widget(WidgetType.MAIL, pos % 3, pos / 3 + 1))
+                        if(pos % 3 == 0) {
+                            page.widgets.add(Widget(WidgetType.MAIL, 3, pos / 3))
+                        }else {
+                            page.widgets.add(Widget(WidgetType.MAIL, pos % 3, pos / 3 + 1))
+                        }
                     }
                     WidgetType.CALENDAR -> {
-                        page.widgets.add(Widget(WidgetType.CALENDAR, pos % 3, pos / 3 + 1))
+                        if(pos % 3 == 0) {
+                            page.widgets.add(Widget(WidgetType.CALENDAR, 3, pos / 3))
+                        }else {
+                            page.widgets.add(Widget(WidgetType.CALENDAR, pos % 3, pos / 3 + 1))
+                        }
                     }
                     WidgetType.WEATHER -> {
-                        page.widgets.add(Widget(WidgetType.WEATHER, pos % 3, pos / 3 + 1))
+                        if(pos % 3 == 0) {
+                            page.widgets.add(Widget(WidgetType.WEATHER, 3, pos / 3))
+                        }else {
+                            page.widgets.add(Widget(WidgetType.WEATHER, pos % 3, pos / 3 + 1))
+                        }
                     }
                     WidgetType.CLOCK -> {
-                        page.widgets.add(Widget(WidgetType.CLOCK, pos % 3, pos / 3 + 1))
+                        if(pos % 3 == 0) {
+                            page.widgets.add(Widget(WidgetType.CLOCK, 3, pos / 3))
+                        }else {
+                            page.widgets.add(Widget(WidgetType.CLOCK, pos % 3, pos / 3 + 1))
+                        }
                     }
                     WidgetType.REMINDER -> {
-                        page.widgets.add(Widget(WidgetType.REMINDER, pos % 3, pos / 3 + 1))
+                        if(pos % 3 == 0) {
+                            page.widgets.add(Widget(WidgetType.REMINDER, 3, pos / 3))
+                        }else {
+                            page.widgets.add(Widget(WidgetType.REMINDER, pos % 3, pos / 3 + 1))
+                        }
                     }
                 }
             }
