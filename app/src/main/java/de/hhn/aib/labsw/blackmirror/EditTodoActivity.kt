@@ -42,7 +42,9 @@ class EditTodoActivity : AppCompatActivity() {
         }
     }
 
-    override fun finish() {
+    override fun finish() = cancel()
+
+    private fun confirm() {
         if (todoTextArea.editText?.text?.isEmpty() == true) {
             AlertDialog.Builder(this).run {
                 setTitle(null)
@@ -127,7 +129,7 @@ class EditTodoActivity : AppCompatActivity() {
                 true
             }
             R.id.confirmItem -> {
-                finish()
+                confirm()
                 true
             }
             else -> super.onOptionsItemSelected(item)
