@@ -8,8 +8,7 @@ import android.view.MenuItem
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.textfield.TextInputLayout
-
-const val TODO_TEXT_EXTRA = "todo_text"
+import de.hhn.aib.labsw.blackmirror.EditTodoActivity.Constants.TODO_TEXT_EXTRA
 
 /**
  * Activity to edit an to do item.
@@ -25,6 +24,10 @@ const val TODO_TEXT_EXTRA = "todo_text"
  */
 class EditTodoActivity : AppCompatActivity() {
     private lateinit var todoTextArea: TextInputLayout
+
+    object Constants {
+        const val TODO_TEXT_EXTRA = "todo_text"
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

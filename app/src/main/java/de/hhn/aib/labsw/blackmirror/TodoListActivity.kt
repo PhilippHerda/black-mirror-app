@@ -8,10 +8,10 @@ import android.view.MenuInflater
 import android.view.MenuItem
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AlertDialog
-import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.floatingactionbutton.FloatingActionButton
+import de.hhn.aib.labsw.blackmirror.EditTodoActivity.Constants.TODO_TEXT_EXTRA
+import de.hhn.aib.labsw.blackmirror.TodoListActivity.Constants.TODOS_TOPIC
 import de.hhn.aib.labsw.blackmirror.dataclasses.APITodoData
 import de.hhn.aib.labsw.blackmirror.dataclasses.APITodoEntry
 import de.hhn.aib.labsw.blackmirror.dataclasses.TodoItem
@@ -25,10 +25,12 @@ import java.time.ZonedDateTime
  * @version 2022-06-02
  */
 
-const val TODOS_TOPIC = "todoList"
-
 class TodoListActivity : AbstractActivity() {
     private lateinit var todoList: RecyclerViewList<TodoListItem, TodoItem>
+
+    object Constants {
+        const val TODOS_TOPIC = "todoList"
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
