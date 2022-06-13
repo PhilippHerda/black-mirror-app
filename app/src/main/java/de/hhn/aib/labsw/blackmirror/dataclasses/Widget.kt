@@ -1,7 +1,9 @@
 package de.hhn.aib.labsw.blackmirror.dataclasses
 
-class Widget(name: String, x: Int, y: Int) {
-    private var xVal: Int = x
-    private var yVal: Int = y
-    private var widgetName: String = name
-}
+/**
+ * This class represents the widgets on the mirror.
+ *
+ * @author Selim Özdemir, Niklas Binder
+ * @version 24-05-2022
+ */
+data class Widget(val type: WidgetType, val x: Int, val y: Int)

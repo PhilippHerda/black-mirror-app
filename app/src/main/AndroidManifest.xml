@@ -14,6 +14,9 @@
         android:theme="@style/Theme.Blackmirrorapp"
         android:usesCleartextTraffic="true">
         <activity
+            android:name=".PagesActivity"
+            android:exported="false" />
+        <activity
             android:name=".EditTodoActivity"
             android:exported="false" />
         <activity
