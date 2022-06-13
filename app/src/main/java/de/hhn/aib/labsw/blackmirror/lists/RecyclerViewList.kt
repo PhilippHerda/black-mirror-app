@@ -36,6 +36,9 @@ class RecyclerViewList<ItemViewType : RecyclerViewList.ItemView<ModelType>, Mode
     // forwards listItem.size as this.size
     val size: Int get() = listItems.size
 
+    // forwards listItems as this.data
+    val data: List<ModelType> get() = listItems
+
     var recentlyClickedItem: ModelType
         get() {
             if (recentlyClickedPos == -1) {
@@ -121,6 +124,10 @@ class RecyclerViewList<ItemViewType : RecyclerViewList.ItemView<ModelType>, Mode
         }
     }
 
+    fun setOnItemRemovedListener(listener: ((ModelType) -> Unit)?) {
+        onItemRemovedListener = listener
+    }
+
 
     ////////////////////////////////////////////////////////////////////////////////////////
     // IMPLEMENTATION
@@ -130,6 +137,7 @@ class RecyclerViewList<ItemViewType : RecyclerViewList.ItemView<ModelType>, Mode
     private fun runOnUIThread(action: Runnable) = activity.runOnUiThread(action)
 
     private var onItemClickedListener: ((ModelType) -> Unit)? = null
+    private var onItemRemovedListener: ((ModelType) -> Unit)? = null
     private var recentlyClickedPos = -1
 
     private val itemTouchHelper =
@@ -144,6 +152,7 @@ class RecyclerViewList<ItemViewType : RecyclerViewList.ItemView<ModelType>, Mode
             ) = false
 
             override fun onSwiped(viewHolder: RecyclerView.ViewHolder, dir: Int) {
+                onItemRemovedListener?.invoke(listItems[viewHolder.adapterPosition])
                 removeAt(viewHolder.adapterPosition)
             }
         })

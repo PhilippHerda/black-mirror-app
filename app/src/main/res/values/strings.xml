@@ -34,4 +34,7 @@
     <string name="edit_todo_cancel_dialog_msg">Todo text has been changed. Do you really want to discard the changes?</string>
     <string name="edit_todo_cancel_dialog_confirm">Discard</string>
     <string name="edit_todo_cancel_dialog_cancel">Continue editing</string>
+    <string name="todos_sent_successfully">Synchronized items with mirror</string>
+    <string name="feature_not_supported_dialog_title">Feature not supported</string>
+    <string name="feature_not_supported_dialog_msg">This feature is not supported for your android version. Either upgrade your version or request backwards compatibility for your version.</string>
 </resources>
