@@ -46,12 +46,10 @@ class MyRecyclerAdapter(
                 builder.setMessage("Do you want to delete this page?")
 
                 builder.setPositiveButton("Yes") { dialog, _ ->
-                    mirror.removePage(adapterPosition)
-                    onItemDismiss(adapterPosition)
-                    notifyDataSetChanged()
+                    removeAt(layoutPosition)
                     dialog.dismiss()
                     recyclerView.invalidate()
-
+                    println(mirror.pages)
                 }
                 builder.setNegativeButton("No") { dialog, _ ->
                     dialog.dismiss()
@@ -61,6 +59,11 @@ class MyRecyclerAdapter(
                 dialog?.show()
             }
         }
+    }
+
+    private fun removeAt(position: Int) {
+        mirror.removePage(position);
+        onItemDismiss(position)
     }
 
     /**
@@ -109,7 +112,8 @@ class MyRecyclerAdapter(
      * Called if page is deleted.
      */
     override fun onItemDismiss(pos: Int) {
-        notifyItemRemoved(pos)
+        notifyItemRemoved(pos);
+        notifyItemRangeChanged(pos, mirror.pages.size);
     }
 
     /**
