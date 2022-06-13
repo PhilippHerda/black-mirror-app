@@ -12,5 +12,6 @@
         <!-- Status bar color. -->
         <item name="android:statusBarColor" tools:targetApi="l">?attr/colorPrimaryVariant</item>
         <!-- Customize your theme here. -->
+        <item name="listItemSelector">@drawable/item_selector_day</item>
     </style>
 </resources>
