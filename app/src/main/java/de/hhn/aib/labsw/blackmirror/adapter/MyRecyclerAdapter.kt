@@ -35,28 +35,29 @@ class MyRecyclerAdapter(
 ) : RecyclerView.Adapter<MyRecyclerAdapter.MyViewHolder>(), ItemTouchHelperAdapter {
 
     inner class MyViewHolder(itemView: View): RecyclerView.ViewHolder(itemView) {
-        var number: TextView
         var grid: androidx.gridlayout.widget.GridLayout
         init {
-            number = itemView.findViewById(R.id.txt_number) as TextView
             grid = itemView.findViewById(R.id.PageItemGrid)
 
             itemView.setOnClickListener {
-                val builder: android.app.AlertDialog.Builder = android.app.AlertDialog.Builder(context)
-                builder.setMessage("Do you want to delete this page?")
+                val pos = adapterPosition;
+                if (pos != RecyclerView.NO_POSITION) {
+                    val builder: android.app.AlertDialog.Builder =
+                        android.app.AlertDialog.Builder(context)
+                    builder.setMessage("Do you want to delete this page?")
 
-                builder.setPositiveButton("Yes") { dialog, _ ->
-                    removeAt(layoutPosition)
-                    dialog.dismiss()
-                    recyclerView.invalidate()
-                    println(mirror.pages)
-                }
-                builder.setNegativeButton("No") { dialog, _ ->
-                    dialog.dismiss()
-                }
+                    builder.setPositiveButton("Yes") { dialog, _ ->
+                        removeAt(layoutPosition)
+                        dialog.dismiss()
+                        recyclerView.invalidate()
+                    }
+                    builder.setNegativeButton("No") { dialog, _ ->
+                        dialog.dismiss()
+                    }
 
-                val dialog: android.app.AlertDialog? = builder.create()
-                dialog?.show()
+                    val dialog: android.app.AlertDialog? = builder.create()
+                    dialog?.show()
+                }
             }
         }
     }
@@ -78,13 +79,14 @@ class MyRecyclerAdapter(
      */
     @SuppressLint("SetTextI18n", "NotifyDataSetChanged")
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
-        holder.number.text = (position+1).toString()
         holder.itemView.tag = position
         for (widget in mirror.pages[position].widgets) {
             val pos: Int = (widget.x - 1) + (widget.y - 1) * 3
             holder.grid[pos].foreground = getDrawableForWidget(widget)
             holder.grid[pos].background = AppCompatResources.getDrawable(context, R.drawable.selectable_box_small)
         }
+
+
 
         holder.itemView.setOnLongClickListener {
             listener.onStartDrag(holder)
@@ -113,7 +115,6 @@ class MyRecyclerAdapter(
      */
     override fun onItemDismiss(pos: Int) {
         notifyItemRemoved(pos);
-        notifyItemRangeChanged(pos, mirror.pages.size);
     }
 
     /**

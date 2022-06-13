@@ -32,7 +32,6 @@ import kotlin.collections.ArrayList
  * @version 12-06-2022
  */
 class PagesActivity : AppCompatActivity() {
-
     var itemTouchHelper: ItemTouchHelper? = null
     private lateinit var recyclerView: RecyclerView
     private lateinit var unsavedMirror: Mirror
@@ -60,7 +59,6 @@ class PagesActivity : AppCompatActivity() {
         val callback = MyItemTouchHelperCallback(adapter)
         itemTouchHelper = ItemTouchHelper(callback)
         itemTouchHelper!!.attachToRecyclerView(recyclerView)
-
     }
 
     /**
@@ -76,7 +74,7 @@ class PagesActivity : AppCompatActivity() {
         actionButton.setOnClickListener {
             unsavedMirror.pages.add(Page(ArrayList()))
             recyclerView.adapter?.notifyItemInserted(unsavedMirror.pages.size - 1)
-            println(unsavedMirror.pages)
+            resetAdapterState()
         }
 
         val saveButton = findViewById<MaterialButton>(R.id.saveButton)
@@ -88,6 +86,11 @@ class PagesActivity : AppCompatActivity() {
         exitButton.setOnClickListener {
             onBackPressed()
         }
+    }
+
+    private fun resetAdapterState() {
+        val myAdapter = recyclerView.adapter
+        recyclerView.adapter = myAdapter
     }
 
     /**
