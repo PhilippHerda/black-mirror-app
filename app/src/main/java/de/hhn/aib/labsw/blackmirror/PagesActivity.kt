@@ -88,6 +88,9 @@ class PagesActivity : AppCompatActivity() {
         }
     }
 
+    /**
+     * Resets adapter.
+     */
     private fun resetAdapterState() {
         val myAdapter = recyclerView.adapter
         recyclerView.adapter = myAdapter
