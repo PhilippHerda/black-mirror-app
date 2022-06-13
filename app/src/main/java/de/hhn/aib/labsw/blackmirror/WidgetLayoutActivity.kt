@@ -264,45 +264,33 @@ class WidgetLayoutActivity : AbstractActivity() {
             if (box.foreground != null) {
                 when (box.tag) {
                     WidgetType.MAIL -> {
-                        if(pos % 3 == 0) {
-                            page.widgets.add(Widget(WidgetType.MAIL, 3, pos / 3))
-                        }else {
-                            page.widgets.add(Widget(WidgetType.MAIL, pos % 3, pos / 3 + 1))
-                        }
+                        setPosition(pos, WidgetType.MAIL, page)
                     }
                     WidgetType.CALENDAR -> {
-                        if(pos % 3 == 0) {
-                            page.widgets.add(Widget(WidgetType.CALENDAR, 3, pos / 3))
-                        }else {
-                            page.widgets.add(Widget(WidgetType.CALENDAR, pos % 3, pos / 3 + 1))
-                        }
+                        setPosition(pos, WidgetType.CALENDAR, page)
                     }
                     WidgetType.WEATHER -> {
-                        if(pos % 3 == 0) {
-                            page.widgets.add(Widget(WidgetType.WEATHER, 3, pos / 3))
-                        }else {
-                            page.widgets.add(Widget(WidgetType.WEATHER, pos % 3, pos / 3 + 1))
-                        }
+                        setPosition(pos, WidgetType.WEATHER, page)
                     }
                     WidgetType.CLOCK -> {
-                        if(pos % 3 == 0) {
-                            page.widgets.add(Widget(WidgetType.CLOCK, 3, pos / 3))
-                        }else {
-                            page.widgets.add(Widget(WidgetType.CLOCK, pos % 3, pos / 3 + 1))
-                        }
+                        setPosition(pos, WidgetType.CLOCK, page)
                     }
                     WidgetType.REMINDER -> {
-                        if(pos % 3 == 0) {
-                            page.widgets.add(Widget(WidgetType.REMINDER, 3, pos / 3))
-                        }else {
-                            page.widgets.add(Widget(WidgetType.REMINDER, pos % 3, pos / 3 + 1))
-                        }
+                        setPosition(pos, WidgetType.REMINDER, page)
                     }
                 }
             }
             pos++
         }
         mirror.pages[mirror.currentPageIndex] = page
+    }
+
+    private fun setPosition(pos : Int, type : WidgetType, page : Page) {
+        if(pos % 3 == 0) {
+            page.widgets.add(Widget(type, 3, pos / 3))
+        }else {
+            page.widgets.add(Widget(type, pos % 3, pos / 3 + 1))
+        }
     }
 
     /**
