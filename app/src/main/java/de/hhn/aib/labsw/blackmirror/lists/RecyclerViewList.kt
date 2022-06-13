@@ -152,8 +152,10 @@ class RecyclerViewList<ItemViewType : RecyclerViewList.ItemView<ModelType>, Mode
             ) = false
 
             override fun onSwiped(viewHolder: RecyclerView.ViewHolder, dir: Int) {
-                removeAt(viewHolder.adapterPosition)
-                onItemRemovedListener?.invoke(listItems[viewHolder.adapterPosition])
+                val pos = viewHolder.adapterPosition
+                val itemModel = listItems[pos]
+                removeAt(pos)
+                onItemRemovedListener?.invoke(itemModel)
             }
         })
 

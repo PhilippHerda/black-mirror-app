@@ -49,7 +49,7 @@ class EditTodoActivity : AppCompatActivity() {
                 setMessage(getString(R.string.empty_todo_dialog_msg))
                 setPositiveButton(getString(R.string.empty_todo_dialog_confirm)) { dialog, _ ->
                     dialog.dismiss()
-                    runOnUiThread(this@EditTodoActivity::onFinishConfirmed)
+                    runOnUiThread(this@EditTodoActivity::returnAndRemoveItem)
                 }
                 setNegativeButton(getString(R.string.empty_todo_dialog_cancel)) { dialog, _ ->
                     dialog.dismiss()
@@ -57,45 +57,66 @@ class EditTodoActivity : AppCompatActivity() {
                 create().show()
             }
         } else {
-            onFinishConfirmed()
+            commitChanges()
         }
     }
 
-    private fun onFinishConfirmed() {
+    private fun cancel() {
+        val oldText = intent.getStringExtra(TODO_TEXT_EXTRA)
+        val newText = todoTextArea.editText!!.text!!.toString()
+
+        if (oldText == null) {
+            // item was recently created and is edited the first time
+            if (newText.isEmpty()) {
+                returnAndRemoveItem()
+            } else {
+                askDicardChanges(oldText)
+            }
+        } else if (oldText != newText) {
+            // item was changed
+            askDicardChanges(oldText)
+        } else {
+            // item was not changed
+            revertChanges()
+        }
+    }
+
+    private fun askDicardChanges(oldText: String?) {
+        AlertDialog.Builder(this).run {
+            setTitle(null)
+            setMessage(getString(R.string.edit_todo_cancel_dialog_msg))
+            setPositiveButton(getString(R.string.edit_todo_cancel_dialog_confirm)) { dialog, _ ->
+                if (oldText == null) {
+                    runOnUiThread(this@EditTodoActivity::returnAndRemoveItem)
+                } else {
+                    runOnUiThread(this@EditTodoActivity::revertChanges)
+                }
+                dialog.dismiss()
+            }
+            setNegativeButton(getString(R.string.edit_todo_cancel_dialog_cancel)) { dialog, _ ->
+                dialog.dismiss()
+            }
+            create().show()
+        }
+    }
+
+    private fun returnAndRemoveItem() {
+        setResult(RESULT_OK, Intent())
+        super.finish()
+    }
+
+    private fun revertChanges() {
+        setResult(RESULT_CANCELED)
+        super.finish()
+    }
+
+    private fun commitChanges() {
         val data = Intent()
         if (todoTextArea.editText?.text?.isNotEmpty() == true) {
             data.putExtra(TODO_TEXT_EXTRA, todoTextArea.editText?.text.toString())
         }
         setResult(RESULT_OK, data)
 
-        super.finish()
-    }
-
-    private fun cancel() {
-        val oldText = intent.getStringExtra(TODO_TEXT_EXTRA)
-        val newText = todoTextArea.editText?.text?.toString()
-        if (oldText != null && newText != null && oldText != newText) {
-            AlertDialog.Builder(this).run {
-                setTitle(null)
-                setMessage(getString(R.string.edit_todo_cancel_dialog_msg))
-                setPositiveButton(getString(R.string.edit_todo_cancel_dialog_confirm)) { dialog, _ ->
-                    runOnUiThread(this@EditTodoActivity::onCancelConfirmed)
-                    dialog.dismiss()
-                }
-                setNegativeButton(getString(R.string.edit_todo_cancel_dialog_cancel)) { dialog, _ ->
-                    dialog.dismiss()
-                }
-                create().show()
-            }
-        } else if (oldText == null) {
-            onFinishConfirmed()
-        } else {
-            onCancelConfirmed()
-        }
-    }
-
-    private fun onCancelConfirmed() {
-        setResult(RESULT_CANCELED)
         super.finish()
     }
 
