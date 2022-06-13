@@ -17,8 +17,14 @@
             android:name=".PagesActivity"
             android:exported="false" />
         <activity
-            android:name=".EmailDataActivity"
+            android:name=".EditTodoActivity"
             android:exported="false" />
+        <activity
+            android:name=".TodoListActivity"
+            android:exported="true" />
+        <activity
+            android:name=".EmailDataActivity"
+            android:exported="true" />
         <activity
             android:name=".WeatherLocationActivity"
             android:exported="true" />
