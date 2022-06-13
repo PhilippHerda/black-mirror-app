@@ -114,11 +114,8 @@ class EditTodoActivity : AppCompatActivity() {
 
     private fun commitChanges() {
         val data = Intent()
-        if (todoTextArea.editText?.text?.isNotEmpty() == true) {
-            data.putExtra(TODO_TEXT_EXTRA, todoTextArea.editText?.text.toString())
-        }
+        data.putExtra(TODO_TEXT_EXTRA, todoTextArea.editText!!.text.toString())
         setResult(RESULT_OK, data)
-
         super.finish()
     }
 
