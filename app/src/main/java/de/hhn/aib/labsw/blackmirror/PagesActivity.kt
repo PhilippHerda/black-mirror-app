@@ -23,7 +23,8 @@ import de.hhn.aib.labsw.blackmirror.helper.OnStartDragListener
 import kotlin.collections.ArrayList
 
 /**
- * This activity is used for
+ * This activity is used as a configuration page which allows the user to
+ * change the order of pages, delete pages or add pages.
  *
  * @author Selim Özdemir
  * @version 12-06-2022
@@ -41,6 +42,9 @@ class PagesActivity : AppCompatActivity() {
         generateItem()
     }
 
+    /**
+     * Generates the items in the recyclerview.
+     */
     private fun generateItem() {
         myMirror = intent.getSerializableExtra("myMirror") as Mirror
         val adapter = MyRecyclerAdapter(this, recyclerView, object : OnStartDragListener {
@@ -55,6 +59,9 @@ class PagesActivity : AppCompatActivity() {
 
     }
 
+    /**
+     * Initiates all buttons and sets the layout of the recyclerview.
+     */
     private fun init() {
         recyclerView = findViewById(R.id.pagesRecyclerView)
         recyclerView.setHasFixedSize(true)
@@ -81,15 +88,18 @@ class PagesActivity : AppCompatActivity() {
         }
     }
 
-    fun setMirror(mirror: Mirror) {
-        myMirror = mirror
-    }
-
+    /**
+     *
+     */
     private fun sendPagesToMirror() {
         TODO("Not yet implemented")
     }
 
+    /**
+     * Reads all pages in the recyclerview and saves them as a mirror object.
+     */
     private fun savePages() {
+        var mirror = Mirror(ArrayList())
         for (item in recyclerView) {
             item as CardView
             val layout = item[0] as RelativeLayout
@@ -134,7 +144,10 @@ class PagesActivity : AppCompatActivity() {
                 }
                 pos++
             }
-            myMirror.pages[recyclerView.indexOfChild(item)] = page
+            mirror.pages.add(page)
+        }
+        if(mirror.pages.isNotEmpty()) {
+            myMirror = mirror
         }
     }
 }
