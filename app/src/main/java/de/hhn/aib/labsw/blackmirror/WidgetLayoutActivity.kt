@@ -142,8 +142,6 @@ class WidgetLayoutActivity : AbstractActivity() {
         for (box in myGridLayout) {
             box.setOnClickListener {
                 if (box.foreground != null) {
-                    intent = null
-
                     when (box.tag) {
                         WidgetType.CALENDAR -> {
                             // intent = Intent(this@WidgetLayoutActivity, Activity::class.java) calendar configuration
@@ -152,27 +150,37 @@ class WidgetLayoutActivity : AbstractActivity() {
                             // intent = Intent(this@WidgetLayoutActivity, Activity::class.java) clock configuration
                         }
                         WidgetType.MAIL -> {
-                            intent =
-                                Intent(this@WidgetLayoutActivity, EmailDataActivity::class.java)
+                            startActivity(
+                                Intent(
+                                    this@WidgetLayoutActivity,
+                                    EmailDataActivity::class.java
+                                )
+                            )
                         }
                         WidgetType.WEATHER -> {
-                            intent = Intent(
-                                this@WidgetLayoutActivity,
-                                WeatherLocationActivity::class.java
+                            startActivity(
+                                Intent(
+                                    this@WidgetLayoutActivity,
+                                    WeatherLocationActivity::class.java
+                                )
                             )
                         }
                         WidgetType.REMINDER -> {
-                            intent = Intent(this@WidgetLayoutActivity, TodoListActivity::class.java)
+                            startActivity(
+                                Intent(
+                                    this@WidgetLayoutActivity,
+                                    TodoListActivity::class.java
+                                )
+                            )
+
                         }
-                    }
-                    if (intent == null) {
-                        Toast.makeText(
-                            applicationContext,
-                            R.string.Str_widgetNoConfigAvailableToastMessage,
-                            Toast.LENGTH_SHORT
-                        ).show()
-                    } else {
-                        startActivity(intent)
+                        else -> {
+                            Toast.makeText(
+                                applicationContext,
+                                R.string.Str_widgetNoConfigAvailableToastMessage,
+                                Toast.LENGTH_SHORT
+                            ).show()
+                        }
                     }
                 }
             }
