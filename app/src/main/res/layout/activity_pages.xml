@@ -41,10 +41,13 @@
         android:id="@+id/pagesRecyclerView"
         android:layout_width="0dp"
         android:layout_height="0dp"
+        android:layout_gravity="center_horizontal"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/toolbar" />
+        app:layout_constraintTop_toBottomOf="@+id/toolbar"
+        android:paddingStart="4dp"
+        android:paddingEnd="4dp"/>
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/addPageActionButton"
@@ -53,6 +56,8 @@
         android:layout_marginEnd="30dp"
         android:layout_marginBottom="30dp"
         android:contentDescription="@string/Str_addPageActionButton"
+        android:foreground="@android:drawable/ic_input_add"
+        android:foregroundTint="#FFFFFF"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         tools:ignore="ImageContrastCheck,ImageContrastCheck" />
@@ -63,7 +68,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:backgroundTint="#3F51B5"
-        android:text="@string/Str_widgetExitButton"
+        android:text="@string/Str_pagesExitButton"
         app:layout_constraintBottom_toBottomOf="@+id/toolbar"
         app:layout_constraintStart_toStartOf="@+id/toolbar"
         app:layout_constraintTop_toTopOf="@+id/toolbar" />

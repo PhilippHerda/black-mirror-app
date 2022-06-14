@@ -34,7 +34,7 @@ import de.hhn.aib.labsw.blackmirror.dataclasses.WidgetType
  * This allows customizable mirror layouts.
  *
  * @author Selim Özdemir, Niklas Binder
- * @version 28-05-2022
+ * @version 09-06-2022
  */
 class WidgetLayoutActivity : AbstractActivity() {
 
@@ -42,7 +42,7 @@ class WidgetLayoutActivity : AbstractActivity() {
     lateinit var myGridLayout: GridLayout
     private lateinit var widgetList: LinearLayout
     private lateinit var mirror: Mirror
-
+  
     object LayoutConstants {
         const val PAGE_UPDATE_TOPIC = "pageUpdate"
     }
@@ -53,8 +53,6 @@ class WidgetLayoutActivity : AbstractActivity() {
         setContentView(R.layout.activity_widget_layout)
         init()
         placeWidgetItems()
-
-        // Initializing Mirror object
         val pages = ArrayList<Page>()
         val widgets = ArrayList<Widget>()
         pages.add(Page(widgets))
@@ -138,7 +136,7 @@ class WidgetLayoutActivity : AbstractActivity() {
      */
     @SuppressLint("ClickableViewAccessibility", "SetTextI18n")
     private fun init() {
-        myGridLayout = findViewById(R.id.widgetGrid)
+        myGridLayout = findViewById(R.id.PageItemGrid)
         for (box in myGridLayout) {
             box.setOnClickListener {
                 if (box.foreground != null) {
@@ -220,14 +218,16 @@ class WidgetLayoutActivity : AbstractActivity() {
                 ) { dialog, id -> deleteConfiguration() }
                 .setNegativeButton(
                     resources.getString(R.string.Str_widgetConfirmClearNoTxt)
-                ) { dialog, id -> dialog.cancel() }
+                ) { dialog, _ -> dialog.cancel() }
             val alert = builder.create()
             alert.show()
         }
 
         val configPagesButton: MaterialButton = findViewById(R.id.configPagesButton)
         configPagesButton.setOnClickListener {
-            startActivity(Intent(this@WidgetLayoutActivity, PagesActivity::class.java))
+            val intent = Intent(this, PagesActivity::class.java)
+            intent.putExtra("myMirror", mirror)
+            startActivity(intent)
         }
 
         val navigateLeftButton = findViewById<FloatingActionButton>(R.id.navigateLeft_fab)
@@ -421,16 +421,28 @@ class WidgetLayoutActivity : AbstractActivity() {
         }
     }
 
+    @RequiresApi(Build.VERSION_CODES.N)
+    override fun onResume() {
+        super.onResume()
+        if (intent.hasExtra("myMirror")) {
+            mirror = intent.getSerializableExtra("myMirror") as Mirror
+            clearWidgetGrid()
+            displayPage()
+            findViewById<TextView>(R.id.pageAmountTextView).text = mirror.pages.size.toString()
+        }
+
+    }
+
     override fun onBackPressed() {
         val builder = AlertDialog.Builder(this@WidgetLayoutActivity)
         builder.setMessage(resources.getString(R.string.Str_widgetConfirmExitApplicationTxt))
             .setCancelable(false)
             .setPositiveButton(
                 resources.getString(R.string.Str_widgetConfirmClearYesTxt)
-            ) { dialog, id -> this@WidgetLayoutActivity.finishAffinity() }
+            ) { _, _ -> this@WidgetLayoutActivity.finishAffinity() }
             .setNegativeButton(
                 resources.getString(R.string.Str_widgetConfirmClearNoTxt)
-            ) { dialog, id -> dialog.cancel() }
+            ) { dialog, _ -> dialog.cancel() }
         val alert = builder.create()
         alert.show()
     }

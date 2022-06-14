@@ -39,6 +39,8 @@
 
     <string name="Str_defaulNumber">0</string>
     <string name="Str_addPageActionButton">+</string>
+    <string name="Str_pagesExitButton">exit</string>
+    <string name="Str_pageIndex">1</string>
     <string name="add_todo_item">Add</string>
     <string name="todoTextHint">What\'s to do?</string>
     <string name="todo_list_title">Todo list</string>
