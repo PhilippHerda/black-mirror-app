@@ -51,8 +51,14 @@ class WidgetLayoutActivity : AbstractActivity() {
         setContentView(R.layout.activity_widget_layout)
         init()
         placeWidgetItems()
-
+        val pages = ArrayList<Page>()
+        val widgets = ArrayList<Widget>()
+        pages.add(Page(widgets))
+        pages.add(Page(widgets))
+        pages.add(Page(widgets))
+        mirror = Mirror(pages)
         findViewById<TextView>(R.id.pageIndicatorTextView).text = "1"
+        findViewById<TextView>(R.id.pageAmountTextView).text = mirror.pages.size.toString()
     }
 
     /**
@@ -407,20 +413,13 @@ class WidgetLayoutActivity : AbstractActivity() {
     @RequiresApi(Build.VERSION_CODES.N)
     override fun onResume() {
         super.onResume()
-        mirror = if (intent.hasExtra("myMirror")) {
-            intent.getSerializableExtra("myMirror") as Mirror
-        } else {
-            val pages = ArrayList<Page>()
-            val widgets = ArrayList<Widget>()
-            pages.add(Page(widgets))
-            pages.add(Page(widgets))
-            pages.add(Page(widgets))
-            Mirror(pages)
+        if (intent.hasExtra("myMirror")) {
+            mirror = intent.getSerializableExtra("myMirror") as Mirror
+            clearWidgetGrid()
+            displayPage()
+            findViewById<TextView>(R.id.pageAmountTextView).text = mirror.pages.size.toString()
         }
 
-        findViewById<TextView>(R.id.pageAmountTextView).text = mirror.pages.size.toString()
-        clearWidgetGrid()
-        displayPage()
     }
 
     override fun onBackPressed() {
