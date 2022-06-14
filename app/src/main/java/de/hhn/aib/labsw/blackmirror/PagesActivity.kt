@@ -32,7 +32,7 @@ import kotlin.collections.ArrayList
  * @version 12-06-2022
  */
 class PagesActivity : AppCompatActivity() {
-    var itemTouchHelper: ItemTouchHelper? = null
+    lateinit var itemTouchHelper: ItemTouchHelper
     private lateinit var recyclerView: RecyclerView
     private lateinit var unsavedMirror: Mirror
     private lateinit var myMirror: Mirror
@@ -52,13 +52,13 @@ class PagesActivity : AppCompatActivity() {
         myMirror = unsavedMirror
         val adapter = MyRecyclerAdapter(this, recyclerView, object : OnStartDragListener {
             override fun onStartDrag(viewHolder: RecyclerView.ViewHolder?) {
-                itemTouchHelper!!.startDrag(viewHolder!!)
+                itemTouchHelper.startDrag(viewHolder!!)
             }
         }, unsavedMirror)
         recyclerView.adapter = adapter
         val callback = MyItemTouchHelperCallback(adapter)
         itemTouchHelper = ItemTouchHelper(callback)
-        itemTouchHelper!!.attachToRecyclerView(recyclerView)
+        itemTouchHelper.attachToRecyclerView(recyclerView)
     }
 
     /**
@@ -75,6 +75,7 @@ class PagesActivity : AppCompatActivity() {
             unsavedMirror.pages.add(Page(ArrayList()))
             recyclerView.adapter?.notifyItemInserted(unsavedMirror.pages.size - 1)
             resetAdapterState()
+            recyclerView.tag = "unsaved"
         }
 
         val saveButton = findViewById<MaterialButton>(R.id.saveButton)
@@ -94,13 +95,6 @@ class PagesActivity : AppCompatActivity() {
     private fun resetAdapterState() {
         val myAdapter = recyclerView.adapter
         recyclerView.adapter = myAdapter
-    }
-
-    /**
-     *
-     */
-    private fun sendPagesToMirror() {
-        TODO("Not yet implemented")
     }
 
     /**
@@ -164,6 +158,7 @@ class PagesActivity : AppCompatActivity() {
                     Toast.LENGTH_SHORT
                 )
             myToast.show()
+            recyclerView.tag = "saved"
         } else {
             val myToast =
                 Toast.makeText(
@@ -177,24 +172,32 @@ class PagesActivity : AppCompatActivity() {
 
     override fun onBackPressed() {
         val builder = AlertDialog.Builder(this@PagesActivity)
-        builder.setMessage("Do you want to save the pages for exiting?")
-            .setCancelable(false)
-            .setPositiveButton(
-                resources.getString(R.string.Str_widgetConfirmClearYesTxt)
-            ) { _, _ ->
-                savePages()
-                intent = Intent(this, WidgetLayoutActivity::class.java)
-                intent.putExtra("myMirror", myMirror)
-                startActivity(intent)
-                this@PagesActivity.finish() }
-            .setNegativeButton(
-                resources.getString(R.string.Str_widgetConfirmClearNoTxt)
-            ) { _, _ ->
-                intent = Intent(this, WidgetLayoutActivity::class.java)
-                intent.putExtra("myMirror", myMirror)
-                startActivity(intent)
-                this@PagesActivity.finish() }
-        val alert = builder.create()
-        alert.show()
+        if (recyclerView.tag == "unsaved") {
+            builder.setMessage("Do you want to save the pages before exiting?")
+                .setCancelable(false)
+                .setPositiveButton(
+                    resources.getString(R.string.Str_widgetConfirmClearYesTxt)
+                ) { _, _ ->
+                    savePages()
+                    intent = Intent(this, WidgetLayoutActivity::class.java)
+                    intent.putExtra("myMirror", myMirror)
+                    startActivity(intent)
+                    this@PagesActivity.finish()
+                }
+                .setNegativeButton(
+                    resources.getString(R.string.Str_widgetConfirmClearNoTxt)
+                ) { _, _ ->
+                    intent = Intent(this, WidgetLayoutActivity::class.java)
+                    intent.putExtra("myMirror", myMirror)
+                    startActivity(intent)
+                    this@PagesActivity.finish()
+                }
+            val alert = builder.create()
+            alert.show()
+        } else {
+            intent = Intent(this, WidgetLayoutActivity::class.java)
+            intent.putExtra("myMirror", myMirror)
+            startActivity(intent)
+        }
     }
 }

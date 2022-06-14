@@ -50,6 +50,7 @@ class MyRecyclerAdapter(
                         removeAt(layoutPosition)
                         dialog.dismiss()
                         recyclerView.invalidate()
+                        recyclerView.tag = "unsaved"
                     }
                     builder.setNegativeButton("No") { dialog, _ ->
                         dialog.dismiss()
@@ -107,6 +108,7 @@ class MyRecyclerAdapter(
     override fun onItemMove(fromPos: Int, toPos: Int): Boolean {
         mirror.swapPages(fromPos, toPos)
         notifyItemMoved(fromPos, toPos)
+        recyclerView.tag = "unsaved"
         return true
     }
 
