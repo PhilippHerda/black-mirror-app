@@ -2,9 +2,9 @@ package de.hhn.aib.labsw.blackmirror
 
 
 import android.annotation.SuppressLint
+import android.app.AlertDialog
 import android.content.ClipData
 import android.content.Intent
-import android.app.AlertDialog
 import android.graphics.drawable.Drawable
 import android.os.Build
 import android.os.Bundle
@@ -15,7 +15,6 @@ import android.widget.LinearLayout
 import android.widget.TextView
 import android.widget.Toast
 import androidx.annotation.RequiresApi
-import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.content.res.AppCompatResources
 import androidx.core.view.get
 import androidx.core.view.iterator
@@ -23,7 +22,10 @@ import androidx.gridlayout.widget.GridLayout
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import de.hhn.aib.labsw.blackmirror.WidgetLayoutActivity.LayoutConstants.PAGE_UPDATE_TOPIC
-import de.hhn.aib.labsw.blackmirror.dataclasses.*
+import de.hhn.aib.labsw.blackmirror.dataclasses.Mirror
+import de.hhn.aib.labsw.blackmirror.dataclasses.Page
+import de.hhn.aib.labsw.blackmirror.dataclasses.Widget
+import de.hhn.aib.labsw.blackmirror.dataclasses.WidgetType
 
 
 /**
@@ -140,36 +142,45 @@ class WidgetLayoutActivity : AbstractActivity() {
         for (box in myGridLayout) {
             box.setOnClickListener {
                 if (box.foreground != null) {
-                    intent = null
-
                     when (box.tag) {
                         WidgetType.CALENDAR -> {
                             // intent = Intent(this@WidgetLayoutActivity, Activity::class.java) calendar configuration
                         }
                         WidgetType.CLOCK -> {
-                            // intent = Intent(this@WidgetLayoutActivity, Activity::class.java) mail configuration
-                        }
-                        WidgetType.MAIL -> {
                             // intent = Intent(this@WidgetLayoutActivity, Activity::class.java) clock configuration
                         }
+                        WidgetType.MAIL -> {
+                            startActivity(
+                                Intent(
+                                    this@WidgetLayoutActivity,
+                                    EmailDataActivity::class.java
+                                )
+                            )
+                        }
                         WidgetType.WEATHER -> {
-                            intent = Intent(
-                                this@WidgetLayoutActivity,
-                                WeatherLocationActivity::class.java
+                            startActivity(
+                                Intent(
+                                    this@WidgetLayoutActivity,
+                                    WeatherLocationActivity::class.java
+                                )
                             )
                         }
                         WidgetType.REMINDER -> {
-                            // intent = Intent(this@WidgetLayoutActivity, Activity::class.java) reminder configuration
+                            startActivity(
+                                Intent(
+                                    this@WidgetLayoutActivity,
+                                    TodoListActivity::class.java
+                                )
+                            )
+
                         }
-                    }
-                    if (intent == null) {
-                        Toast.makeText(
-                            applicationContext,
-                            R.string.Str_widgetNoConfigAvailableToastMessage,
-                            Toast.LENGTH_SHORT
-                        ).show()
-                    } else {
-                        startActivity(intent)
+                        else -> {
+                            Toast.makeText(
+                                applicationContext,
+                                R.string.Str_widgetNoConfigAvailableToastMessage,
+                                Toast.LENGTH_SHORT
+                            ).show()
+                        }
                     }
                 }
             }
@@ -285,10 +296,10 @@ class WidgetLayoutActivity : AbstractActivity() {
         mirror.pages[mirror.currentPageIndex] = page
     }
 
-    private fun setPosition(pos : Int, type : WidgetType, page : Page) {
-        if(pos % 3 == 0) {
+    private fun setPosition(pos: Int, type: WidgetType, page: Page) {
+        if (pos % 3 == 0) {
             page.widgets.add(Widget(type, 3, pos / 3))
-        }else {
+        } else {
             page.widgets.add(Widget(type, pos % 3, pos / 3 + 1))
         }
     }
