@@ -77,31 +77,31 @@ class MirrorApiWebsockets : WebSocketListener(), MirrorApi {
      * send a message to the mirror
      * @param topic topic of the message, not null
      * @param payload payload of the message, not null
+     *
+     * @return true if the message could be queued to at least one receiver, else false
      */
-    override fun publish(topic: String, payload: Any) {
+    override fun publish(topic: String, payload: Any): Boolean {
         val sendPackage = SendPackage(topic, mapper.valueToTree(payload))
+        var oneSuccess = false
         sessions.forEach { session: WebSocket ->
-            try {
-                session.send(mapper.writeValueAsString(sendPackage))
-            } catch (e: IOException) {
-                println(e.message)
-            }
+            if (session.send(mapper.writeValueAsString(sendPackage))) oneSuccess = true
         }
+        return oneSuccess
     }
 
     /**
      * send a message to the mirror
      * @param topic topic of the message, not null
      * @param payload payload of the message, not null
+     *
+     * @return true if the message could be queued to at least one receiver, else false
      */
-    override fun publish(topic: String, payload: JsonNode) {
+    override fun publish(topic: String, payload: JsonNode): Boolean {
         val sendPackage = SendPackage(topic, payload)
+        var oneSuccess = false
         sessions.forEach { session: WebSocket ->
-            try {
-                session.send(mapper.writeValueAsString(sendPackage))
-            } catch (e: IOException) {
-                println(e.message)
-            }
+            if (session.send(mapper.writeValueAsString(sendPackage))) oneSuccess = true
         }
+        return oneSuccess
     }
 }
