@@ -13,4 +13,6 @@ interface MirrorApi {
     fun unsubscribe(topic: String, listener: ApiListener)
     fun publish(topic: String, payload: Any): Boolean
     fun publish(topic: String, payload: JsonNode): Boolean
+    fun subscribeToExceptions(listener:ApiExceptionListener)
+    fun unsubscribeFromExceptions(listener:ApiExceptionListener)
 }

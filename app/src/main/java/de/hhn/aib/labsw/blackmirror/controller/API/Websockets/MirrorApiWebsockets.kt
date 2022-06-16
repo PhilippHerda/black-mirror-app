@@ -13,6 +13,7 @@ import java.io.IOException
 class MirrorApiWebsockets : WebSocketListener(), MirrorApi {
     private val sessions = mutableListOf<WebSocket>()
     private val listeners = mutableMapOf<String, MutableList<ApiListener>>()
+    private val errorListeners = mutableListOf<ApiExceptionListener>()
 
     val mapper: ObjectMapper = ObjectMapper()
 
@@ -43,8 +44,9 @@ class MirrorApiWebsockets : WebSocketListener(), MirrorApi {
 
     override fun onFailure(webSocket: WebSocket, t: Throwable, response: Response?) {
         webSocket.close(1013, "try again later")
-        println("SOCKET API ERROR!")
-        println(t.stackTraceToString())
+        for (errorListener in errorListeners) {
+            errorListener.exceptionReceived(t)
+        }
         sessions.remove(webSocket)
     }
 
@@ -103,5 +105,13 @@ class MirrorApiWebsockets : WebSocketListener(), MirrorApi {
             if (session.send(mapper.writeValueAsString(sendPackage))) oneSuccess = true
         }
         return oneSuccess
+    }
+
+    override fun subscribeToExceptions(listener: ApiExceptionListener) {
+        errorListeners.add(listener)
+    }
+
+    override fun unsubscribeFromExceptions(listener: ApiExceptionListener) {
+        errorListeners.remove(listener)
     }
 }
