@@ -2,13 +2,35 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="de.hhn.aib.labsw.blackmirror">
 
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/Theme.Blackmirrorapp">
+        android:theme="@style/Theme.Blackmirrorapp"
+        android:usesCleartextTraffic="true">
+        <activity
+            android:name=".PagesActivity"
+            android:exported="true" />
+        <activity
+            android:name=".EditTodoActivity"
+            android:exported="false" />
+        <activity
+            android:name=".TodoListActivity"
+            android:exported="true" />
+        <activity
+            android:name=".EmailDataActivity"
+            android:exported="true" />
+        <activity
+            android:name=".WeatherLocationActivity"
+            android:exported="true" />
+        <activity
+            android:name=".WidgetLayoutActivity"
+            android:exported="true" />
         <activity
             android:name=".MainActivity"
             android:exported="true">

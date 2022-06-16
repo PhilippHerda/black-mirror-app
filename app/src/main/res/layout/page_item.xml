@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="16dp"
+    android:background="#878787"
+    app:cardBackgroundColor="#888888">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <androidx.gridlayout.widget.GridLayout
+            android:id="@+id/PageItemGrid"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:background="#F2ECECEC"
+            app:columnCount="3"
+            app:rowCount="5"
+            app:useDefaultMargins="true">
+
+            <ImageView
+                android:id="@+id/box11"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/box_small" />
+
+            <ImageView
+                android:id="@+id/box12"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/box_small" />
+
+            <ImageView
+                android:id="@+id/box13"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/box_small" />
+
+            <ImageView
+                android:id="@+id/box21"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/box_small" />
+
+            <ImageView
+                android:id="@+id/box22"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/box_small" />
+
+            <ImageView
+                android:id="@+id/box23"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/box_small" />
+
+            <ImageView
+                android:id="@+id/box31"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/box_small" />
+
+            <ImageView
+                android:id="@+id/box32"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/box_small" />
+
+            <ImageView
+                android:id="@+id/box33"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/box_small" />
+
+            <ImageView
+                android:id="@+id/box41"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/box_small" />
+
+            <ImageView
+                android:id="@+id/box42"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/box_small" />
+
+            <ImageView
+                android:id="@+id/box43"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/box_small" />
+        </androidx.gridlayout.widget.GridLayout>
+
+    </RelativeLayout>
+
+</androidx.cardview.widget.CardView>

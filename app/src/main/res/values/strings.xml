@@ -1,3 +1,60 @@
 <resources>
     <string name="app_name">black-mirror-app</string>
+
+    //Loading Screen Strings:
+    <string name="blackMirror_logo_contentDescription">Blackmirror content description</string>
+
+    // EmailData Strings:
+    <string name="tv_email">Email:</string>
+    <string name="tv_password">Password:</string>
+    <string name="tv_imap">Imap Server:</string>
+    <string name="tv_port">Imap Port:</string>
+    <string name="btn_save">Save</string>
+
+    // WidgetLayout Strings:
+    <string name="Str_widgetSaveButton">save</string>
+    <string name="Str_widgetExitButton">exit</string>
+    <string name="Str_widgetConfigPagesButton">config pages</string>
+    <string name="Str_widgetClearButton">clear</string>
+    <string name="Str_widgetConfirmClearYesTxt">Yes</string>
+    <string name="Str_widgetConfirmClearNoTxt">No</string>
+    <string name="Str_widgetGoLeftButton">Go Left</string>
+    <string name="Str_widgetGoRightButton">Go Right</string>
+    <string name="Str_widgetPageIndicatorSeparator">/</string>
+    <string name="Str_widgetConfirmClearTxt">Are you sure you want to delete this page?</string>
+    <string name="Str_widgetConfirmExitApplicationTxt">Are you sure you want to exit the application?</string>
+    <string name="Str_widgetNoConfigAvailableToastMessage">There is no configuration available for this widget</string>
+    <string name="Str_widgetSuccessfullySavedToastMessage">Saving successful</string>
+
+    <string name="weatherLocationDescr">Enter the location used for your weather data.\n\nA location consists of a latitude (north-south) and a longitude (west-east).</string>
+    <string name="longitude">Longitude</string>
+    <string name="latitude">Latitude</string>
+    <string name="invalidLatTitle">Invalid latitude</string>
+    <string name="invalidLatMsg">The latitude must be between -90.0° and +90.0°.</string>
+    <string name="invalidLonTitle">Invalid longitude</string>
+    <string name="invalidLonMsg">The longitude must be between -180.0° and +180.0°.</string>
+    <string name="invalidDoubleTitle">Invalid input</string>
+    <string name="invalidDoubleMsg">Failed to read number. Expected the format 25.314.</string>
+    <string name="set_location">Set Location</string>
+
+    <string name="Str_defaulNumber">0</string>
+    <string name="Str_addPageActionButton">+</string>
+    <string name="Str_pagesExitButton">exit</string>
+    <string name="Str_pageIndex">1</string>
+    <string name="add_todo_item">Add</string>
+    <string name="todoTextHint">What\'s to do?</string>
+    <string name="todo_list_title">Todo list</string>
+    <string name="empty_todo_dialog_msg">Todo text is empty. Todo item will be dismissed. Do you really want to return?</string>
+    <string name="empty_todo_dialog_confirm">Return</string>
+    <string name="empty_todo_dialog_cancel">Cancel</string>
+    <string name="help">Help</string>
+    <string name="todo_help_title">Todo List Help</string>
+    <string name="todo_help_msg">Press the + button to add a todo. Tap on an item to edit it. Swipe an item to the side to remove it.</string>
+    <string name="edit_todo_menu_confirm">OK</string>
+    <string name="edit_todo_cancel_dialog_msg">Todo text has been changed. Do you really want to discard the changes?</string>
+    <string name="edit_todo_cancel_dialog_confirm">Discard</string>
+    <string name="edit_todo_cancel_dialog_cancel">Continue editing</string>
+    <string name="todos_sent_successfully">Synchronized items with mirror</string>
+    <string name="feature_not_supported_dialog_title">Feature not supported</string>
+    <string name="feature_not_supported_dialog_msg">This feature is not supported for your android version. Either upgrade your version or request backwards compatibility for your version.</string>
 </resources>
