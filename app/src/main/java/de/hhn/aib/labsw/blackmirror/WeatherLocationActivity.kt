@@ -4,10 +4,7 @@ import android.os.Bundle
 import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
-import androidx.annotation.StringRes
-import androidx.appcompat.app.AlertDialog
 import de.hhn.aib.labsw.blackmirror.dataclasses.Location
-import java.lang.NumberFormatException
 
 /**
  * @author Markus Marewitz, Niklas Binder
@@ -42,10 +39,12 @@ class WeatherLocationActivity : AbstractActivity() {
         }
 
         sendWeatherLocationButton.setOnClickListener {
-            val location = Location(editTextLat.text.toString().toDouble(),
-                                    editTextLon.text.toString().toDouble())
+            if (validateLat(editTextLat.text.toString()) && validateLon(editTextLon.text.toString())) {
+                val location = Location(editTextLat.text.toString().toDouble(),
+                    editTextLon.text.toString().toDouble())
 
-            publishToRemotes("location", location)
+                publishToRemotes("location", location)
+            }
         }
     }
 
@@ -88,7 +87,7 @@ class WeatherLocationActivity : AbstractActivity() {
             val double = input.toDouble()
             return additionalChecks(double)
         } catch (e: NumberFormatException) {
-            Toast.makeText(this, R.string.invalidDoubleMsg, Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, getString(R.string.invalidDoubleTitle) + " " + getString(R.string.invalidDoubleMsg), Toast.LENGTH_SHORT).show()
             false
         }
     }
