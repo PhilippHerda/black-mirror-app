@@ -1,5 +1,6 @@
 package de.hhn.aib.labsw.blackmirror
 
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.fasterxml.jackson.core.JsonProcessingException
 import com.fasterxml.jackson.databind.JsonNode
@@ -86,7 +87,9 @@ abstract class AbstractActivity : AppCompatActivity(), ApiListener, AutoCloseabl
      *
      * @param t the exception that caused the error
      */
-    override fun exceptionReceived(t: Throwable) {}
+    override fun exceptionReceived(t: Throwable) {
+
+    }
 
     /**
      * companion object holding reference to WebsocketServer
@@ -96,12 +99,18 @@ abstract class AbstractActivity : AppCompatActivity(), ApiListener, AutoCloseabl
         //10.0.2.2 is localhost of the computer running the emulator
         //private val SOCKETS_URL = "ws:\\\\10.0.2.2"               // use this for debugging and set PORT on mirror side (in MirrorApiWebsockets) to 80
 
-        private val SOCKETS_URL = "ws:\\\\blackmirror:2306"
-        //private const val SOCKETS_URL = "ws:\\\\LuisRechner:2306"
+        //private val SOCKETS_URL = "ws:\\\\blackmirror:2306"
+        private val SOCKETS_URL = "ws:\\\\LuisLaptop:2306"
 
         //create the apiListener and create a socket
-        private val api = MirrorApiWebsockets()
-        private val socket = OkHttpClient.Builder().build()
+        private var api = MirrorApiWebsockets()
+        private var socket = OkHttpClient.Builder().build()
             .newWebSocket(Request.Builder().url(SOCKETS_URL).build(), api)
+
+        fun apiLostConnection(){
+            api = MirrorApiWebsockets()
+            socket = OkHttpClient.Builder().build()
+                .newWebSocket(Request.Builder().url(SOCKETS_URL).build(), api)
+        }
     }
 }

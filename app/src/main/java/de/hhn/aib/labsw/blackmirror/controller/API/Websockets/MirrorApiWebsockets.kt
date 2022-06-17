@@ -2,8 +2,14 @@ package de.hhn.aib.labsw.blackmirror.controller.API.Websockets
 
 import com.fasterxml.jackson.databind.JsonNode
 import com.fasterxml.jackson.databind.ObjectMapper
+import de.hhn.aib.labsw.blackmirror.AbstractActivity
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import okhttp3.*
 import java.io.IOException
+import java.net.SocketTimeoutException
 
 /**
  * Implementation of the interface using websockets
@@ -46,6 +52,18 @@ class MirrorApiWebsockets : WebSocketListener(), MirrorApi {
         webSocket.close(1013, "try again later")
         for (errorListener in errorListeners) {
             errorListener.exceptionReceived(t)
+        }
+        if (
+            t is java.net.UnknownHostException ||
+            t is SocketTimeoutException
+        ) {
+            println("could not establish connection to server")
+            CoroutineScope(Dispatchers.IO).launch(Dispatchers.IO) {
+                println("trying again in 30 seconds")
+                delay(30 * 1000) //wait 1 minute before retry
+                AbstractActivity.apiLostConnection()
+                println("trying again now")
+            }
         }
         sessions.remove(webSocket)
     }
