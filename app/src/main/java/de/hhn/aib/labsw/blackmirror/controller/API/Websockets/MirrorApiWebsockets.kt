@@ -20,12 +20,14 @@ class MirrorApiWebsockets : WebSocketListener(), MirrorApi {
     private val sessions = mutableListOf<WebSocket>()
     private val listeners = mutableMapOf<String, MutableList<ApiListener>>()
     private val errorListeners = mutableListOf<ApiExceptionListener>()
+    private var connectionAlive = true
 
     val mapper: ObjectMapper = ObjectMapper()
 
     override fun onOpen(webSocket: WebSocket, response: Response) {
         sessions.add(webSocket)
         print("new Connection!: ")
+        connectionAlive = true
     }
 
     override fun onMessage(webSocket: WebSocket, text: String) {
@@ -46,6 +48,7 @@ class MirrorApiWebsockets : WebSocketListener(), MirrorApi {
         // WebSocket connection closes
         print("Connection closed: ")
         sessions.remove(webSocket)
+        if (sessions.isEmpty()) connectionAlive = false
     }
 
     override fun onFailure(webSocket: WebSocket, t: Throwable, response: Response?) {
@@ -54,13 +57,13 @@ class MirrorApiWebsockets : WebSocketListener(), MirrorApi {
             errorListener.exceptionReceived(t)
         }
         if (
-            t is java.net.UnknownHostException ||
-            t is SocketTimeoutException
+            t is IOException
         ) {
+            connectionAlive = false
             println("could not establish connection to server")
             CoroutineScope(Dispatchers.IO).launch(Dispatchers.IO) {
-                println("trying again in 30 seconds")
-                delay(30 * 1000) //wait 1 minute before retry
+                println("trying again in 10 seconds")
+                delay(10 * 1000) //wait 1 minute before retry
                 AbstractActivity.apiLostConnection()
                 println("trying again now")
             }
@@ -102,11 +105,13 @@ class MirrorApiWebsockets : WebSocketListener(), MirrorApi {
      */
     override fun publish(topic: String, payload: Any): Boolean {
         val sendPackage = SendPackage(topic, mapper.valueToTree(payload))
-        var oneSuccess = false
-        sessions.forEach { session: WebSocket ->
-            if (session.send(mapper.writeValueAsString(sendPackage))) oneSuccess = true
-        }
-        return oneSuccess
+        if (connectionAlive) {
+            var oneSuccess = false
+            sessions.forEach { session: WebSocket ->
+                if (session.send(mapper.writeValueAsString(sendPackage))) oneSuccess = true
+            }
+            return oneSuccess
+        } else return false
     }
 
     /**
@@ -119,10 +124,12 @@ class MirrorApiWebsockets : WebSocketListener(), MirrorApi {
     override fun publish(topic: String, payload: JsonNode): Boolean {
         val sendPackage = SendPackage(topic, payload)
         var oneSuccess = false
-        sessions.forEach { session: WebSocket ->
-            if (session.send(mapper.writeValueAsString(sendPackage))) oneSuccess = true
-        }
-        return oneSuccess
+        if (connectionAlive) {
+            sessions.forEach { session: WebSocket ->
+                if (session.send(mapper.writeValueAsString(sendPackage))) oneSuccess = true
+            }
+            return oneSuccess
+        } else return false
     }
 
     override fun subscribeToExceptions(listener: ApiExceptionListener) {
