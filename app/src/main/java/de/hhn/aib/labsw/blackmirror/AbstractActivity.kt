@@ -99,8 +99,8 @@ abstract class AbstractActivity : AppCompatActivity(), ApiListener, AutoCloseabl
         //10.0.2.2 is localhost of the computer running the emulator
         //private val SOCKETS_URL = "ws:\\\\10.0.2.2"               // use this for debugging and set PORT on mirror side (in MirrorApiWebsockets) to 80
 
-        //private val SOCKETS_URL = "ws:\\\\blackmirror:2306"
-        private val SOCKETS_URL = "ws:\\\\LuisLaptop:2306"
+        private val SOCKETS_URL = "ws:\\\\blackmirror:2306"
+        //private val SOCKETS_URL = "ws:\\\\LuisRechner:2306"
 
         //create the apiListener and create a socket
         private var api = MirrorApiWebsockets()
