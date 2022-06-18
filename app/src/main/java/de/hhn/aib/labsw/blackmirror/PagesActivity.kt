@@ -15,7 +15,7 @@ import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.floatingactionbutton.FloatingActionButton
-import de.hhn.aib.labsw.blackmirror.adapter.MyRecyclerAdapter
+import de.hhn.aib.labsw.blackmirror.adapter.PagesRecyclerAdapter
 import de.hhn.aib.labsw.blackmirror.dataclasses.Mirror
 import de.hhn.aib.labsw.blackmirror.dataclasses.Page
 import de.hhn.aib.labsw.blackmirror.dataclasses.Widget
@@ -50,7 +50,7 @@ class PagesActivity : AppCompatActivity() {
     private fun generateItem() {
         unsavedMirror = intent.getSerializableExtra("myMirror") as Mirror
         myMirror = unsavedMirror
-        val adapter = MyRecyclerAdapter(this, recyclerView, object : OnStartDragListener {
+        val adapter = PagesRecyclerAdapter(this, recyclerView, object : OnStartDragListener {
             override fun onStartDrag(viewHolder: RecyclerView.ViewHolder?) {
                 itemTouchHelper.startDrag(viewHolder!!)
             }
@@ -170,6 +170,9 @@ class PagesActivity : AppCompatActivity() {
         }
     }
 
+    /**
+     * Overrides the onBackPressed() method and adds functionality to safe before exiting.
+     */
     override fun onBackPressed() {
         val builder = AlertDialog.Builder(this@PagesActivity)
         if (recyclerView.tag == "unsaved") {

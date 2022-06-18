@@ -6,19 +6,15 @@ import android.graphics.drawable.Drawable
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
 import androidx.appcompat.content.res.AppCompatResources
 import androidx.core.view.get
 import androidx.recyclerview.widget.RecyclerView
-import de.hhn.aib.labsw.blackmirror.PagesActivity
 import de.hhn.aib.labsw.blackmirror.R
 import de.hhn.aib.labsw.blackmirror.dataclasses.Mirror
-import de.hhn.aib.labsw.blackmirror.dataclasses.Page
 import de.hhn.aib.labsw.blackmirror.dataclasses.Widget
 import de.hhn.aib.labsw.blackmirror.dataclasses.WidgetType
 import de.hhn.aib.labsw.blackmirror.helper.ItemTouchHelperAdapter
 import de.hhn.aib.labsw.blackmirror.helper.OnStartDragListener
-import java.util.*
 
 /**
  * This adapter is used for creating views inside a recyclerview. These views can be dragged and
@@ -27,12 +23,12 @@ import java.util.*
  * @author Selim Özdemir
  * @version 12-06-2022
  */
-class MyRecyclerAdapter(
+class PagesRecyclerAdapter(
     private var context: Context,
     private var recyclerView: RecyclerView,
     private var listener: OnStartDragListener,
     private var mirror: Mirror,
-) : RecyclerView.Adapter<MyRecyclerAdapter.MyViewHolder>(), ItemTouchHelperAdapter {
+) : RecyclerView.Adapter<PagesRecyclerAdapter.MyViewHolder>(), ItemTouchHelperAdapter {
 
     inner class MyViewHolder(itemView: View): RecyclerView.ViewHolder(itemView) {
         var grid: androidx.gridlayout.widget.GridLayout
