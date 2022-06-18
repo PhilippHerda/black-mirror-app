@@ -215,7 +215,7 @@ class WidgetLayoutActivity : AbstractActivity() {
                 .setCancelable(false)
                 .setPositiveButton(
                     resources.getString(R.string.Str_widgetConfirmClearYesTxt)
-                ) { dialog, id -> deleteConfiguration() }
+                ) { _, _ -> deleteConfiguration() }
                 .setNegativeButton(
                     resources.getString(R.string.Str_widgetConfirmClearNoTxt)
                 ) { dialog, _ -> dialog.cancel() }
@@ -296,6 +296,13 @@ class WidgetLayoutActivity : AbstractActivity() {
         mirror.pages[mirror.currentPageIndex] = page
     }
 
+    /**
+     * Method to add a widget at a given position.
+     *
+     * @param pos   position of the box in the gridLayout
+     * @param type  type of the new widget to be added
+     * @param page  page where the new widget should be added to
+     */
     private fun setPosition(pos: Int, type: WidgetType, page: Page) {
         if (pos % 3 == 0) {
             page.widgets.add(Widget(type, 3, pos / 3))
@@ -317,6 +324,9 @@ class WidgetLayoutActivity : AbstractActivity() {
         }
     }
 
+    /**
+     * Method to get the fitting drawable for a given widget.
+     */
     private fun getDrawableForWidget(widget: Widget): Drawable {
         return when (widget.type) {
             WidgetType.CALENDAR -> {
@@ -352,6 +362,9 @@ class WidgetLayoutActivity : AbstractActivity() {
         }
     }
 
+    /**
+     * Method to delete the configuration of the current page.
+     */
     private fun deleteConfiguration() {
         clearWidgetGrid()
         saveCurrentPage()
