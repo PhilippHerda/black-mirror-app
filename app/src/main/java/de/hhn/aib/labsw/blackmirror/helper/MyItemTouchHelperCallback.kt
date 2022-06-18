@@ -6,6 +6,9 @@ import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
 import kotlin.math.abs
 
+/**
+ * Custom callback class for drag and drop animations.
+ */
 class MyItemTouchHelperCallback(private val adapter: ItemTouchHelperAdapter): ItemTouchHelper.Callback(){
 
     override fun isLongPressDragEnabled(): Boolean {
@@ -16,6 +19,9 @@ class MyItemTouchHelperCallback(private val adapter: ItemTouchHelperAdapter): It
         return true
     }
 
+    /**
+     * @return movement flags done by user
+     */
     override fun getMovementFlags(
         recyclerView: RecyclerView,
         viewHolder: RecyclerView.ViewHolder
