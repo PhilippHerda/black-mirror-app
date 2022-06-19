@@ -20,7 +20,15 @@ class MirrorApiWebsockets : WebSocketListener(), MirrorApi {
     private val sessions = mutableListOf<WebSocket>()
     private val listeners = mutableMapOf<String, MutableList<ApiListener>>()
     private val errorListeners = mutableListOf<ApiExceptionListener>()
-    private var connectionAlive = true
+
+    /**
+     * this property holds the status of the connection to the mirror.
+     * true means the connection is alive.
+     * false means no connection to the mirror is active.
+     * The mirror API will automaticall try to reconnect every 10 seconds
+     */
+    var connectionAlive = true
+        private set
 
     val mapper: ObjectMapper = ObjectMapper()
 
@@ -63,7 +71,7 @@ class MirrorApiWebsockets : WebSocketListener(), MirrorApi {
             println("could not establish connection to server")
             CoroutineScope(Dispatchers.IO).launch(Dispatchers.IO) {
                 println("trying again in 10 seconds")
-                delay(10 * 1000) //wait 1 minute before retry
+                delay(10 * 1000) //wait 10 seconds before retry
                 AbstractActivity.apiLostConnection()
                 println("trying again now")
             }

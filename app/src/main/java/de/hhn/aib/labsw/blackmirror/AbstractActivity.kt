@@ -104,10 +104,14 @@ abstract class AbstractActivity : AppCompatActivity(), ApiListener, AutoCloseabl
 
         //create the apiListener and create a socket
         private var api = MirrorApiWebsockets()
+        protected val connectionAlive: Boolean
+            get() {
+                return api.connectionAlive
+            }
         private var socket = OkHttpClient.Builder().build()
             .newWebSocket(Request.Builder().url(SOCKETS_URL).build(), api)
 
-        fun apiLostConnection(){
+        fun apiLostConnection() {
             api = MirrorApiWebsockets()
             socket = OkHttpClient.Builder().build()
                 .newWebSocket(Request.Builder().url(SOCKETS_URL).build(), api)
