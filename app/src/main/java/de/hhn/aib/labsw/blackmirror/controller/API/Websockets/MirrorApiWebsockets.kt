@@ -20,6 +20,16 @@ class MirrorApiWebsockets : WebSocketListener(), MirrorApi {
     private val sessions = mutableListOf<WebSocket>()
     private val listeners = mutableMapOf<String, MutableList<ApiListener>>()
     private val errorListeners = mutableListOf<ApiExceptionListener>()
+    private var backgroundTask = CoroutineScope(Dispatchers.IO).launch(Dispatchers.IO) {
+        while(true){
+            if(connectionAlive) {
+                delay(5 * 1000)
+                sessions.forEach {
+                    it.send("alive?")
+                }
+            }
+        }
+    }
 
     /**
      * this property holds the status of the connection to the mirror.
@@ -34,7 +44,6 @@ class MirrorApiWebsockets : WebSocketListener(), MirrorApi {
 
     override fun onOpen(webSocket: WebSocket, response: Response) {
         sessions.add(webSocket)
-        print("new Connection!: ")
         connectionAlive = true
     }
 
@@ -61,20 +70,18 @@ class MirrorApiWebsockets : WebSocketListener(), MirrorApi {
 
     override fun onFailure(webSocket: WebSocket, t: Throwable, response: Response?) {
         webSocket.close(1013, "try again later")
-        for (errorListener in errorListeners) {
-            errorListener.exceptionReceived(t)
-        }
         if (
             t is IOException
         ) {
+            backgroundTask.cancel()
             connectionAlive = false
-            println("could not establish connection to server")
             CoroutineScope(Dispatchers.IO).launch(Dispatchers.IO) {
-                println("trying again in 10 seconds")
                 delay(10 * 1000) //wait 10 seconds before retry
                 AbstractActivity.apiLostConnection()
-                println("trying again now")
             }
+        }
+        for (errorListener in errorListeners) {
+            errorListener.exceptionReceived(t)
         }
         sessions.remove(webSocket)
     }
