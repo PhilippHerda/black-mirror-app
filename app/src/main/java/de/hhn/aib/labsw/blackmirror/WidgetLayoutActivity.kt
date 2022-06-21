@@ -253,14 +253,32 @@ class WidgetLayoutActivity : AbstractActivity() {
      * Method to send the current layout to the mirror.
      */
     private fun sendWidgetLayout() {
-        publishToRemotes(PAGE_UPDATE_TOPIC, mirror)
-        val myToast =
-            Toast.makeText(
-                applicationContext,
-                R.string.Str_widgetSuccessfullySavedToastMessage,
-                Toast.LENGTH_SHORT
-            )
-        myToast.show()
+
+        var hasAtLeastOneWidget = false
+        for(page in mirror.pages) {
+            if(page.widgets.size > 0) {
+                hasAtLeastOneWidget = true;
+            }
+        }
+
+        if(hasAtLeastOneWidget) {
+            publishToRemotes(PAGE_UPDATE_TOPIC, mirror)
+            val myToast =
+                Toast.makeText(
+                    applicationContext,
+                    R.string.Str_pagesSuccessfullySavedToastMessage,
+                    Toast.LENGTH_SHORT
+                )
+            myToast.show()
+        } else {
+            val myToast =
+                Toast.makeText(
+                    applicationContext,
+                    R.string.Str_savingPagesFailedToastMessage,
+                    Toast.LENGTH_SHORT
+                )
+            myToast.show()
+        }
     }
 
     /**
