@@ -111,7 +111,6 @@ abstract class AbstractActivity : AppCompatActivity(), ApiListener, AutoCloseabl
             .newWebSocket(Request.Builder().url(SOCKETS_URL).build(), api)
 
         fun apiLostConnection() {
-            api = MirrorApiWebsockets()
             socket = OkHttpClient.Builder().build()
                 .newWebSocket(Request.Builder().url(SOCKETS_URL).build(), api)
         }
