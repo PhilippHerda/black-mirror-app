@@ -215,7 +215,7 @@ class WidgetLayoutActivity : AbstractActivity() {
                 .setCancelable(false)
                 .setPositiveButton(
                     resources.getString(R.string.Str_widgetConfirmClearYesTxt)
-                ) { dialog, id -> deleteConfiguration() }
+                ) { _, _ -> deleteConfiguration() }
                 .setNegativeButton(
                     resources.getString(R.string.Str_widgetConfirmClearNoTxt)
                 ) { dialog, _ -> dialog.cancel() }
@@ -257,7 +257,7 @@ class WidgetLayoutActivity : AbstractActivity() {
         var hasAtLeastOneWidget = false
         for(page in mirror.pages) {
             if(page.widgets.size > 0) {
-                hasAtLeastOneWidget = true;
+                hasAtLeastOneWidget = true
             }
         }
 
