@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">black-mirror-app</string>
+    <string name="app_name">Black Mirror</string>
 
     //Loading Screen Strings:
     <string name="blackMirror_logo_contentDescription">Blackmirror content description</string>
@@ -24,7 +24,8 @@
     <string name="Str_widgetConfirmClearTxt">Are you sure you want to delete this page?</string>
     <string name="Str_widgetConfirmExitApplicationTxt">Are you sure you want to exit the application?</string>
     <string name="Str_widgetNoConfigAvailableToastMessage">There is no configuration available for this widget</string>
-    <string name="Str_widgetSuccessfullySavedToastMessage">Saving successful</string>
+    <string name="Str_pagesSuccessfullySavedToastMessage">Saving successful</string>
+    <string name="Str_savingPagesFailedToastMessage">At least one widget has to be present</string>
 
     <string name="weatherLocationDescr">Enter the location used for your weather data.\n\nA location consists of a latitude (north-south) and a longitude (west-east).</string>
     <string name="longitude">Longitude</string>
@@ -34,7 +35,7 @@
     <string name="invalidLonTitle">Invalid longitude</string>
     <string name="invalidLonMsg">The longitude must be between -180.0° and +180.0°.</string>
     <string name="invalidDoubleTitle">Invalid input</string>
-    <string name="invalidDoubleMsg">Failed to read number. Expected the format 25.314.</string>
+    <string name="invalidDoubleMsg">Failed to read number. Expected the format "25.314".</string>
     <string name="set_location">Set Location</string>
 
     <string name="Str_defaulNumber">0</string>
