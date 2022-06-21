@@ -3,14 +3,12 @@ package de.hhn.aib.labsw.blackmirror
 import android.os.Bundle
 import android.widget.Button
 import android.widget.EditText
-import androidx.annotation.StringRes
-import androidx.appcompat.app.AlertDialog
+import android.widget.Toast
 import de.hhn.aib.labsw.blackmirror.dataclasses.Location
-import java.lang.NumberFormatException
 
 /**
- * @author Markus Marewitz
- * @version 2022-04-17
+ * @author Markus Marewitz, Niklas Binder
+ * @version 2022-06-16
  */
 class WeatherLocationActivity : AbstractActivity() {
     lateinit var editTextLat: EditText
@@ -33,7 +31,6 @@ class WeatherLocationActivity : AbstractActivity() {
                 return validateLat(newText)
             }
         }
-
         editTextLon.onFocusChangeListener = object : EditTextListener(editTextLon) {
             override fun onTextEdited(newText: String): Boolean {
                 return validateLon(newText)
@@ -42,10 +39,12 @@ class WeatherLocationActivity : AbstractActivity() {
         }
 
         sendWeatherLocationButton.setOnClickListener {
-            val location = Location(editTextLat.text.toString().toDouble(),
-                                    editTextLon.text.toString().toDouble())
+            if (validateLat(editTextLat.text.toString()) && validateLon(editTextLon.text.toString())) {
+                val location = Location(editTextLat.text.toString().toDouble(),
+                    editTextLon.text.toString().toDouble())
 
-            publishToRemotes("location", location)
+                publishToRemotes("location", location)
+            }
         }
     }
 
@@ -55,7 +54,7 @@ class WeatherLocationActivity : AbstractActivity() {
     private fun validateLat(input: String): Boolean {
         return validateInput(input) {
             return@validateInput if (it < -90.0 || it > 90.0) {
-                showInvalidInput(R.string.invalidLatTitle, R.string.invalidLatMsg)
+                Toast.makeText(this, getString(R.string.invalidLatTitle) + " " + getString(R.string.invalidLatMsg), Toast.LENGTH_SHORT).show()
                 false
             } else {
                 true
@@ -69,7 +68,7 @@ class WeatherLocationActivity : AbstractActivity() {
     private fun validateLon(input: String): Boolean {
         return validateInput(input) {
             return@validateInput if (it < -180.0 || it > 180.0) {
-                showInvalidInput(R.string.invalidLonTitle, R.string.invalidLonMsg)
+                Toast.makeText(this, getString(R.string.invalidLonTitle) + " " + getString(R.string.invalidLonMsg), Toast.LENGTH_SHORT).show()
                 false
             } else {
                 true
@@ -88,18 +87,8 @@ class WeatherLocationActivity : AbstractActivity() {
             val double = input.toDouble()
             return additionalChecks(double)
         } catch (e: NumberFormatException) {
-            showInvalidInput(R.string.invalidDoubleTitle, R.string.invalidDoubleMsg)
+            Toast.makeText(this, getString(R.string.invalidDoubleTitle) + " " + getString(R.string.invalidDoubleMsg), Toast.LENGTH_SHORT).show()
             false
         }
     }
-
-    private fun showInvalidInput(@StringRes titleResId: Int, @StringRes msgResId: Int) {
-        runOnUiThread {
-            AlertDialog.Builder(this)
-                .setTitle(getString(titleResId))
-                .setMessage(getString(msgResId))
-                .show()
-        }
-    }
-
 }
