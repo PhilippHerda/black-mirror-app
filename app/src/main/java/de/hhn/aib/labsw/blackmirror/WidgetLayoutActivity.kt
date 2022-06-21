@@ -413,10 +413,10 @@ class WidgetLayoutActivity : AbstractActivity() {
                     v.background = view.background
                     v.foreground = view.foreground
                     v.tag = view.tag
-                    saveCurrentPage()
                 }
                 else -> {}
             }
+            saveCurrentPage()
             return true
         }
     }
