@@ -65,6 +65,10 @@ class RecyclerViewList<ItemViewType : RecyclerViewList.ItemView<ModelType>, Mode
     open class ItemView<ModelType : Any> {
         lateinit var model: ModelType
 
+        /**
+         * This method is called when a list item is bound to this item view and should be used
+         * to bind the model data to the view components such as text fields, buttons, icons, ...
+         */
         open fun onBind() {}
     }
 

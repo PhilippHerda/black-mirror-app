@@ -9,6 +9,8 @@ import java.time.format.DateTimeFormatter
 import java.time.format.FormatStyle
 
 /**
+ * Item View for a todolist item.
+ *
  * @author Markus Marewitz
  * @version 2022-06-02
  */
