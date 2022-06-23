@@ -4,27 +4,24 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.fasterxml.jackson.core.JsonProcessingException
 import com.fasterxml.jackson.databind.JsonNode
-import de.hhn.aib.labsw.blackmirror.controller.API.Websockets.ApiExceptionListener
-import de.hhn.aib.labsw.blackmirror.controller.API.Websockets.ApiListener
-import de.hhn.aib.labsw.blackmirror.controller.API.Websockets.MirrorApi
-import de.hhn.aib.labsw.blackmirror.controller.API.Websockets.MirrorApiWebsockets
+import de.hhn.aib.labsw.blackmirror.controller.API.Websockets.*
 import okhttp3.OkHttpClient
 import okhttp3.Request
 
 /**
  * Abstract activity providing api access
  * @author Luis Gutzeit
- * @version 16.06.2022
+ * @version 23.06.2022
  */
 abstract class AbstractActivity : AppCompatActivity(), ApiListener, AutoCloseable,
     ApiExceptionListener {
 
     init {
-        api.subscribeToExceptions(this)
+        handler.api.subscribeToExceptions(this)
     }
 
     override fun close() {
-        api.unsubscribeFromExceptions(this)
+        handler.api.unsubscribeFromExceptions(this)
     }
 
     /**
@@ -33,7 +30,7 @@ abstract class AbstractActivity : AppCompatActivity(), ApiListener, AutoCloseabl
      * @param payload payload of the message, not null
      */
     protected open fun publishToRemotes(topic: String, payload: JsonNode) {
-        api.publish(topic, payload)
+        handler.api.publish(topic, payload)
     }
 
     /**
@@ -42,7 +39,7 @@ abstract class AbstractActivity : AppCompatActivity(), ApiListener, AutoCloseabl
      * @param payload payload of the message, not null
      */
     protected open fun publishToRemotes(topic: String, payload: Any) {
-        api.publish(topic, payload)
+        handler.api.publish(topic, payload)
     }
 
     /**
@@ -51,7 +48,7 @@ abstract class AbstractActivity : AppCompatActivity(), ApiListener, AutoCloseabl
      * @param listener listener to receive updates, not null
      */
     protected open fun subscribe(topic: String, listener: ApiListener) {
-        api.subscribe(topic, listener)
+        handler.api.subscribe(topic, listener)
     }
 
     /**
@@ -61,7 +58,7 @@ abstract class AbstractActivity : AppCompatActivity(), ApiListener, AutoCloseabl
      * @param listener listener to be removed, not null
      */
     protected open fun unsubscribe(topic: String, listener: ApiListener) {
-        api.unsubscribe(topic, listener)
+        handler.api.unsubscribe(topic, listener)
     }
 
     /**
@@ -71,7 +68,7 @@ abstract class AbstractActivity : AppCompatActivity(), ApiListener, AutoCloseabl
      */
     @Throws(JsonProcessingException::class)
     protected fun <T> nodeToObject(node: JsonNode, tClass: Class<T>): T {
-        return api.mapper.treeToValue(node, tClass)
+        return handler.api.mapper.treeToValue(node, tClass)
     }
 
     /**
@@ -97,22 +94,15 @@ abstract class AbstractActivity : AppCompatActivity(), ApiListener, AutoCloseabl
     companion object {
         //set URL here
         //10.0.2.2 is localhost of the computer running the emulator
-        //private val SOCKETS_URL = "ws:\\\\10.0.2.2"               // use this for debugging and set PORT on mirror side (in MirrorApiWebsockets) to 80
+        //private val SOCKETS_URL = "ws:\\\\10.0.2.2:2306"
 
-        private val SOCKETS_URL = "ws:\\\\blackmirror:2306"
+        //private val SOCKETS_URL = "ws:\\\\blackmirror:2306"
+        private val SOCKETS_URL = "ws:\\\\LuisRechner:2306"
+        val handler = MasterSocketHandler(SOCKETS_URL)
 
-        //create the apiListener and create a socket
-        private var api = MirrorApiWebsockets()
         protected val connectionAlive: Boolean
             get() {
-                return api.connectionAlive
+                return handler.api.connectionAlive
             }
-        private var socket = OkHttpClient.Builder().build()
-            .newWebSocket(Request.Builder().url(SOCKETS_URL).build(), api)
-
-        fun apiLostConnection() {
-            socket = OkHttpClient.Builder().build()
-                .newWebSocket(Request.Builder().url(SOCKETS_URL).build(), api)
-        }
     }
 }

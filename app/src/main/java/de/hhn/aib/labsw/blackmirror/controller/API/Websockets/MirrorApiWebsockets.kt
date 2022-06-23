@@ -16,13 +16,15 @@ import java.net.SocketTimeoutException
  * @author Luis Gutzeit
  * @version 05.05.2022
  */
-class MirrorApiWebsockets : WebSocketListener(), MirrorApi {
+class MirrorApiWebsockets(
+    val resetConnection: () -> Unit
+) : WebSocketListener(), MirrorApi {
     private val sessions = mutableListOf<WebSocket>()
     private val listeners = mutableMapOf<String, MutableList<ApiListener>>()
     private val errorListeners = mutableListOf<ApiExceptionListener>()
     private var backgroundTask = CoroutineScope(Dispatchers.IO).launch(Dispatchers.IO) {
-        while(true){
-            if(connectionAlive) {
+        while (true) {
+            if (connectionAlive) {
                 delay(5 * 1000)
                 sessions.forEach {
                     it.send("alive?")
@@ -77,7 +79,7 @@ class MirrorApiWebsockets : WebSocketListener(), MirrorApi {
             connectionAlive = false
             CoroutineScope(Dispatchers.IO).launch(Dispatchers.IO) {
                 delay(10 * 1000) //wait 10 seconds before retry
-                AbstractActivity.apiLostConnection()
+                resetConnection()
             }
         }
         for (errorListener in errorListeners) {
