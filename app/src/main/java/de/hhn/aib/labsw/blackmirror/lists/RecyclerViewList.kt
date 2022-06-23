@@ -68,12 +68,21 @@ class RecyclerViewList<ItemViewType : RecyclerViewList.ItemView<ModelType>, Mode
         open fun onBind() {}
     }
 
+    /**
+     * Scrolls the list to the specified item so that is definitely visible.
+     */
     fun scrollToItem(item: ModelType) {
         recyclerView.smoothScrollToPosition(tryGetItemPos(item))
     }
 
+    /**
+     * Scrolls to the top of the list.
+     */
     fun scrollToTop() = recyclerView.smoothScrollToPosition(0)
 
+    /**
+     * Scrolls to the bottom of the list.
+     */
     fun scrollToBottom() = recyclerView.smoothScrollToPosition(listItems.size - 1)
 
     /**
@@ -112,10 +121,18 @@ class RecyclerViewList<ItemViewType : RecyclerViewList.ItemView<ModelType>, Mode
     }
 
     /**
-     * Call this method to remove an item from this list
+     * Call this method to remove an item from this list. This will notify
+     * the item remove listener (see [setOnItemRemovedListener]).
      */
-    fun remove(item: ModelType) = removeAt(tryGetItemPos(item))
+    fun remove(item: ModelType) = removeAt(tryGetItemPos(item), item)
 
+    /**
+     * Sets whether removing list items when the user swipes the item to either side
+     * should be enabled. When an item is removed the item remove listener
+     * will be notified (see [setOnItemRemovedListener]).
+     *
+     * @param remove Items will be removed when this is set to `true`.
+     */
     fun removeItemOnSwipe(remove: Boolean) {
         if (remove) {
             itemTouchHelper.attachToRecyclerView(recyclerView)
@@ -124,6 +141,10 @@ class RecyclerViewList<ItemViewType : RecyclerViewList.ItemView<ModelType>, Mode
         }
     }
 
+    /**
+     * @param listener A callback that is invoked whenever an item is removed.
+     * May be `null` to remove the previously set callback.
+     */
     fun setOnItemRemovedListener(listener: ((ModelType) -> Unit)?) {
         onItemRemovedListener = listener
     }
@@ -140,6 +161,10 @@ class RecyclerViewList<ItemViewType : RecyclerViewList.ItemView<ModelType>, Mode
     private var onItemRemovedListener: ((ModelType) -> Unit)? = null
     private var recentlyClickedPos = -1
 
+    /**
+     * An object containing the callbacks for item swiping and dragging.
+     * This is attached and detached to enable/disable item removal on swiping.
+     */
     private val itemTouchHelper =
         ItemTouchHelper(object : ItemTouchHelper.SimpleCallback(
             0,
@@ -154,8 +179,7 @@ class RecyclerViewList<ItemViewType : RecyclerViewList.ItemView<ModelType>, Mode
             override fun onSwiped(viewHolder: RecyclerView.ViewHolder, dir: Int) {
                 val pos = viewHolder.adapterPosition
                 val itemModel = listItems[pos]
-                removeAt(pos)
-                onItemRemovedListener?.invoke(itemModel)
+                removeAt(pos, itemModel)
             }
         })
 
@@ -163,6 +187,11 @@ class RecyclerViewList<ItemViewType : RecyclerViewList.ItemView<ModelType>, Mode
         recyclerView.adapter = Adapter()
     }
 
+    /**
+     * Tries to get the position of the specified item in this list.
+     *
+     * @throws IllegalArgumentException If the item is not contained in this list.
+     */
     private fun tryGetItemPos(item: ModelType): Int {
         val index = listItems.indexOf(item)
         if (index == -1) {
@@ -171,14 +200,31 @@ class RecyclerViewList<ItemViewType : RecyclerViewList.ItemView<ModelType>, Mode
         return index
     }
 
-    private fun removeAt(position: Int) {
+    /**
+     * Removes the item at the specified position and invokes the
+     * callback [onItemRemovedListener] if set.
+     *
+     * @throws IllegalArgumentException if the position is out of bounds or doesn't match
+     * the position of the specified item.
+     */
+    private fun removeAt(position: Int, item: ModelType) {
+        if (position != tryGetItemPos(item)) {
+            throw IllegalArgumentException(
+                "The specified item is not located at the specified position")
+        }
         if (position == recentlyClickedPos) {
             recentlyClickedPos = -1
         }
         listItems.removeAt(position)
-        runOnUIThread { recyclerView.adapter?.notifyItemRemoved(position) }
+        runOnUIThread {
+            recyclerView.adapter?.notifyItemRemoved(position)
+            onItemRemovedListener?.invoke(item)
+        }
     }
 
+    /**
+     * Wrapper for the generic [ItemView] that implements common functionality of all items views.
+     */
     private inner class ItemViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         private val itemViewer = itemViewCreator(itemView)
 
@@ -191,12 +237,19 @@ class RecyclerViewList<ItemViewType : RecyclerViewList.ItemView<ModelType>, Mode
             }
         }
 
+        /**
+         * Binds the view holder to an item in this list and calls the clients
+         * [ItemView.onBind] method.
+         */
         fun bind(position: Int) {
             itemViewer.model = listItems[position]
             itemViewer.onBind()
         }
     }
 
+    /**
+     * The recycler view adapter that controls the construction and binding of view holders.
+     */
     private inner class Adapter : RecyclerView.Adapter<ItemViewHolder>() {
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ItemViewHolder {
             return ItemViewHolder(
