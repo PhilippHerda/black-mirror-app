@@ -119,6 +119,9 @@ class TodoListActivity : AbstractActivity() {
         }
     }
 
+    /**
+     * Shows a dialog with a description of how to use this activity.
+     */
     private fun showHelp() {
         AlertDialog.Builder(this).run {
             setTitle(R.string.todo_help_title)
@@ -127,6 +130,10 @@ class TodoListActivity : AbstractActivity() {
         }
     }
 
+    /**
+     * Synchronizes the todolist with the mirror by sending all to do items in an [APITodoData]
+     * object under the topic [TODOS_TOPIC].
+     */
     private fun sendTodosToMirror() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             val data =

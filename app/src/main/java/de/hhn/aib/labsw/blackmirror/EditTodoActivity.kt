@@ -12,6 +12,8 @@ import de.hhn.aib.labsw.blackmirror.EditTodoActivity.Constants.TODO_TEXT_EXTRA
 
 /**
  * Activity to edit an to do item.
+ * The previous to do text should be passed as an intent extra with the key [TODO_TEXT_EXTRA].
+ *
  * Returns [android.app.Activity.RESULT_OK] when the text has been changed
  * or [android.app.Activity.RESULT_CANCELED] when the user has canceled editing as
  * an activity result.
@@ -19,6 +21,7 @@ import de.hhn.aib.labsw.blackmirror.EditTodoActivity.Constants.TODO_TEXT_EXTRA
  * The edited to do text is passed as an intent extra with the key [TODO_TEXT_EXTRA]
  * if the text is not empty. Otherwise this extra is not passed and the caller should
  * discard the to do item.
+ *
  * @author Markus Marewitz
  * @version 2022-06-02
  */
@@ -45,9 +48,14 @@ class EditTodoActivity : AppCompatActivity() {
         }
     }
 
-    override fun finish() = cancel()
+    override fun finish() = onCancel()
 
-    private fun confirm() {
+    /**
+     * This method is called when the user clicks the confirm button.
+     * If the todotext is empty the user is prompted to decide whether the item should
+     * be removed or he/she wants to continue editing.
+     */
+    private fun onConfirm() {
         if (todoTextArea.editText?.text?.isEmpty() == true) {
             AlertDialog.Builder(this).run {
                 setTitle(null)
@@ -66,7 +74,15 @@ class EditTodoActivity : AppCompatActivity() {
         }
     }
 
-    private fun cancel() {
+    /**
+     * This method is called when the user clicks the cancel button or the back button
+     * in the navigation bar.
+     * * If the item is edited the first time and the text is empty the item will be removed.
+     * * If no changes where made this activity is closed.
+     * * If changes where made the user is prompted whether the changes should be discarded,
+     *   see [askDiscardChanges].
+     */
+    private fun onCancel() {
         val oldText = intent.getStringExtra(TODO_TEXT_EXTRA)
         val newText = todoTextArea.editText!!.text!!.toString()
 
@@ -75,18 +91,22 @@ class EditTodoActivity : AppCompatActivity() {
             if (newText.isEmpty()) {
                 returnAndRemoveItem()
             } else {
-                askDicardChanges(oldText)
+                askDiscardChanges(oldText)
             }
         } else if (oldText != newText) {
             // item was changed
-            askDicardChanges(oldText)
+            askDiscardChanges(oldText)
         } else {
             // item was not changed
             revertChanges()
         }
     }
 
-    private fun askDicardChanges(oldText: String?) {
+    /**
+     * Shows a dialog to the user and lets him/her decide whether the changes
+     * should be discarded or he/she wants to continue editing.
+     */
+    private fun askDiscardChanges(oldText: String?) {
         AlertDialog.Builder(this).run {
             setTitle(null)
             setMessage(getString(R.string.edit_todo_cancel_dialog_msg))
@@ -105,16 +125,29 @@ class EditTodoActivity : AppCompatActivity() {
         }
     }
 
+    /**
+     * Returns from this activity with a result that indicates to the caller that the item
+     * should be removed, see [EditTodoActivity].
+     */
     private fun returnAndRemoveItem() {
         setResult(RESULT_OK, Intent())
         super.finish()
     }
 
+    /**
+     * Returns from this activity with a result that indicates to the caller that the item
+     * should not be changed, see [EditTodoActivity].
+     */
     private fun revertChanges() {
         setResult(RESULT_CANCELED)
         super.finish()
     }
 
+    /**
+     * Returns from this activity with a result that indicates to the caller that the item
+     * was changed and passes the new to do text as an intent extra with the key [TODO_TEXT_EXTRA],
+     * see [EditTodoActivity].
+     */
     private fun commitChanges() {
         val data = Intent()
         data.putExtra(TODO_TEXT_EXTRA, todoTextArea.editText!!.text.toString())
@@ -125,11 +158,11 @@ class EditTodoActivity : AppCompatActivity() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
             android.R.id.home -> {
-                cancel()
+                onCancel()
                 true
             }
             R.id.confirmItem -> {
-                confirm()
+                onConfirm()
                 true
             }
             else -> super.onOptionsItemSelected(item)

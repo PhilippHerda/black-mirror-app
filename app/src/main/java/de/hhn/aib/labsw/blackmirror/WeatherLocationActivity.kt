@@ -93,6 +93,10 @@ class WeatherLocationActivity : AbstractActivity() {
         }
     }
 
+    /**
+     * Shows a dialog to the user to notify him/her that the input was invalid. The title and
+     * message of this dialog are passed as arguments.
+     */
     private fun showInvalidInput(@StringRes titleResId: Int, @StringRes msgResId: Int) {
         runOnUiThread {
             AlertDialog.Builder(this)
