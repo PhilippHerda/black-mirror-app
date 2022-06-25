@@ -44,11 +44,17 @@ class MirrorApiWebsockets(
 
     val mapper: ObjectMapper = ObjectMapper()
 
+    /**
+     * system method - do not call this method by yourself!!
+     */
     override fun onOpen(webSocket: WebSocket, response: Response) {
         sessions.add(webSocket)
         connectionAlive = true
     }
 
+    /**
+     * system method - do not call this method by yourself!!
+     */
     override fun onMessage(webSocket: WebSocket, text: String) {
         try {
             val jsonNode: JsonNode = mapper.readTree(text)
@@ -63,6 +69,9 @@ class MirrorApiWebsockets(
         }
     }
 
+    /**
+     * system method - do not call this method by yourself!!
+     */
     override fun onClosed(webSocket: WebSocket, code: Int, reason: String) {
         // WebSocket connection closes
         print("Connection closed: ")
@@ -70,6 +79,9 @@ class MirrorApiWebsockets(
         if (sessions.isEmpty()) connectionAlive = false
     }
 
+    /**
+     * system method - do not call this method by yourself!!
+     */
     override fun onFailure(webSocket: WebSocket, t: Throwable, response: Response?) {
         webSocket.close(1013, "try again later")
         if (
@@ -149,10 +161,18 @@ class MirrorApiWebsockets(
         } else return false
     }
 
+    /**
+     * subscribe to new exceptions
+     * @param listener the listener to subscribe to exceptions in MirrorApi
+     */
     override fun subscribeToExceptions(listener: ApiExceptionListener) {
         errorListeners.add(listener)
     }
 
+    /**
+     * unsubscribe from new exceptions
+     * @param listener the listener to unsubscribe
+     */
     override fun unsubscribeFromExceptions(listener: ApiExceptionListener) {
         errorListeners.remove(listener)
     }
