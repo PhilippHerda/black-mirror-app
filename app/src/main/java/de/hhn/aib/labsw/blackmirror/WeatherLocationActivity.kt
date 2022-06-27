@@ -1,6 +1,7 @@
 package de.hhn.aib.labsw.blackmirror
 
 import android.os.Bundle
+import android.text.Editable
 import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
@@ -28,12 +29,16 @@ class WeatherLocationActivity : AbstractActivity() {
 
         editTextLat.onFocusChangeListener = object : EditTextListener(editTextLat) {
             override fun onTextEdited(newText: String): Boolean {
-                return validateLat(newText)
+                var newTextCleared = newText.replace(",", ".")
+                editTextLat.text = Editable.Factory.getInstance().newEditable(newTextCleared)
+                return validateLat(newTextCleared)
             }
         }
         editTextLon.onFocusChangeListener = object : EditTextListener(editTextLon) {
             override fun onTextEdited(newText: String): Boolean {
-                return validateLon(newText)
+                var newTextCleared = newText.replace(",", ".")
+                editTextLon.text = Editable.Factory.getInstance().newEditable(newTextCleared)
+                return validateLon(newTextCleared)
             }
 
         }
