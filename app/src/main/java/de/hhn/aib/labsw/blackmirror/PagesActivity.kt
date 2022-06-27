@@ -111,36 +111,41 @@ class PagesActivity : AppCompatActivity() {
             var pos = 1
             for (box in grid) {
                 if (box.foreground != null) {
-                    when (box.foreground.constantState) {
-                        AppCompatResources.getDrawable(
-                            this,
-                            R.drawable.mail_widget_icon_foreground
-                        )?.constantState -> {
-                            page.widgets.add(Widget(WidgetType.MAIL, pos % 3, pos / 3 + 1))
+                    when (box.tag) {
+                        WidgetType.MAIL -> {
+                            if (pos % 4 == 0) {
+                                page.widgets.add(Widget(WidgetType.MAIL, 4, pos / 4))
+                            } else {
+                                page.widgets.add(Widget(WidgetType.MAIL, pos % 4, pos / 4 + 1))
+                            }
                         }
-                        AppCompatResources.getDrawable(
-                            this,
-                            R.drawable.calendar_widget_icon_foreground
-                        )?.constantState -> {
-                            page.widgets.add(Widget(WidgetType.CALENDAR, pos % 3, pos / 3 + 1))
+                        WidgetType.CALENDAR -> {
+                            if (pos % 4 == 0) {
+                                page.widgets.add(Widget(WidgetType.CALENDAR, 4, pos / 4))
+                            } else {
+                                page.widgets.add(Widget(WidgetType.CALENDAR, pos % 4, pos / 4 + 1))
+                            }
                         }
-                        AppCompatResources.getDrawable(
-                            this,
-                            R.drawable.weather_widget_icon_foreground
-                        )?.constantState -> {
-                            page.widgets.add(Widget(WidgetType.WEATHER, pos % 3, pos / 3 + 1))
+                        WidgetType.WEATHER -> {
+                            if (pos % 4 == 0) {
+                                page.widgets.add(Widget(WidgetType.WEATHER, 4, pos / 4))
+                            } else {
+                                page.widgets.add(Widget(WidgetType.WEATHER, pos % 4, pos / 4 + 1))
+                            }
                         }
-                        AppCompatResources.getDrawable(
-                            this,
-                            R.drawable.clock_widget_icon_foreground
-                        )?.constantState -> {
-                            page.widgets.add(Widget(WidgetType.CLOCK, pos % 3, pos / 3 + 1))
+                        WidgetType.CLOCK -> {
+                            if (pos % 4 == 0) {
+                                page.widgets.add(Widget(WidgetType.CLOCK, 4, pos / 4))
+                            } else {
+                                page.widgets.add(Widget(WidgetType.CLOCK, pos % 4, pos / 4 + 1))
+                            }
                         }
-                        AppCompatResources.getDrawable(
-                            this,
-                            R.drawable.reminder_widget_icon_foreground
-                        )?.constantState -> {
-                            page.widgets.add(Widget(WidgetType.REMINDER, pos % 3, pos / 3 + 1))
+                        WidgetType.REMINDER -> {
+                            if (pos % 4 == 0) {
+                                page.widgets.add(Widget(WidgetType.REMINDER, 4, pos / 4))
+                            } else {
+                                page.widgets.add(Widget(WidgetType.REMINDER, pos % 4, pos / 4 + 1))
+                            }
                         }
                     }
                 }
@@ -148,7 +153,7 @@ class PagesActivity : AppCompatActivity() {
             }
             mirror.pages.add(page)
         }
-        if(mirror.pages.isNotEmpty()) {
+        if (mirror.pages.isNotEmpty()) {
             unsavedMirror = mirror
             myMirror = unsavedMirror
             val myToast =

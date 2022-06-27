@@ -50,6 +50,7 @@ class MirrorApiWebsockets(
     override fun onOpen(webSocket: WebSocket, response: Response) {
         sessions.add(webSocket)
         connectionAlive = true
+        println(webSocket)
     }
 
     /**
@@ -84,6 +85,7 @@ class MirrorApiWebsockets(
      */
     override fun onFailure(webSocket: WebSocket, t: Throwable, response: Response?) {
         webSocket.close(1013, "try again later")
+        println(t.stackTraceToString())
         if (
             t is IOException
         ) {

@@ -315,10 +315,10 @@ class WidgetLayoutActivity : AbstractActivity() {
     }
 
     private fun setPosition(pos: Int, type: WidgetType, page: Page) {
-        if (pos % 3 == 0) {
-            page.widgets.add(Widget(type, 3, pos / 3))
+        if (pos % 4 == 0) {
+            page.widgets.add(Widget(type, 4, pos / 4))
         } else {
-            page.widgets.add(Widget(type, pos % 3, pos / 3 + 1))
+            page.widgets.add(Widget(type, pos % 4, pos / 4 + 1))
         }
     }
 
@@ -327,7 +327,7 @@ class WidgetLayoutActivity : AbstractActivity() {
      */
     private fun displayPage() {
         for (widget in mirror.pages[mirror.currentPageIndex].widgets) {
-            val pos: Int = (widget.x - 1) + (widget.y - 1) * 3
+            val pos: Int = (widget.x - 1) + (widget.y - 1) * 4
             myGridLayout[pos].foreground = getDrawableForWidget(widget)
             myGridLayout[pos].background =
                 AppCompatResources.getDrawable(this, R.drawable.widget_box)

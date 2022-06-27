@@ -34,8 +34,9 @@ class MyRecyclerAdapter(
     private var mirror: Mirror,
 ) : RecyclerView.Adapter<MyRecyclerAdapter.MyViewHolder>(), ItemTouchHelperAdapter {
 
-    inner class MyViewHolder(itemView: View): RecyclerView.ViewHolder(itemView) {
+    inner class MyViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         var grid: androidx.gridlayout.widget.GridLayout
+
         init {
             grid = itemView.findViewById(R.id.PageItemGrid)
 
@@ -72,7 +73,7 @@ class MyRecyclerAdapter(
      * Create an Holder for each itemview.
      */
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
-        return MyViewHolder(LayoutInflater.from(context).inflate(R.layout.page_item,parent,false))
+        return MyViewHolder(LayoutInflater.from(context).inflate(R.layout.page_item, parent, false))
     }
 
     /**
@@ -82,9 +83,11 @@ class MyRecyclerAdapter(
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
         holder.itemView.tag = position
         for (widget in mirror.pages[position].widgets) {
-            val pos: Int = (widget.x - 1) + (widget.y - 1) * 3
+            val pos: Int = (widget.x - 1) + (widget.y - 1) * 4
             holder.grid[pos].foreground = getDrawableForWidget(widget)
-            holder.grid[pos].background = AppCompatResources.getDrawable(context, R.drawable.selectable_box_small)
+            holder.grid[pos].background =
+                AppCompatResources.getDrawable(context, R.drawable.selectable_box_small)
+            holder.grid[pos].tag = widget.type
         }
 
 
