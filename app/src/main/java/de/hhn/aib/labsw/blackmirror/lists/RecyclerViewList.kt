@@ -80,8 +80,10 @@ class RecyclerViewList<ItemViewType : RecyclerViewList.ItemView<ModelType>, Mode
      * Adds an item to the end of the list and updates the UI
      */
     fun add(item: ModelType) {
-        listItems.add(item)
-        runOnUIThread { recyclerView.adapter?.notifyItemInserted(listItems.size - 1) }
+        runOnUIThread {
+            listItems.add(item)
+            recyclerView.adapter?.notifyItemInserted(listItems.size - 1)
+        }
     }
 
     /**
@@ -95,8 +97,10 @@ class RecyclerViewList<ItemViewType : RecyclerViewList.ItemView<ModelType>, Mode
      * Call this method when an item of this list has changed
      */
     fun update(item: ModelType, action: (ModelType) -> Unit = {}) {
-        action(item)
-        runOnUIThread { recyclerView.adapter?.notifyItemChanged(tryGetItemPos(item)) }
+        runOnUIThread {
+            action(item)
+            recyclerView.adapter?.notifyItemChanged(tryGetItemPos(item))
+        }
     }
 
     /**
@@ -107,8 +111,10 @@ class RecyclerViewList<ItemViewType : RecyclerViewList.ItemView<ModelType>, Mode
         if (recentlyClickedPos == -1) {
             throw IllegalStateException("There is no recently clicked item")
         }
-        action(listItems[recentlyClickedPos])
-        runOnUIThread { recyclerView.adapter?.notifyItemChanged(recentlyClickedPos) }
+        runOnUIThread {
+            action(listItems[recentlyClickedPos])
+            recyclerView.adapter?.notifyItemChanged(recentlyClickedPos)
+        }
     }
 
     /**
@@ -121,6 +127,15 @@ class RecyclerViewList<ItemViewType : RecyclerViewList.ItemView<ModelType>, Mode
             itemTouchHelper.attachToRecyclerView(recyclerView)
         } else {
             itemTouchHelper.attachToRecyclerView(null)
+        }
+    }
+
+    /**
+     * Removes all elements from the list and notifies the item remove listener if set.
+     */
+    fun clear() {
+        while (listItems.isNotEmpty()) {
+            remove(listItems.last())
         }
     }
 
@@ -175,8 +190,10 @@ class RecyclerViewList<ItemViewType : RecyclerViewList.ItemView<ModelType>, Mode
         if (position == recentlyClickedPos) {
             recentlyClickedPos = -1
         }
-        listItems.removeAt(position)
-        runOnUIThread { recyclerView.adapter?.notifyItemRemoved(position) }
+        runOnUIThread {
+            listItems.removeAt(position)
+            recyclerView.adapter?.notifyItemRemoved(position)
+        }
     }
 
     private inner class ItemViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {

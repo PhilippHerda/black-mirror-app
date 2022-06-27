@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
+import android.view.View
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AlertDialog
@@ -20,7 +21,6 @@ import de.hhn.aib.labsw.blackmirror.dataclasses.APITodoEntry
 import de.hhn.aib.labsw.blackmirror.dataclasses.TodoItem
 import de.hhn.aib.labsw.blackmirror.lists.RecyclerViewList
 import de.hhn.aib.labsw.blackmirror.lists.TodoListItem
-import org.json.JSONObject
 import java.time.Instant
 import java.time.ZoneId
 import java.time.ZonedDateTime
@@ -33,6 +33,7 @@ import java.time.ZonedDateTime
 
 class TodoListActivity : AbstractActivity() {
     private lateinit var todoList: RecyclerViewList<TodoListItem, TodoItem>
+    private lateinit var addItemBtn: FloatingActionButton
 
     object Constants {
         const val TODOS_TOPIC = "todoList"
@@ -73,7 +74,8 @@ class TodoListActivity : AbstractActivity() {
         todoList.removeItemOnSwipe(true)
         todoList.setOnItemRemovedListener { sendTodosToMirror() }
 
-        val addItemBtn = findViewById<FloatingActionButton>(R.id.addItemButton)
+        addItemBtn = findViewById(R.id.addItemButton)
+        addItemBtn.visibility = View.GONE
         addItemBtn.setOnClickListener {
             requireAPIVersion(Build.VERSION_CODES.O) {
                 val item = TodoItem("", ZonedDateTime.now())
@@ -88,13 +90,19 @@ class TodoListActivity : AbstractActivity() {
         publishToRemotes(FETCH_TODOS_TOPIC, Unit)
     }
 
-    override fun dataReceived(topic: String, node: JsonNode) {
+    override fun finish() {
+        unsubscribe(TODOS_TOPIC, this)
+        super.finish()
+    }
+
+    override fun dataReceived(topic: String, `object`: JsonNode) {
         if (topic != TODOS_TOPIC) {
             throw IllegalArgumentException("topic must be $TODOS_TOPIC")
         }
         try {
             requireAPIVersion(Build.VERSION_CODES.O) {
-                val data = nodeToObject(node, APITodoData::class.java)
+                val data = nodeToObject(`object`, APITodoData::class.java)
+//                todoList.clear()
                 data.entries.forEach { (createdTimestamp, text) ->
                     todoList.add(
                         TodoItem(
@@ -107,6 +115,7 @@ class TodoListActivity : AbstractActivity() {
                     )
                 }
             }
+            runOnUiThread { addItemBtn.visibility = View.VISIBLE }
         } catch (e: JsonProcessingException) {
             runOnUiThread {
                 Toast.makeText(this, R.string.fetch_todos_failed, Toast.LENGTH_SHORT).show()

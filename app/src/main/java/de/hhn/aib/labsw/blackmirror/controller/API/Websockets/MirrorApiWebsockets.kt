@@ -2,6 +2,7 @@ package de.hhn.aib.labsw.blackmirror.controller.API.Websockets
 
 import com.fasterxml.jackson.databind.JsonNode
 import com.fasterxml.jackson.databind.ObjectMapper
+import com.fasterxml.jackson.module.kotlin.registerKotlinModule
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
@@ -40,7 +41,7 @@ class MirrorApiWebsockets(
     var connectionAlive = true
         private set
 
-    val mapper: ObjectMapper = ObjectMapper()
+    val mapper: ObjectMapper = ObjectMapper().registerKotlinModule()
 
     /**
      * system method - do not call this method by yourself!!
