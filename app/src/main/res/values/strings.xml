@@ -58,4 +58,5 @@
     <string name="todos_sent_successfully">Synchronized items with mirror</string>
     <string name="feature_not_supported_dialog_title">Feature not supported</string>
     <string name="feature_not_supported_dialog_msg">This feature is not supported for your android version. Either upgrade your version or request backwards compatibility for your version.</string>
+    <string name="fetch_todos_failed">Failed to load the todo list from the mirror.</string>
 </resources>

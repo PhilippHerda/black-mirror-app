@@ -6,17 +6,23 @@ import android.os.Bundle
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
+import android.view.View
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AlertDialog
+import com.fasterxml.jackson.core.JsonProcessingException
+import com.fasterxml.jackson.databind.JsonNode
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import de.hhn.aib.labsw.blackmirror.EditTodoActivity.Constants.TODO_TEXT_EXTRA
+import de.hhn.aib.labsw.blackmirror.TodoListActivity.Constants.FETCH_TODOS_TOPIC
 import de.hhn.aib.labsw.blackmirror.TodoListActivity.Constants.TODOS_TOPIC
 import de.hhn.aib.labsw.blackmirror.dataclasses.APITodoData
 import de.hhn.aib.labsw.blackmirror.dataclasses.APITodoEntry
 import de.hhn.aib.labsw.blackmirror.dataclasses.TodoItem
 import de.hhn.aib.labsw.blackmirror.lists.RecyclerViewList
 import de.hhn.aib.labsw.blackmirror.lists.TodoListItem
+import java.time.Instant
+import java.time.ZoneId
 import java.time.ZonedDateTime
 
 /**
@@ -27,9 +33,11 @@ import java.time.ZonedDateTime
 
 class TodoListActivity : AbstractActivity() {
     private lateinit var todoList: RecyclerViewList<TodoListItem, TodoItem>
+    private lateinit var addItemBtn: FloatingActionButton
 
     object Constants {
         const val TODOS_TOPIC = "todoList"
+        const val FETCH_TODOS_TOPIC = "fetchTodoList"
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -66,9 +74,10 @@ class TodoListActivity : AbstractActivity() {
         todoList.removeItemOnSwipe(true)
         todoList.setOnItemRemovedListener { sendTodosToMirror() }
 
-        val addItemBtn = findViewById<FloatingActionButton>(R.id.addItemButton)
+        addItemBtn = findViewById(R.id.addItemButton)
+        addItemBtn.visibility = View.GONE
         addItemBtn.setOnClickListener {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            requireAPIVersion(Build.VERSION_CODES.O) {
                 val item = TodoItem("", ZonedDateTime.now())
                 todoList.add(item)
                 todoList.recentlyClickedItem = item
@@ -77,29 +86,41 @@ class TodoListActivity : AbstractActivity() {
                 )
             }
         }
+        subscribe(TODOS_TOPIC,this)
+        publishToRemotes(FETCH_TODOS_TOPIC, Unit)
+    }
 
-        // sample todos
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            listOf(
-                TodoItem("Müll rausbringen", ZonedDateTime.now()),
-                TodoItem("Auf Klausur lernen", ZonedDateTime.now()),
-                TodoItem("Am Projekt weiterarbeiten", ZonedDateTime.now()),
-                TodoItem("Behörde zurückrufen", ZonedDateTime.now()),
-                TodoItem("Auslagen zurückzahlen", ZonedDateTime.now()),
-                TodoItem("DVD zurückgeben", ZonedDateTime.now()),
-                TodoItem("Dune anschauen", ZonedDateTime.now()),
-                TodoItem("Urlaub planen", ZonedDateTime.now()),
-                TodoItem("Ideen sammeln, wie ich reich werde", ZonedDateTime.now()),
-                TodoItem("Eine Rezension für den neuen Staubsauger schreiben", ZonedDateTime.now()),
-                TodoItem("Neujahrsvorsätze umsetzen", ZonedDateTime.now()),
-                TodoItem("Mehr Sport treiben", ZonedDateTime.now()),
-                TodoItem("E-Mails sortieren", ZonedDateTime.now()),
-                TodoItem("Milch einkaufen", ZonedDateTime.now()),
-                TodoItem("Kellerlicht reparieren", ZonedDateTime.now()),
-                TodoItem("Geburtstagsgeschenk kaufen", ZonedDateTime.now())
-            ).forEach {
-                todoList.add(it)
+    override fun finish() {
+        unsubscribe(TODOS_TOPIC, this)
+        super.finish()
+    }
+
+    override fun dataReceived(topic: String, `object`: JsonNode) {
+        if (topic != TODOS_TOPIC) {
+            throw IllegalArgumentException("topic must be $TODOS_TOPIC")
+        }
+        try {
+            requireAPIVersion(Build.VERSION_CODES.O) {
+                val data = nodeToObject(`object`, APITodoData::class.java)
+//                todoList.clear()
+                data.entries.forEach { (createdTimestamp, text) ->
+                    todoList.add(
+                        TodoItem(
+                            text,
+                            ZonedDateTime.ofInstant(
+                                Instant.ofEpochMilli(createdTimestamp),
+                                ZoneId.systemDefault()
+                            )
+                        )
+                    )
+                }
             }
+            runOnUiThread { addItemBtn.visibility = View.VISIBLE }
+        } catch (e: JsonProcessingException) {
+            runOnUiThread {
+                Toast.makeText(this, R.string.fetch_todos_failed, Toast.LENGTH_SHORT).show()
+            }
+            e.printStackTrace()
         }
     }
 
@@ -128,17 +149,11 @@ class TodoListActivity : AbstractActivity() {
     }
 
     private fun sendTodosToMirror() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+        requireAPIVersion(Build.VERSION_CODES.O) {
             val data =
                 APITodoData(todoList.data.map { APITodoEntry(it.date.toEpochSecond(), it.text) })
             publishToRemotes(TODOS_TOPIC, data)
             Toast.makeText(this, R.string.todos_sent_successfully, Toast.LENGTH_SHORT).show()
-        } else {
-            AlertDialog.Builder(this).run {
-                setTitle(R.string.feature_not_supported_dialog_title)
-                setMessage(R.string.feature_not_supported_dialog_msg)
-                create().show()
-            }
         }
     }
 }

@@ -1,6 +1,8 @@
 package de.hhn.aib.labsw.blackmirror
 
+import android.os.Build
 import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import com.fasterxml.jackson.core.JsonProcessingException
 import com.fasterxml.jackson.databind.JsonNode
@@ -88,17 +90,31 @@ abstract class AbstractActivity : AppCompatActivity(), ApiListener, AutoCloseabl
 
     }
 
+    protected fun requireAPIVersion(version: Int, action: () -> Unit) {
+        if (Build.VERSION.SDK_INT >= version) {
+            action()
+        } else {
+            runOnUiThread {
+                AlertDialog.Builder(this).run {
+                    setTitle(R.string.feature_not_supported_dialog_title)
+                    setMessage(R.string.feature_not_supported_dialog_msg)
+                    create().show()
+                }
+            }
+        }
+    }
+
     /**
      * companion object holding reference to WebsocketServer
      */
     companion object {
         //set URL here
         //10.0.2.2 is localhost of the computer running the emulator
-        //private val SOCKETS_URL = "ws:\\\\10.0.2.2:2306"
+        private val SOCKETS_URL = "ws:\\\\10.0.2.2:80"
 
-        private val SOCKETS_URL = "ws:\\\\blackmirror:2306"
+//        private val SOCKETS_URL = "ws:\\\\blackmirror:2306"
 
-        //private val SOCKETS_URL = "ws:\\\\LuisRechner:2306"
+//        private val SOCKETS_URL = "ws:\\\\Markus-Laptop:2306"
         val handler = MasterSocketHandler(SOCKETS_URL)
 
         protected val connectionAlive: Boolean
