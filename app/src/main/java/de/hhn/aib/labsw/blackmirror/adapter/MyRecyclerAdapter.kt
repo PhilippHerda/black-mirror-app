@@ -82,7 +82,7 @@ class MyRecyclerAdapter(
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
         holder.itemView.tag = position
         for (widget in mirror.pages[position].widgets) {
-            val pos: Int = (widget.x - 1) + (widget.y - 1) * 3
+            val pos: Int = (widget.x - 1) + (widget.y - 1) * 4
             holder.grid[pos].foreground = getDrawableForWidget(widget)
             holder.grid[pos].background = AppCompatResources.getDrawable(context, R.drawable.selectable_box_small)
         }

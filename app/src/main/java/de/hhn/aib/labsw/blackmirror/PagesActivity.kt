@@ -116,31 +116,51 @@ class PagesActivity : AppCompatActivity() {
                             this,
                             R.drawable.mail_widget_icon_foreground
                         )?.constantState -> {
-                            page.widgets.add(Widget(WidgetType.MAIL, pos % 3, pos / 3 + 1))
+                            if (pos % 4 == 0) {
+                                page.widgets.add(Widget(WidgetType.MAIL, 4, pos / 4))
+                            } else {
+                                page.widgets.add(Widget(WidgetType.MAIL, pos % 4, pos / 4 + 1))
+                            }
                         }
                         AppCompatResources.getDrawable(
                             this,
                             R.drawable.calendar_widget_icon_foreground
                         )?.constantState -> {
-                            page.widgets.add(Widget(WidgetType.CALENDAR, pos % 3, pos / 3 + 1))
+                            if (pos % 4 == 0) {
+                                page.widgets.add(Widget(WidgetType.CALENDAR, 4, pos / 4))
+                            } else {
+                                page.widgets.add(Widget(WidgetType.CALENDAR, pos % 4, pos / 4 + 1))
+                            }
                         }
                         AppCompatResources.getDrawable(
                             this,
                             R.drawable.weather_widget_icon_foreground
                         )?.constantState -> {
-                            page.widgets.add(Widget(WidgetType.WEATHER, pos % 3, pos / 3 + 1))
+                            if (pos % 4 == 0) {
+                                page.widgets.add(Widget(WidgetType.WEATHER, 4, pos / 4))
+                            } else {
+                                page.widgets.add(Widget(WidgetType.WEATHER, pos % 4, pos / 4 + 1))
+                            }
                         }
                         AppCompatResources.getDrawable(
                             this,
                             R.drawable.clock_widget_icon_foreground
                         )?.constantState -> {
-                            page.widgets.add(Widget(WidgetType.CLOCK, pos % 3, pos / 3 + 1))
+                            if (pos % 4 == 0) {
+                                page.widgets.add(Widget(WidgetType.CLOCK, 4, pos / 4))
+                            } else {
+                                page.widgets.add(Widget(WidgetType.CLOCK, pos % 4, pos / 4 + 1))
+                            }
                         }
                         AppCompatResources.getDrawable(
                             this,
                             R.drawable.reminder_widget_icon_foreground
                         )?.constantState -> {
-                            page.widgets.add(Widget(WidgetType.REMINDER, pos % 3, pos / 3 + 1))
+                            if (pos % 4 == 0) {
+                                page.widgets.add(Widget(WidgetType.REMINDER, 4, pos / 4))
+                            } else {
+                                page.widgets.add(Widget(WidgetType.REMINDER, pos % 4, pos / 4 + 1))
+                            }
                         }
                     }
                 }
