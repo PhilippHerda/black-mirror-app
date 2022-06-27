@@ -59,6 +59,11 @@ class PagesRecyclerAdapter(
         }
     }
 
+    /**
+     * Removes the item at the given position.
+     *
+     * @param position of item.
+     */
     private fun removeAt(position: Int) {
         mirror.removePage(position);
         onItemDismiss(position)

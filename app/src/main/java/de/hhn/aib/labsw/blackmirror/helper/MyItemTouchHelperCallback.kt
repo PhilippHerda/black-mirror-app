@@ -11,10 +11,16 @@ import kotlin.math.abs
  */
 class MyItemTouchHelperCallback(private val adapter: ItemTouchHelperAdapter): ItemTouchHelper.Callback(){
 
+    /**
+     * @return if long press is enabled for this view (always true)
+     */
     override fun isLongPressDragEnabled(): Boolean {
         return true
     }
 
+    /**
+     * @return if swipe is enabled for this view (always true)
+     */
     override fun isItemViewSwipeEnabled(): Boolean {
         return true
     }
@@ -37,6 +43,11 @@ class MyItemTouchHelperCallback(private val adapter: ItemTouchHelperAdapter): It
         }
     }
 
+    /**
+     * Method called on move of the view with this callback.
+     *
+     * @return true if target view is of same type as this view
+     */
     override fun onMove(
         recyclerView: RecyclerView,
         viewHolder: RecyclerView.ViewHolder,
@@ -47,10 +58,16 @@ class MyItemTouchHelperCallback(private val adapter: ItemTouchHelperAdapter): It
         return true
     }
 
+    /**
+     * Method called on swipe. Dismisses the item.
+     */
     override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
         adapter.onItemDismiss(viewHolder.adapterPosition)
     }
 
+    /**
+     * Draws the drag shadow of the dragged view.
+     */
     override fun onChildDraw(
         c: Canvas,
         recyclerView: RecyclerView,
@@ -68,6 +85,10 @@ class MyItemTouchHelperCallback(private val adapter: ItemTouchHelperAdapter): It
         super.onChildDraw(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive)
     }
 
+    /**
+     * Used for clearing the view after a drag and drop operation. Removes it from the
+     * recyclerview.
+     */
     override fun clearView(recyclerView: RecyclerView, viewHolder: RecyclerView.ViewHolder) {
         super.clearView(recyclerView, viewHolder)
         viewHolder.itemView.alpha = ALPHA_FULL
@@ -77,6 +98,9 @@ class MyItemTouchHelperCallback(private val adapter: ItemTouchHelperAdapter): It
         }
     }
 
+    /**
+     * Method called if the selected view is changed.
+     */
     override fun onSelectedChanged(viewHolder: RecyclerView.ViewHolder?, actionState: Int) {
         if (actionState != ItemTouchHelper.ACTION_STATE_IDLE)
         {
