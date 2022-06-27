@@ -1,6 +1,8 @@
 package de.hhn.aib.labsw.blackmirror
 
+import android.os.Build
 import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import com.fasterxml.jackson.core.JsonProcessingException
 import com.fasterxml.jackson.databind.JsonNode
@@ -86,6 +88,18 @@ abstract class AbstractActivity : AppCompatActivity(), ApiListener, AutoCloseabl
      */
     override fun exceptionReceived(t: Throwable) {
 
+    }
+
+    protected fun requireAPIVersion(version: Int, action: () -> Unit) {
+        if (Build.VERSION.SDK_INT >= version) {
+            action()
+        } else {
+            AlertDialog.Builder(this).run {
+                setTitle(R.string.feature_not_supported_dialog_title)
+                setMessage(R.string.feature_not_supported_dialog_msg)
+                create().show()
+            }
+        }
     }
 
     /**
