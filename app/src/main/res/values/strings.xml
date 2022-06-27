@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">black-mirror-app</string>
+    <string name="app_name">Black Mirror</string>
 
     //Loading Screen Strings:
     <string name="blackMirror_logo_contentDescription">Blackmirror content description</string>
