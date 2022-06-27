@@ -11,6 +11,8 @@ import com.fasterxml.jackson.databind.ObjectMapper
 interface MirrorApi {
     fun subscribe(topic: String, listener: ApiListener)
     fun unsubscribe(topic: String, listener: ApiListener)
-    fun publish(topic: String, payload: Any)
-    fun publish(topic: String, payload: JsonNode)
+    fun publish(topic: String, payload: Any): Boolean
+    fun publish(topic: String, payload: JsonNode): Boolean
+    fun subscribeToExceptions(listener:ApiExceptionListener)
+    fun unsubscribeFromExceptions(listener:ApiExceptionListener)
 }
