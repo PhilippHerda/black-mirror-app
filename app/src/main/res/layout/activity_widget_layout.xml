@@ -174,12 +174,13 @@
         android:id="@+id/navigateLeft_fab"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginStart="32dp"
         android:layout_marginTop="36dp"
         android:layout_marginBottom="38dp"
         android:clickable="true"
         android:contentDescription="@string/Str_widgetGoLeftButton"
         app:layout_constraintBottom_toTopOf="@+id/horizontalScrollView"
-        app:layout_constraintStart_toStartOf="@+id/PageItemGrid"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/PageItemGrid"
         app:srcCompat="@drawable/arrow_left" />
 
@@ -187,14 +188,13 @@
         android:id="@+id/navigateRight_fab"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="166dp"
         android:layout_marginTop="36dp"
+        android:layout_marginEnd="32dp"
         android:layout_marginBottom="38dp"
         android:clickable="true"
         android:contentDescription="@string/Str_widgetGoRightButton"
         app:layout_constraintBottom_toTopOf="@+id/horizontalScrollView"
-        app:layout_constraintEnd_toEndOf="@+id/PageItemGrid"
-        app:layout_constraintStart_toEndOf="@+id/navigateLeft_fab"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/PageItemGrid"
         app:srcCompat="@drawable/arrow_right" />
 
