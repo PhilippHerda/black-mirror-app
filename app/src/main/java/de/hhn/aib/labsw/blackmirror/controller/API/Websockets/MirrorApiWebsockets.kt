@@ -2,14 +2,12 @@ package de.hhn.aib.labsw.blackmirror.controller.API.Websockets
 
 import com.fasterxml.jackson.databind.JsonNode
 import com.fasterxml.jackson.databind.ObjectMapper
-import de.hhn.aib.labsw.blackmirror.AbstractActivity
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import okhttp3.*
 import java.io.IOException
-import java.net.SocketTimeoutException
 
 /**
  * Implementation of the interface using websockets
@@ -62,7 +60,7 @@ class MirrorApiWebsockets(
             requireNotNull(jsonNode.get("payload")) { "wrong json format" }
             val listenersList = listeners[topic]
             listenersList?.forEach { e ->
-                e.dataReceived(topic, jsonNode)
+                e.dataReceived(topic, jsonNode.get("payload"))
             }
         } catch (e: Exception) {
             println(e.message)

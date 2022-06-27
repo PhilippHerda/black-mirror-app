@@ -94,10 +94,12 @@ abstract class AbstractActivity : AppCompatActivity(), ApiListener, AutoCloseabl
         if (Build.VERSION.SDK_INT >= version) {
             action()
         } else {
-            AlertDialog.Builder(this).run {
-                setTitle(R.string.feature_not_supported_dialog_title)
-                setMessage(R.string.feature_not_supported_dialog_msg)
-                create().show()
+            runOnUiThread {
+                AlertDialog.Builder(this).run {
+                    setTitle(R.string.feature_not_supported_dialog_title)
+                    setMessage(R.string.feature_not_supported_dialog_msg)
+                    create().show()
+                }
             }
         }
     }
@@ -108,9 +110,9 @@ abstract class AbstractActivity : AppCompatActivity(), ApiListener, AutoCloseabl
     companion object {
         //set URL here
         //10.0.2.2 is localhost of the computer running the emulator
-        //private val SOCKETS_URL = "ws:\\\\10.0.2.2:2306"
+        private val SOCKETS_URL = "ws:\\\\10.0.2.2:80"
 
-        private val SOCKETS_URL = "ws:\\\\blackmirror:2306"
+        //private val SOCKETS_URL = "ws:\\\\blackmirror:2306"
 
         //private val SOCKETS_URL = "ws:\\\\LuisRechner:2306"
         val handler = MasterSocketHandler(SOCKETS_URL)

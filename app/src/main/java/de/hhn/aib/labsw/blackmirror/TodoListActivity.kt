@@ -84,8 +84,8 @@ class TodoListActivity : AbstractActivity() {
                 )
             }
         }
-
-        publishToRemotes(FETCH_TODOS_TOPIC, JSONObject())
+        subscribe(TODOS_TOPIC,this)
+        publishToRemotes(FETCH_TODOS_TOPIC, Unit)
     }
 
     override fun dataReceived(topic: String, node: JsonNode) {
@@ -108,7 +108,9 @@ class TodoListActivity : AbstractActivity() {
                 }
             }
         } catch (e: JsonProcessingException) {
-            Toast.makeText(this, R.string.fetch_todos_failed, Toast.LENGTH_SHORT).show()
+            runOnUiThread {
+                Toast.makeText(this, R.string.fetch_todos_failed, Toast.LENGTH_SHORT).show()
+            }
             e.printStackTrace()
         }
     }
